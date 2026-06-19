@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { COURSES } from "@/lib/courses";
 import { ArrowRight } from "lucide-react";
 
-export const Route = createFileRoute("/courses")({
+export const Route = createFileRoute("/courses/")({
   head: () => ({
     meta: [
       { title: "SAP Courses — Next-Gen ERP Solutions" },
