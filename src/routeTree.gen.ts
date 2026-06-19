@@ -9,21 +9,69 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SuccessStoriesRouteImport } from './routes/success-stories'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as PlacementsRouteImport } from './routes/placements'
+import { Route as FresherJourneyRouteImport } from './routes/fresher-journey'
+import { Route as ExperiencedProfessionalRouteImport } from './routes/experienced-professional'
 import { Route as CoursesRouteImport } from './routes/courses'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CareerJourneysRouteImport } from './routes/career-journeys'
+import { Route as CareerGapRouteImport } from './routes/career-gap'
+import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CoursesIndexRouteImport } from './routes/courses.index'
 import { Route as CoursesSlugRouteImport } from './routes/courses.$slug'
 
+const SuccessStoriesRoute = SuccessStoriesRouteImport.update({
+  id: '/success-stories',
+  path: '/success-stories',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlacementsRoute = PlacementsRouteImport.update({
+  id: '/placements',
+  path: '/placements',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FresherJourneyRoute = FresherJourneyRouteImport.update({
+  id: '/fresher-journey',
+  path: '/fresher-journey',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExperiencedProfessionalRoute = ExperiencedProfessionalRouteImport.update({
+  id: '/experienced-professional',
+  path: '/experienced-professional',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CoursesRoute = CoursesRouteImport.update({
   id: '/courses',
   path: '/courses',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CareerJourneysRoute = CareerJourneysRouteImport.update({
   id: '/career-journeys',
   path: '/career-journeys',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CareerGapRoute = CareerGapRouteImport.update({
+  id: '/career-gap',
+  path: '/career-gap',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -50,15 +98,31 @@ const CoursesSlugRoute = CoursesSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/blog': typeof BlogRoute
+  '/career-gap': typeof CareerGapRoute
   '/career-journeys': typeof CareerJourneysRoute
+  '/contact': typeof ContactRoute
   '/courses': typeof CoursesRouteWithChildren
+  '/experienced-professional': typeof ExperiencedProfessionalRoute
+  '/fresher-journey': typeof FresherJourneyRoute
+  '/placements': typeof PlacementsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/success-stories': typeof SuccessStoriesRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/courses/': typeof CoursesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/blog': typeof BlogRoute
+  '/career-gap': typeof CareerGapRoute
   '/career-journeys': typeof CareerJourneysRoute
+  '/contact': typeof ContactRoute
+  '/experienced-professional': typeof ExperiencedProfessionalRoute
+  '/fresher-journey': typeof FresherJourneyRoute
+  '/placements': typeof PlacementsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/success-stories': typeof SuccessStoriesRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/courses': typeof CoursesIndexRoute
 }
@@ -66,8 +130,16 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/blog': typeof BlogRoute
+  '/career-gap': typeof CareerGapRoute
   '/career-journeys': typeof CareerJourneysRoute
+  '/contact': typeof ContactRoute
   '/courses': typeof CoursesRouteWithChildren
+  '/experienced-professional': typeof ExperiencedProfessionalRoute
+  '/fresher-journey': typeof FresherJourneyRoute
+  '/placements': typeof PlacementsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/success-stories': typeof SuccessStoriesRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/courses/': typeof CoursesIndexRoute
 }
@@ -76,18 +148,47 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/blog'
+    | '/career-gap'
     | '/career-journeys'
+    | '/contact'
     | '/courses'
+    | '/experienced-professional'
+    | '/fresher-journey'
+    | '/placements'
+    | '/sitemap.xml'
+    | '/success-stories'
     | '/courses/$slug'
     | '/courses/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/career-journeys' | '/courses/$slug' | '/courses'
+  to:
+    | '/'
+    | '/about'
+    | '/blog'
+    | '/career-gap'
+    | '/career-journeys'
+    | '/contact'
+    | '/experienced-professional'
+    | '/fresher-journey'
+    | '/placements'
+    | '/sitemap.xml'
+    | '/success-stories'
+    | '/courses/$slug'
+    | '/courses'
   id:
     | '__root__'
     | '/'
     | '/about'
+    | '/blog'
+    | '/career-gap'
     | '/career-journeys'
+    | '/contact'
     | '/courses'
+    | '/experienced-professional'
+    | '/fresher-journey'
+    | '/placements'
+    | '/sitemap.xml'
+    | '/success-stories'
     | '/courses/$slug'
     | '/courses/'
   fileRoutesById: FileRoutesById
@@ -95,12 +196,55 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  BlogRoute: typeof BlogRoute
+  CareerGapRoute: typeof CareerGapRoute
   CareerJourneysRoute: typeof CareerJourneysRoute
+  ContactRoute: typeof ContactRoute
   CoursesRoute: typeof CoursesRouteWithChildren
+  ExperiencedProfessionalRoute: typeof ExperiencedProfessionalRoute
+  FresherJourneyRoute: typeof FresherJourneyRoute
+  PlacementsRoute: typeof PlacementsRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  SuccessStoriesRoute: typeof SuccessStoriesRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/success-stories': {
+      id: '/success-stories'
+      path: '/success-stories'
+      fullPath: '/success-stories'
+      preLoaderRoute: typeof SuccessStoriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/placements': {
+      id: '/placements'
+      path: '/placements'
+      fullPath: '/placements'
+      preLoaderRoute: typeof PlacementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fresher-journey': {
+      id: '/fresher-journey'
+      path: '/fresher-journey'
+      fullPath: '/fresher-journey'
+      preLoaderRoute: typeof FresherJourneyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/experienced-professional': {
+      id: '/experienced-professional'
+      path: '/experienced-professional'
+      fullPath: '/experienced-professional'
+      preLoaderRoute: typeof ExperiencedProfessionalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/courses': {
       id: '/courses'
       path: '/courses'
@@ -108,11 +252,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoursesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/career-journeys': {
       id: '/career-journeys'
       path: '/career-journeys'
       fullPath: '/career-journeys'
       preLoaderRoute: typeof CareerJourneysRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/career-gap': {
+      id: '/career-gap'
+      path: '/career-gap'
+      fullPath: '/career-gap'
+      preLoaderRoute: typeof CareerGapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -162,8 +327,16 @@ const CoursesRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  BlogRoute: BlogRoute,
+  CareerGapRoute: CareerGapRoute,
   CareerJourneysRoute: CareerJourneysRoute,
+  ContactRoute: ContactRoute,
   CoursesRoute: CoursesRouteWithChildren,
+  ExperiencedProfessionalRoute: ExperiencedProfessionalRoute,
+  FresherJourneyRoute: FresherJourneyRoute,
+  PlacementsRoute: PlacementsRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  SuccessStoriesRoute: SuccessStoriesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
