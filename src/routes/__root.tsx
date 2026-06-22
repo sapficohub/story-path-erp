@@ -87,8 +87,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Next-Gen ERP Solutions — SAP Training & Placement" },
       { name: "twitter:description", content: "India's career transformation platform for SAP training & placement. For freshers, experienced professionals and career-gap candidates." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a0de8a93-3da3-4f44-9a06-f75cc91d0af4/id-preview-8fe975f5--09dca174-c81b-4742-927b-f94c4e91b362.lovable.app-1781849242899.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a0de8a93-3da3-4f44-9a06-f75cc91d0af4/id-preview-8fe975f5--09dca174-c81b-4742-927b-f94c4e91b362.lovable.app-1781849242899.png" },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/af57bbe9-a35d-4c25-bfae-7f27d731b468" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/af57bbe9-a35d-4c25-bfae-7f27d731b468" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
