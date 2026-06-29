@@ -22,6 +22,9 @@ import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CoursesIndexRouteImport } from './routes/courses.index'
+import { Route as JourneyFresherRouteImport } from './routes/journey.fresher'
+import { Route as JourneyExperiencedRouteImport } from './routes/journey.experienced'
+import { Route as JourneyCareerGapRouteImport } from './routes/journey.career-gap'
 import { Route as CoursesSlugRouteImport } from './routes/courses.$slug'
 
 const SuccessStoriesRoute = SuccessStoriesRouteImport.update({
@@ -89,6 +92,21 @@ const CoursesIndexRoute = CoursesIndexRouteImport.update({
   path: '/',
   getParentRoute: () => CoursesRoute,
 } as any)
+const JourneyFresherRoute = JourneyFresherRouteImport.update({
+  id: '/journey/fresher',
+  path: '/journey/fresher',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JourneyExperiencedRoute = JourneyExperiencedRouteImport.update({
+  id: '/journey/experienced',
+  path: '/journey/experienced',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JourneyCareerGapRoute = JourneyCareerGapRouteImport.update({
+  id: '/journey/career-gap',
+  path: '/journey/career-gap',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CoursesSlugRoute = CoursesSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -109,6 +127,9 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/success-stories': typeof SuccessStoriesRoute
   '/courses/$slug': typeof CoursesSlugRoute
+  '/journey/career-gap': typeof JourneyCareerGapRoute
+  '/journey/experienced': typeof JourneyExperiencedRoute
+  '/journey/fresher': typeof JourneyFresherRoute
   '/courses/': typeof CoursesIndexRoute
 }
 export interface FileRoutesByTo {
@@ -124,6 +145,9 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/success-stories': typeof SuccessStoriesRoute
   '/courses/$slug': typeof CoursesSlugRoute
+  '/journey/career-gap': typeof JourneyCareerGapRoute
+  '/journey/experienced': typeof JourneyExperiencedRoute
+  '/journey/fresher': typeof JourneyFresherRoute
   '/courses': typeof CoursesIndexRoute
 }
 export interface FileRoutesById {
@@ -141,6 +165,9 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/success-stories': typeof SuccessStoriesRoute
   '/courses/$slug': typeof CoursesSlugRoute
+  '/journey/career-gap': typeof JourneyCareerGapRoute
+  '/journey/experienced': typeof JourneyExperiencedRoute
+  '/journey/fresher': typeof JourneyFresherRoute
   '/courses/': typeof CoursesIndexRoute
 }
 export interface FileRouteTypes {
@@ -159,6 +186,9 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/success-stories'
     | '/courses/$slug'
+    | '/journey/career-gap'
+    | '/journey/experienced'
+    | '/journey/fresher'
     | '/courses/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -174,6 +204,9 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/success-stories'
     | '/courses/$slug'
+    | '/journey/career-gap'
+    | '/journey/experienced'
+    | '/journey/fresher'
     | '/courses'
   id:
     | '__root__'
@@ -190,6 +223,9 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/success-stories'
     | '/courses/$slug'
+    | '/journey/career-gap'
+    | '/journey/experienced'
+    | '/journey/fresher'
     | '/courses/'
   fileRoutesById: FileRoutesById
 }
@@ -206,6 +242,9 @@ export interface RootRouteChildren {
   PlacementsRoute: typeof PlacementsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SuccessStoriesRoute: typeof SuccessStoriesRoute
+  JourneyCareerGapRoute: typeof JourneyCareerGapRoute
+  JourneyExperiencedRoute: typeof JourneyExperiencedRoute
+  JourneyFresherRoute: typeof JourneyFresherRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -301,6 +340,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoursesIndexRouteImport
       parentRoute: typeof CoursesRoute
     }
+    '/journey/fresher': {
+      id: '/journey/fresher'
+      path: '/journey/fresher'
+      fullPath: '/journey/fresher'
+      preLoaderRoute: typeof JourneyFresherRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/journey/experienced': {
+      id: '/journey/experienced'
+      path: '/journey/experienced'
+      fullPath: '/journey/experienced'
+      preLoaderRoute: typeof JourneyExperiencedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/journey/career-gap': {
+      id: '/journey/career-gap'
+      path: '/journey/career-gap'
+      fullPath: '/journey/career-gap'
+      preLoaderRoute: typeof JourneyCareerGapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/courses/$slug': {
       id: '/courses/$slug'
       path: '/$slug'
@@ -337,7 +397,20 @@ const rootRouteChildren: RootRouteChildren = {
   PlacementsRoute: PlacementsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SuccessStoriesRoute: SuccessStoriesRoute,
+  JourneyCareerGapRoute: JourneyCareerGapRoute,
+  JourneyExperiencedRoute: JourneyExperiencedRoute,
+  JourneyFresherRoute: JourneyFresherRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

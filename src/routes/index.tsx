@@ -20,9 +20,9 @@ export const Route = createFileRoute("/")({
 });
 
 const JOURNEYS = [
-  { icon: GraduationCap, emoji: "🎓", title: "Fresher", desc: "Completed graduation? Looking for your first job?", cta: "Start My Journey", to: "/fresher-journey", color: "from-[#0B1C9C] to-[#1686F5]" },
-  { icon: Briefcase, emoji: "💼", title: "Experienced Professional", desc: "Working hard but salary growth is slow?", cta: "Upgrade My Career", to: "/experienced-professional", color: "from-[#1686F5] to-[#19C7D8]" },
-  { icon: RotateCcw, emoji: "🔄", title: "Career Gap", desc: "Ready to restart your career?", cta: "Restart My Career", to: "/career-gap", color: "from-[#19C7D8] to-[#09B83E]" },
+  { icon: GraduationCap, emoji: "🎓", title: "Fresher", desc: "Completed graduation? Looking for your first job?", cta: "Start My Journey", to: "/journey/fresher", color: "from-[#0B1C9C] to-[#1686F5]" },
+  { icon: Briefcase, emoji: "💼", title: "Experienced Professional", desc: "Working hard but salary growth is slow?", cta: "Upgrade My Career", to: "/journey/experienced", color: "from-[#1686F5] to-[#19C7D8]" },
+  { icon: RotateCcw, emoji: "🔄", title: "Career Gap", desc: "Ready to restart your career?", cta: "Restart My Career", to: "/journey/career-gap", color: "from-[#19C7D8] to-[#09B83E]" },
 ] as const;
 
 const PROCESS = [
@@ -36,7 +36,7 @@ const PROCESS = [
 
 function HomePage() {
   return (
-    <SiteLayout>
+    <SiteLayout dark>
       {/* HERO */}
       <section className="relative overflow-hidden bg-gradient-hero">
         <div className="halftone absolute inset-0" />
