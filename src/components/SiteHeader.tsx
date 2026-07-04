@@ -3,15 +3,16 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Logo } from "./Logo";
 
-const NAV = [
+const   NAV = [
   { to: "/", label: "Home" },
-  { to: "/about", label: "About" },
+  // { to: "/about", label: "About" },
   { to: "/courses", label: "SAP Courses" },
   { to: "/career-journeys", label: "Career Journeys" },
   { to: "/placements", label: "Placements" },
   { to: "/success-stories", label: "Success Stories" },
   { to: "/blog", label: "Blog" },
-  { to: "/contact", label: "Contact" },
+  { to: "/quiz", label: "Quiz" },
+  { to: "/about", label: "About" },
 ] as const;
 
 export function SiteHeader() {

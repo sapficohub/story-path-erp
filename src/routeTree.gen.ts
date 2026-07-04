@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SuccessStoriesRouteImport } from './routes/success-stories'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as PlacementsRouteImport } from './routes/placements'
 import { Route as FresherJourneyRouteImport } from './routes/fresher-journey'
 import { Route as ExperiencedProfessionalRouteImport } from './routes/experienced-professional'
@@ -35,6 +36,11 @@ const SuccessStoriesRoute = SuccessStoriesRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuizRoute = QuizRouteImport.update({
+  id: '/quiz',
+  path: '/quiz',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlacementsRoute = PlacementsRouteImport.update({
@@ -124,6 +130,7 @@ export interface FileRoutesByFullPath {
   '/experienced-professional': typeof ExperiencedProfessionalRoute
   '/fresher-journey': typeof FresherJourneyRoute
   '/placements': typeof PlacementsRoute
+  '/quiz': typeof QuizRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/success-stories': typeof SuccessStoriesRoute
   '/courses/$slug': typeof CoursesSlugRoute
@@ -142,6 +149,7 @@ export interface FileRoutesByTo {
   '/experienced-professional': typeof ExperiencedProfessionalRoute
   '/fresher-journey': typeof FresherJourneyRoute
   '/placements': typeof PlacementsRoute
+  '/quiz': typeof QuizRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/success-stories': typeof SuccessStoriesRoute
   '/courses/$slug': typeof CoursesSlugRoute
@@ -162,6 +170,7 @@ export interface FileRoutesById {
   '/experienced-professional': typeof ExperiencedProfessionalRoute
   '/fresher-journey': typeof FresherJourneyRoute
   '/placements': typeof PlacementsRoute
+  '/quiz': typeof QuizRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/success-stories': typeof SuccessStoriesRoute
   '/courses/$slug': typeof CoursesSlugRoute
@@ -183,6 +192,7 @@ export interface FileRouteTypes {
     | '/experienced-professional'
     | '/fresher-journey'
     | '/placements'
+    | '/quiz'
     | '/sitemap.xml'
     | '/success-stories'
     | '/courses/$slug'
@@ -201,6 +211,7 @@ export interface FileRouteTypes {
     | '/experienced-professional'
     | '/fresher-journey'
     | '/placements'
+    | '/quiz'
     | '/sitemap.xml'
     | '/success-stories'
     | '/courses/$slug'
@@ -220,6 +231,7 @@ export interface FileRouteTypes {
     | '/experienced-professional'
     | '/fresher-journey'
     | '/placements'
+    | '/quiz'
     | '/sitemap.xml'
     | '/success-stories'
     | '/courses/$slug'
@@ -240,6 +252,7 @@ export interface RootRouteChildren {
   ExperiencedProfessionalRoute: typeof ExperiencedProfessionalRoute
   FresherJourneyRoute: typeof FresherJourneyRoute
   PlacementsRoute: typeof PlacementsRoute
+  QuizRoute: typeof QuizRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SuccessStoriesRoute: typeof SuccessStoriesRoute
   JourneyCareerGapRoute: typeof JourneyCareerGapRoute
@@ -261,6 +274,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quiz': {
+      id: '/quiz'
+      path: '/quiz'
+      fullPath: '/quiz'
+      preLoaderRoute: typeof QuizRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/placements': {
@@ -395,6 +415,7 @@ const rootRouteChildren: RootRouteChildren = {
   ExperiencedProfessionalRoute: ExperiencedProfessionalRoute,
   FresherJourneyRoute: FresherJourneyRoute,
   PlacementsRoute: PlacementsRoute,
+  QuizRoute: QuizRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SuccessStoriesRoute: SuccessStoriesRoute,
   JourneyCareerGapRoute: JourneyCareerGapRoute,
