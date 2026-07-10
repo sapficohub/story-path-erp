@@ -1064,12 +1064,18 @@ const QUESTIONS = [
     "ans": 1
   },
   {
-    "type": "yn",
+    "type": "mc",
     "section": "General Ledger",
     "subclass": "General Ledger Accounting (New)",
-    "q": "How many types of Chart of Accounts are available in SAP FI?",
-    "fact": "Yes",
-    "ans": true
+    "q": "Many types of Chart of Accounts are available in SAP FI?",
+    "fact": "3",
+    "opts": [
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "ans": 1
   },
   {
     "type": "mc",
@@ -1089,7 +1095,7 @@ const QUESTIONS = [
     "type": "mc",
     "section": "General Ledger",
     "subclass": "General Ledger Accounting (New)",
-    "q": "Which Chart of Accounts is used for day to day postings in Company Code?",
+    "q": "Which Chart of Accounts is used for day-to-day postings in Company Code?",
     "fact": "Operating COA",
     "opts": [
       "Country COA",
