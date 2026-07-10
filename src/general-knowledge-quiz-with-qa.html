@@ -94,6 +94,17 @@
       animation-delay: var(--delay);
     }
 
+    .sap-chip:nth-child(1) { --x: 7%; --dur: 22s; --delay: -2s; }
+    .sap-chip:nth-child(2) { --x: 18%; --dur: 28s; --delay: -12s; }
+    .sap-chip:nth-child(3) { --x: 31%; --dur: 24s; --delay: -6s; }
+    .sap-chip:nth-child(4) { --x: 45%; --dur: 30s; --delay: -18s; }
+    .sap-chip:nth-child(5) { --x: 58%; --dur: 25s; --delay: -9s; }
+    .sap-chip:nth-child(6) { --x: 72%; --dur: 32s; --delay: -16s; }
+    .sap-chip:nth-child(7) { --x: 84%; --dur: 26s; --delay: -4s; }
+    .sap-chip:nth-child(8) { --x: 12%; --dur: 34s; --delay: -24s; }
+    .sap-chip:nth-child(9) { --x: 65%; --dur: 29s; --delay: -22s; }
+    .sap-chip:nth-child(10) { --x: 91%; --dur: 23s; --delay: -11s; }
+
     .sap-chip:nth-child(2n) {
       border-color: rgba(147,197,253,0.22);
       color: rgba(219,234,254,0.58);
@@ -167,10 +178,12 @@
     }
     .hero-progress-fill {
       height: 100%;
+      width: 0;
       background: #fff;
       border-radius: 99px;
       transition: width 0.4s ease;
     }
+    .question-type-label { color: #38bdf8; font-weight: 700; }
     .hero-progress-label {
       font-size: 13px;
       font-weight: 600;
@@ -191,6 +204,7 @@
       border-radius: 8px;
       padding: 0.45rem 0.75rem;
       background: rgba(255,255,255,0.12);
+      -webkit-backdrop-filter: blur(6px);
       backdrop-filter: blur(6px);
     }
 
@@ -260,6 +274,7 @@
         radial-gradient(circle at 50% 16%, rgba(37,99,235,0.20), transparent 34%),
         linear-gradient(135deg, rgba(255,255,255,0.13), rgba(255,255,255,0.06));
       box-shadow: 0 24px 80px rgba(0,0,0,0.38);
+      -webkit-backdrop-filter: blur(10px);
       backdrop-filter: blur(10px);
     }
 
@@ -597,6 +612,7 @@
       position: fixed;
       inset: 0;
       background: rgba(2,16,43,0.74);
+      -webkit-backdrop-filter: blur(5px);
       backdrop-filter: blur(5px);
       z-index: 100;
       align-items: center;
@@ -714,16 +730,16 @@
 <body>
 
 <div class="sap-bg" aria-hidden="true">
-  <span class="sap-chip" style="--x:7%;--dur:22s;--delay:-2s;">SAP</span>
-  <span class="sap-chip" style="--x:18%;--dur:28s;--delay:-12s;">FICO</span>
-  <span class="sap-chip" style="--x:31%;--dur:24s;--delay:-6s;">GL</span>
-  <span class="sap-chip" style="--x:45%;--dur:30s;--delay:-18s;">FS00</span>
-  <span class="sap-chip" style="--x:58%;--dur:25s;--delay:-9s;">OB52</span>
-  <span class="sap-chip" style="--x:72%;--dur:32s;--delay:-16s;">ACDOCA</span>
-  <span class="sap-chip" style="--x:84%;--dur:26s;--delay:-4s;">LEDGER</span>
-  <span class="sap-chip" style="--x:12%;--dur:34s;--delay:-24s;">FI</span>
-  <span class="sap-chip" style="--x:65%;--dur:29s;--delay:-22s;">CO</span>
-  <span class="sap-chip" style="--x:91%;--dur:23s;--delay:-11s;">K4</span>
+  <span class="sap-chip">SAP</span>
+  <span class="sap-chip">FICO</span>
+  <span class="sap-chip">GL</span>
+  <span class="sap-chip">FS00</span>
+  <span class="sap-chip">OB52</span>
+  <span class="sap-chip">ACDOCA</span>
+  <span class="sap-chip">LEDGER</span>
+  <span class="sap-chip">FI</span>
+  <span class="sap-chip">CO</span>
+  <span class="sap-chip">K4</span>
 </div>
 
 <!-- Oops Popup Overlay -->
@@ -750,7 +766,7 @@
   <h1 id="hero-title">SAP FICO <span class="gold">Challenge</span></h1>
   <div class="hero-sub" id="hero-sub"></div>
   <div class="hero-progress-track">
-    <div class="hero-progress-fill" id="hero-fill" style="width:0%"></div>
+    <div class="hero-progress-fill" id="hero-fill"></div>
   </div>
   <div class="hero-progress-label" id="hero-label">Question 1 of 330</div>
   <div class="hero-stats" aria-label="Quiz stats">
@@ -5558,8 +5574,8 @@ function render() {
   updateHero(pct, current + 1, pool.length);
 
   const typeTag = q.type === 'yn'
-    ? '<span style="color:#38bdf8;font-weight:700;">Yes / No</span>'
-    : '<span style="color:#38bdf8;font-weight:700;">Multiple Choice</span>';
+    ? '<span class="question-type-label">Yes / No</span>'
+    : '<span class="question-type-label">Multiple Choice</span>';
 
   root.innerHTML = `
     <div class="question-card" id="q-card">

@@ -36,7 +36,7 @@ const PROCESS = [
 
 function HomePage() {
   return (
-    <SiteLayout dark>
+    <SiteLayout>
       {/* HERO */}
       <section className="relative overflow-hidden bg-gradient-hero">
         <div className="halftone absolute inset-0" />
