@@ -1,0 +1,5005 @@
+import{o as e}from"./useStore-DgTVU5_6.js";import{t}from"./SiteLayout-BARTAcRh.js";var n=`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FICO Interview Questions</title>
+  <link rel="stylesheet" href="./general-knowledge-quiz-with-qa.css" />
+</head>
+<body>
+
+<div class="sap-bg" aria-hidden="true">
+  <span class="sap-chip sap-chip-1">SAP</span>
+  <span class="sap-chip sap-chip-2">FICO</span>
+  <span class="sap-chip sap-chip-3">GL</span>
+  <span class="sap-chip sap-chip-4">FS00</span>
+  <span class="sap-chip sap-chip-5">OB52</span>
+  <span class="sap-chip sap-chip-6">ACDOCA</span>
+  <span class="sap-chip sap-chip-7">LEDGER</span>
+  <span class="sap-chip sap-chip-8">FI</span>
+  <span class="sap-chip sap-chip-9">CO</span>
+  <span class="sap-chip sap-chip-10">K4</span>
+</div>
+
+<!-- Oops Popup Overlay -->
+<div class="oops-overlay" id="oops-overlay">
+  <div class="oops-box">
+    <span class="oops-emoji">😬</span>
+    <div class="oops-title">Oops!</div>
+    <div class="oops-sub">That's not the right answer.<br>Give it another try!</div>
+    <button class="oops-try-btn" onclick="closeOops()">Try Again →</button>
+  </div>
+</div>
+
+<!-- Correct Answer Popup Overlay -->
+<div class="success-overlay" id="success-overlay">
+  <div class="success-box">
+    <div class="success-title">Correct!</div>
+    <div class="success-sub">Great job!</div>
+  </div>
+</div>
+
+<!-- Hero header (always visible, updates dynamically) -->
+<div class="quiz-hero" id="quiz-hero">
+  <img class="hero-logo" src="next-gen-logo.png" alt="Next-Gen ERP Solutions">
+  <h1 id="hero-title">SAP FICO <span class="gold">Challenge</span></h1>
+  <div class="hero-sub" id="hero-sub"></div>
+  <div class="hero-progress-track">
+    <div class="hero-progress-fill" id="hero-fill"></div>
+  </div>
+  <div class="hero-progress-label" id="hero-label">Question 1 of 330</div>
+  <div class="hero-stats" aria-label="Quiz stats">
+    <div class="hero-stat">
+      <span class="hero-stat-value" id="streak-value">0</span>
+      <span class="hero-stat-label">Streak</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-value" id="best-streak-value">0</span>
+      <span class="hero-stat-label">Best</span>
+    </div>
+  </div>
+</div>
+
+<div class="quiz-body">
+  <div id="quiz-root"></div>
+</div>
+
+<script>
+// type "mc" = multiple choice (opts[], ans = index)
+// type "yn" = yes/no (ans = true/false)
+const QUESTIONS = [
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "SAP FICO Enterprise Structure",
+    "q": "Which organizational unit represents an independent legal entity in SAP?",
+    "fact": "A Company Code is the smallest organizational unit for which a complete set of accounts can be maintained.",
+    "opts": [
+      "Company Code",
+      "Company",
+      "Plant",
+      "Profit Center"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "SAP FICO Enterprise Structure",
+    "q": "Which transaction code is used to create a Company Code?",
+    "fact": "OX02",
+    "opts": [
+      "OX02",
+      "OX15",
+      "OX18",
+      "SPRO"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "yn",
+    "section": "General Ledger",
+    "subclass": "SAP FICO Enterprise Structure",
+    "q": "Can multiple Company Codes be assigned to one Company?",
+    "fact": "Multiple Company Codes can belong to the same Company for consolidated reporting.",
+    "ans": true
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "SAP FICO Enterprise Structure",
+    "q": "Which organizational unit is used to monitor customer credit limits?",
+    "fact": "Credit Control Area",
+    "opts": [
+      "Company Code",
+      "Credit Control Area",
+      "Profit Center",
+      "Plant"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "SAP FICO Enterprise Structure",
+    "q": "One Credit Control Area can be assigned to",
+    "fact": "Multiple Company Codes",
+    "opts": [
+      "Multiple Company Codes",
+      "One Company Code Only",
+      "One Plant Only",
+      "One Purchasing Organization"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "SAP FICO Enterprise Structure",
+    "q": "What is the smallest organizational unit for which a complete set of accounts can be maintained",
+    "fact": "Company Code",
+    "opts": [
+      "Company",
+      "Company Code",
+      "Plant",
+      "Business Area"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Financial Accounting Global Settings (New)",
+    "q": "What is the standard fiscal year variant for calendar year in SAP?",
+    "fact": "K4 follows January to December with 12 normal periods and 4 special periods",
+    "opts": [
+      "V3",
+      "K4",
+      "V6",
+      "S4"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Financial Accounting Global Settings (New)",
+    "q": "Which transaction code is used to maintain Company Code Global Parameters?",
+    "fact": "OBY6",
+    "opts": [
+      "OBY6",
+      "OB52",
+      "OBA7",
+      "OB13"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Financial Accounting Global Settings (New)",
+    "q": "In OBY6, which of the following can be maintained?",
+    "fact": "All of the Above",
+    "opts": [
+      "Local Currency",
+      "Fiscal Year Variant",
+      "Chart of Accounts",
+      "All of the Above"
+    ],
+    "ans": 3
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Financial Accounting Global Settings (New)",
+    "q": "What is the purpose of a Fiscal Year Variant?",
+    "fact": "Define accounting periods in a fiscal year",
+    "opts": [
+      "Define tax procedure",
+      "Define accounting periods in a fiscal year",
+      "Define exchange rates",
+      "Define document types"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Financial Accounting Global Settings (New)",
+    "q": "How many special periods can SAP support in a Fiscal Year?",
+    "fact": "4",
+    "opts": [
+      "2",
+      "4",
+      "6",
+      "12"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Financial Accounting Global Settings (New)",
+    "q": "What is the purpose of a Posting Period Variant?",
+    "fact": "Control open and closed posting periods",
+    "opts": [
+      "Control open and closed posting periods",
+      "Define currencies",
+      "Define taxes",
+      "Define company codes"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Financial Accounting Global Settings (New)",
+    "q": "Which transaction code is used to open and close posting periods?",
+    "fact": "OB52",
+    "opts": [
+      "OBY6",
+      "OB52",
+      "OB13",
+      "OBA7"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Financial Accounting Global Settings (New)",
+    "q": "What happens if a user posts to a closed period?",
+    "fact": "System issues an error and blocks posting",
+    "opts": [
+      "Posting succeeds",
+      "System allows posting with warning",
+      "System issues an error and blocks posting",
+      "Document is parked automatically"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Financial Accounting Global Settings (New)",
+    "q": "Which transaction code is used to define Document Type & Number Ranges?",
+    "fact": "Number ranges are maintained in FBN1 and assigned through document types in OBA7.",
+    "opts": [
+      "FBN1",
+      "OBA7",
+      "FBN1/OBA7",
+      "OB52"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Financial Accounting Global Settings (New)",
+    "q": "What is the purpose of a Document Type?",
+    "fact": "Control document entry and number ranges",
+    "opts": [
+      "Determine account group",
+      "Control document entry and number ranges",
+      "Define tax codes",
+      "Define exchange rates"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Financial Accounting Global Settings (New)",
+    "q": "What is the standard SAP document type for General Ledger postings?",
+    "fact": "SA",
+    "opts": [
+      "SA",
+      "KR",
+      "DZ",
+      "DR"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Financial Accounting Global Settings (New)",
+    "q": "What is the purpose of Field Status Variants?",
+    "fact": "Control field behavior during document entry",
+    "opts": [
+      "Control field behavior during document entry",
+      "Control number ranges",
+      "Control exchange rates",
+      "Control tax procedures"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Financial Accounting Global Settings (New)",
+    "q": "Which field status options are available in SAP?",
+    "fact": "All of the Above",
+    "opts": [
+      "Suppress",
+      "Optional",
+      "Required",
+      "All of the Above"
+    ],
+    "ans": 3
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Financial Accounting Global Settings (New)",
+    "q": "Your client wants to post adjustment entries after year-end closing. Which configuration helps?",
+    "fact": "Special Periods in Fiscal Year Variant",
+    "opts": [
+      "Document Type Mapping",
+      "Special Periods in Fiscal Year Variant",
+      "Posting Period Variant",
+      "Field Status Variant"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "General Ledger Accounting (New)",
+    "q": "What are the three types of Chart of Accounts in SAP?",
+    "fact": "Operating, Country, Group",
+    "opts": [
+      "Operating, Country, Group",
+      "Vendor, Customer, Asset",
+      "Balance Sheet, P&L, Statistical",
+      "Local, Global, Regional"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "General Ledger Accounting (New)",
+    "q": "Which Chart of Accounts is used for day to day postings in Company Code?",
+    "fact": "Operating COA",
+    "opts": [
+      "Country COA",
+      "Operating COA",
+      "Group COA",
+      "Alternate COA"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "General Ledger Accounting (New)",
+    "q": "What is the purpose of tolerance groups in SAP FI?",
+    "fact": "Control posting limits and payment differences",
+    "opts": [
+      "Control posting limits and payment differences",
+      "Control taxes",
+      "Control exchange rates",
+      "Control fiscal years"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "General Ledger Accounting (New)",
+    "q": "What is the primary purpose of General Ledger Accounting?",
+    "fact": "The General Ledger (G/L) is the central repository for all accounting transactions and forms the basis for financial reporting",
+    "opts": [
+      "Manage vendors",
+      "Manage customers",
+      "Record all financial transactions and generate financial statements",
+      "Manage materials"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "General Ledger Accounting (New)",
+    "q": "What is a Chart of Accounts?",
+    "fact": "List of all G/L Accounts used by one or more Company Codes",
+    "opts": [
+      "List of Vendors",
+      "List of Customers",
+      "List of all G/L Accounts used by one or more Company Codes",
+      "List of Cost Centers"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "General Ledger Accounting (New)",
+    "q": "At year-end, P&L Accounts are carried forward to:",
+    "fact": "Retained Earnings Account",
+    "opts": [
+      "Vendor Account",
+      "Customer Account",
+      "Retained Earnings Account",
+      "Asset Account"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Controlling",
+    "q": "Which organizational unit is responsible for cost accounting?",
+    "fact": "Controlling Area",
+    "opts": [
+      "Company Code",
+      "Controlling Area",
+      "Plant",
+      "Sales Organization"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Controlling",
+    "q": "One Controlling Area can be assigned to:",
+    "fact": "Multiple Company Codes",
+    "opts": [
+      "One Company Code Only",
+      "Multiple Company Codes",
+      "One Plant Only",
+      "One Sales Organization"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Controlling",
+    "q": "What is the relationship between Company Code and Controlling Area in SAP?",
+    "fact": "Many Company Codes to One Controlling Area",
+    "opts": [
+      "1:1 Only",
+      "Many Company Codes to One Controlling Area",
+      "One Plant to One Controlling Area",
+      "No Assignment Required"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Controlling",
+    "q": "Which organizational unit is used for internal management reporting?",
+    "fact": "Profit Center",
+    "opts": [
+      "Profit Center",
+      "Company",
+      "Plant",
+      "Storage Location"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Controlling",
+    "q": "Which transaction code is used to create a Controlling Area?",
+    "fact": "OKKP",
+    "opts": [
+      "OX06",
+      "OKKP",
+      "OX18",
+      "FS00"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Accounting Concepts",
+    "q": "According to the Golden Rules of Accounting, for a Real Account:",
+    "fact": "Debit What Comes In, Credit What Goes Out",
+    "opts": [
+      "Debit the Receiver, Credit the Giver",
+      "Debit What Comes In, Credit What Goes Out",
+      "Debit Expenses, Credit Income",
+      "Debit Income, Credit Expenses"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Accounting Concepts",
+    "q": "Which of the following is an Asset?",
+    "fact": "Cash in Hand",
+    "opts": [
+      "Loan from Bank",
+      "Accounts Payable",
+      "Cash in Hand",
+      "Share Capital"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Accounting Concepts",
+    "q": "Which of the following is a Liability?",
+    "fact": "Vendor Payable",
+    "opts": [
+      "Building",
+      "Vendor Payable",
+      "Inventory",
+      "Cash"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Accounting Concepts",
+    "q": "What is Double Entry Accounting?",
+    "fact": "Two or more accounts affected with equal Debit and Credit",
+    "opts": [
+      "One account affected",
+      "Two or more accounts affected with equal Debit and Credit",
+      "Only Debit Entries",
+      "Only Credit Entries"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Accounting Concepts",
+    "q": "Which statement is always true?",
+    "fact": "Total Debit = Total Credit",
+    "opts": [
+      "Total Debit = Total Credit",
+      "Total Debit > Total Credit",
+      "Total Credit > Total Debit",
+      "None"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Accounting Concepts",
+    "q": "Which account type is Salary Expense?",
+    "fact": "Expense",
+    "opts": [
+      "Asset",
+      "Liability",
+      "Income",
+      "Expense"
+    ],
+    "ans": 3
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Accounting Concepts",
+    "q": "What is a Journal Entry?",
+    "fact": "First recording of a transaction in books",
+    "opts": [
+      "Summary Report",
+      "First recording of a transaction in books",
+      "Trial Balance",
+      "Balance Sheet"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Accounting Concepts",
+    "q": "Which financial statement shows profitability?",
+    "fact": "Profit & Loss Statement",
+    "opts": [
+      "Balance Sheet",
+      "Trial Balance",
+      "Profit & Loss Statement",
+      "Cash Book"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Accounting Concepts",
+    "q": "What is the purpose of a Trial Balance?",
+    "fact": "Verify Debit and Credit balances",
+    "opts": [
+      "Verify Debit and Credit balances",
+      "Calculate Tax",
+      "Manage Inventory",
+      "Create Vendors"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Accounting Concepts",
+    "q": "Which financial statement shows Assets and Liabilities?",
+    "fact": "Balance Sheet",
+    "opts": [
+      "P&L Statement",
+      "Balance Sheet",
+      "Journal",
+      "Ledger"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Accounting Concepts",
+    "q": "Accounts Receivable represents:",
+    "fact": "Money owed by Customers",
+    "opts": [
+      "Money owed to Vendors",
+      "Money owed by Customers",
+      "Cash Balance",
+      "Tax Liability"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Accounting Concepts",
+    "q": "Accounts Payable represents:",
+    "fact": "Money payable to vendors",
+    "opts": [
+      "Money receivable from customers",
+      "Money payable to vendors",
+      "Cash in Bank",
+      "Fixed Assets"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Accounting Concepts",
+    "q": "What is Depreciation?",
+    "fact": "Allocation of Asset Cost over useful life",
+    "opts": [
+      "Increase in Asset Value",
+      "Allocation of Asset Cost over useful life",
+      "Tax Calculation",
+      "Vendor Payment"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Accounting Concepts",
+    "q": "What is a Provision?",
+    "fact": "Known future liability estimated today",
+    "opts": [
+      "Known future liability estimated today",
+      "Fixed Asset",
+      "Cash Balance",
+      "Revenue Account"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Master data",
+    "q": "Which transaction code is used to create a G/L Account?",
+    "fact": "FS00",
+    "opts": [
+      "FSP0",
+      "FS00",
+      "FK01",
+      "FD01"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Master data",
+    "q": "A G/L Account is created at which levels?",
+    "fact": "Chart of Accounts and Company Code",
+    "opts": [
+      "Company Code only",
+      "Chart of Accounts only",
+      "Chart of Accounts and Company Code",
+      "Client only"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Master data",
+    "q": "What controls the number range of G/L accounts?",
+    "fact": "Account Group",
+    "opts": [
+      "Fiscal Year Variant",
+      "Account Group",
+      "Document Type",
+      "Posting Key"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Master data",
+    "q": "What is Open Item Management in SAP?",
+    "fact": "Open Item Management (OIM) tracks outstanding (open) and cleared transactions until they are fully settled.",
+    "opts": [
+      "Tracks all cleared and uncleared items separately",
+      "Controls document number ranges",
+      "Defines posting periods",
+      "Creates cost centers"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Master data",
+    "q": "What is the purpose of a Cost Center?",
+    "fact": "Track Expenses",
+    "opts": [
+      "Track Expenses",
+      "Track Assets",
+      "Track Vendors",
+      "Track Taxes"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Master data",
+    "q": "What is the purpose of a Profit Center?",
+    "fact": "Track Revenue and Profitability",
+    "opts": [
+      "Track Expenses Only",
+      "Track Revenue and Profitability",
+      "Track Vendors",
+      "Track Fixed Assets"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Master data",
+    "q": "During document posting, Assignment Field should be mandatory. Which configuration controls this?",
+    "fact": "Field Status Variant",
+    "opts": [
+      "Posting Period Variant",
+      "Field Status Variant",
+      "Fiscal Year Variant"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Master data",
+    "q": "Which transaction code displays G/L account balances?",
+    "fact": "FS10N or FAGLB03",
+    "opts": [
+      "FBL3N",
+      "FS10N or FAGLB03",
+      "F-02",
+      "FB03"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Master data",
+    "q": "What happens when an invoice is posted to an Open Item Managed account?",
+    "fact": "It remains open until cleared by a payment",
+    "opts": [
+      "It is immediately cleared",
+      "It remains open until cleared by a payment",
+      "It is archived automatically",
+      "It cannot be displayed"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Master data",
+    "q": "Which indicator in the G/L master enables Open Item Management?",
+    "fact": "Open Item Management",
+    "opts": [
+      "Line Item Display",
+      "Open Item Management",
+      "Tax Category",
+      "Posting Block"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Master data",
+    "q": "What is the main advantage of Open Item Management?",
+    "fact": "Easy tracking of outstanding balances",
+    "opts": [
+      "Faster printing",
+      "Easy tracking of outstanding balances",
+      "Automatic exchange rate updates",
+      "Automatic tax calculation"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Master data",
+    "q": "Which transaction is commonly used to clear open items?",
+    "fact": "F-03",
+    "opts": [
+      "F-03",
+      "F-02",
+      "FB50",
+      "FS00"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Master data",
+    "q": "What is a cleared item?",
+    "fact": "An item matched and settled against another transaction",
+    "opts": [
+      "An item awaiting payment",
+      "An item matched and settled against another transaction",
+      "A blocked item",
+      "A parked document"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Master data",
+    "q": "What is Line Item Display?",
+    "fact": "Displays individual document line items for an account",
+    "opts": [
+      "Displays individual document line items for an account",
+      "Displays only account balances",
+      "Displays vendor details only",
+      "Displays fiscal year variants"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Master data",
+    "q": "Which indicator enables line item reporting for a G/L account?",
+    "fact": "Line Item Display",
+    "opts": [
+      "Open Item Management",
+      "Line Item Display",
+      "Posting Key",
+      "Field Status Group"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Master data",
+    "q": "Which transaction displays G/L line items?",
+    "fact": "FBL3N or FAGLL03",
+    "opts": [
+      "FS10N",
+      "FBL3N or FAGLL03",
+      "FB03",
+      "F-03"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Master data",
+    "q": "Which account type commonly uses Line Item Display?",
+    "fact": "All of the Above",
+    "opts": [
+      "Expense Accounts",
+      "Revenue Accounts",
+      "Balance Sheet Accounts",
+      "All of the Above"
+    ],
+    "ans": 3
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Master data",
+    "q": "Which table stores G/L line items in S/4HANA?",
+    "fact": "ACDOCA",
+    "opts": [
+      "BSEG",
+      "BKPF",
+      "ACDOCA",
+      "SKA1"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Master data",
+    "q": "What is the purpose of the \\"Balance in Local Currency\\" indicator in FS00?",
+    "fact": "When this indicator is activated, SAP stores and manages account balances only in the Company Code currency (Local Currency), regardless of the transaction currency.",
+    "opts": [
+      "Displays balances only in document currency",
+      "Updates account balances in local currency only",
+      "Blocks foreign currency postings",
+      "Enables tax calculation"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Master data",
+    "q": "What is the purpose of the \\"Post Automatically Only\\" indicator?",
+    "fact": "Restricts manual postings and allows only system-generated postings",
+    "opts": [
+      "Allows manual postings only",
+      "Restricts manual postings and allows only system-generated postings",
+      "Blocks all postings",
+      "Allows vendor postings only"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "General Ledger",
+    "subclass": "Master data",
+    "q": "What is the purpose of the \\"Relevant to Cash Flow\\" indicator?",
+    "fact": "Includes account postings in Cash Flow Statement reporting",
+    "opts": [
+      "Controls tax calculation",
+      "Includes account postings in Cash Flow Statement reporting",
+      "Opens posting periods",
+      "Controls number ranges"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "S/4 HANA",
+    "q": "What is the primary database supported by SAP S/4HANA?",
+    "fact": "SAP S/4HANA runs exclusively on the SAP HANA database.",
+    "opts": [
+      "Oracle",
+      "SQL Server",
+      "SAP HANA",
+      "DB2"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "S/4 HANA",
+    "q": "Which table replaces BKPF and BSEG reporting simplification in S/4HANA?",
+    "fact": "ACDOCA (Universal Journal) combines FI and CO line-item data.",
+    "opts": [
+      "ACDOCA",
+      "GLT0",
+      "FAGLFLEXT",
+      "ANEK"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "S/4 HANA",
+    "q": "Which transaction is replaced by SAP Fiori apps in S/4HANA?",
+    "fact": "Traditional SAP GUI transactions still exist, but SAP recommends Fiori apps",
+    "opts": [
+      "FB50",
+      "FB60",
+      "FBL1N",
+      "All of the Above"
+    ],
+    "ans": 3
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "S/4 HANA",
+    "q": "Which functionality is mandatory in S/4HANA for inventory valuation?",
+    "fact": "Material Ledger",
+    "opts": [
+      "Profit Center Accounting",
+      "Material Ledger",
+      "Special Ledger",
+      "Costing Sheet"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "S/4 HANA",
+    "q": "Vendor and Customer Master records are replaced by:",
+    "fact": "Business Partner (BP) is mandatory in S/4HANA.",
+    "opts": [
+      "Business Partner",
+      "Universal Journal",
+      "Profit Center",
+      "Cost Center"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "S/4 HANA",
+    "q": "Which table stores material documents in S/4HANA?",
+    "fact": "MATDOC",
+    "opts": [
+      "MKPF and MSEG",
+      "MATDOC",
+      "MARD",
+      "MARA"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "Asset Accounting",
+    "q": "Which asset accounting version is available in S/4HANA?",
+    "fact": "New Asset Accounting",
+    "opts": [
+      "Classic Asset Accounting",
+      "New Asset Accounting",
+      "Legacy Asset Accounting",
+      "Special Asset Accounting"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "Asset Accounting",
+    "q": "Which table stores Asset Accounting postings in SAP S/4HANA?",
+    "fact": "Asset Accounting postings are stored in the Universal Journal (ACDOCA)",
+    "opts": [
+      "ANEK",
+      "ANEP",
+      "ACDOCA",
+      "BKPF"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "Asset Accounting",
+    "q": "Which transaction code is used to create an Asset Master Record?",
+    "fact": "AS01",
+    "opts": [
+      "AS01",
+      "AS11",
+      "AW01N",
+      "ABZON"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "Asset Accounting",
+    "q": "What is the purpose of an Asset Class?",
+    "fact": "Determines Asset Number Range and G/L Accounts",
+    "opts": [
+      "Controls Vendor Posting",
+      "Controls Customer Posting",
+      "Determines Asset Number Range and G/L Accounts",
+      "Calculates GST"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "Asset Accounting",
+    "q": "What is Depreciation Area?",
+    "fact": "Valuation View for Depreciation Calculation",
+    "opts": [
+      "Asset Category",
+      "Valuation View for Depreciation Calculation",
+      "Cost Center Group",
+      "Fiscal Year Variant"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "Asset Accounting",
+    "q": "Which depreciation area posts to the General Ledger?",
+    "fact": "Area 01 (Book Depreciation)",
+    "opts": [
+      "Area 01 (Book Depreciation)",
+      "Area 15",
+      "Area 20",
+      "Area 30"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "Asset Accounting",
+    "q": "Which transaction is used to display Asset Explorer?",
+    "fact": "AW01N",
+    "opts": [
+      "AS03",
+      "AW01N",
+      "AFAB",
+      "ABUMN"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "Asset Accounting",
+    "q": "Which transaction is used to run depreciation?",
+    "fact": "AFAB",
+    "opts": [
+      "AFAB",
+      "F.13",
+      "F110",
+      "AJRW"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "Asset Accounting",
+    "q": "In S/4HANA, depreciation posting updates which table?",
+    "fact": "ACDOCA",
+    "opts": [
+      "BSEG",
+      "ANEP",
+      "ACDOCA",
+      "BSIS"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "Asset Accounting",
+    "q": "Which transaction is used for Asset Acquisition from Vendor?",
+    "fact": "F-90",
+    "opts": [
+      "F-90",
+      "F-92",
+      "ABUMN",
+      "ABAON"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "Asset Accounting",
+    "q": "Which transaction is used for Asset Retirement with Revenue?",
+    "fact": "F-92",
+    "opts": [
+      "F-92",
+      "F-90",
+      "AS02",
+      "AFAB"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "Asset Accounting",
+    "q": "What is the benefit of Universal Journal in Asset Accounting?",
+    "fact": "Real-time Integration between FI and AA",
+    "opts": [
+      "Separate FI and AA Reconciliation",
+      "Real-time Integration between FI and AA",
+      "Manual Reconciliation Required",
+      "No Asset Reporting"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "Asset Accounting",
+    "q": "What is Accumulated Depreciation?",
+    "fact": "Accumulated Depreciation represents the total depreciation recorded on an asset over its useful life",
+    "opts": [
+      "Total cost of an asset",
+      "Total depreciation charged on an asset since acquisition",
+      "Annual depreciation amount",
+      "Asset sale value"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "Ledgers",
+    "q": "What is a Ledger in SAP S/4HANA?",
+    "fact": "A ledger stores accounting transactions and supports different accounting principles.",
+    "opts": [
+      "A Vendor Account",
+      "A Customer Account",
+      "A Repository of Accounting Postings",
+      "A Cost Center"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "Ledgers",
+    "q": "Which ledger is the leading ledger delivered by SAP?",
+    "fact": "0L",
+    "opts": [
+      "0L",
+      "1L",
+      "NL",
+      "SL"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "Ledgers",
+    "q": "How many leading ledgers can exist in a company code?",
+    "fact": "One",
+    "opts": [
+      "Multiple",
+      "Two",
+      "One",
+      "Unlimited"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "Ledgers",
+    "q": "What is the purpose of a Non-Leading Ledger?",
+    "fact": "Support parallel accounting principles",
+    "opts": [
+      "Store vendor data",
+      "Support parallel accounting principles",
+      "Manage assets",
+      "Calculate taxes"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "Ledgers",
+    "q": "Which accounting principle is typically assigned to the Leading Ledger?",
+    "fact": "IFRS",
+    "opts": [
+      "Local GAAP",
+      "IFRS",
+      "Tax Accounting Only",
+      "Management Accounting"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "Ledgers",
+    "q": "What is the main advantage of using multiple ledgers?",
+    "fact": "Parallel Accounting",
+    "opts": [
+      "Faster payments",
+      "Parallel Accounting",
+      "Vendor Management",
+      "Inventory Management"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "Ledgers",
+    "q": "Can a posting be made only to a specific ledger?",
+    "fact": "Yes, through Ledger Group Posting",
+    "opts": [
+      "No",
+      "Yes, through Ledger Group Posting",
+      "Only in ECC",
+      "Only in Asset Accounting"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "Ledgers",
+    "q": "What is a Ledger Group?",
+    "fact": "Collection of One or More Ledgers",
+    "opts": [
+      "Group of Cost Centers",
+      "Group of Vendors",
+      "Collection of One or More Ledgers",
+      "Group of Assets"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "Ledgers",
+    "q": "Which ledger receives all postings by default?",
+    "fact": "Leading Ledger (0L)",
+    "opts": [
+      "Non-Leading Ledger",
+      "Extension Ledger",
+      "Leading Ledger (0L)",
+      "Special Purpose Ledger"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "Ledgers",
+    "q": "What is an Extension Ledger in S/4HANA?",
+    "fact": "Ledger that stores only delta adjustments and references a base ledger",
+    "opts": [
+      "Physical Ledger",
+      "Ledger that stores only delta adjustments and references a base ledger",
+      "Vendor Ledger",
+      "Asset Ledge"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "Ledgers",
+    "q": "Which type of ledger reduces data redundancy?",
+    "fact": "Extension Ledger",
+    "opts": [
+      "Leading Ledger",
+      "Extension Ledger",
+      "Asset Ledger",
+      "Customer Ledger"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "Ledgers",
+    "q": "A company reports under both IFRS and Indian GAAP. Which feature should be used?",
+    "fact": "Multiple Ledgers",
+    "opts": [
+      "Cost Centers",
+      "Multiple Ledgers",
+      "Profit Centers",
+      "Internal Orders"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "Ledgers",
+    "q": "What is Parallel Accounting?",
+    "fact": "Maintaining financial statements under different accounting standards",
+    "opts": [
+      "Multiple vendors in one company code",
+      "Maintaining financial statements under different accounting standards",
+      "Multiple currencies only",
+      "Multiple fiscal years"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "Ledgers",
+    "q": "Which Table stores ledger-specific information in Universal Journal?",
+    "fact": "ACDOCA",
+    "opts": [
+      "ACDOCA",
+      "MKPF",
+      "MSEG",
+      "ANEP"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "Ledgers",
+    "q": "Can different fiscal year variants be assigned to non-leading ledgers?",
+    "fact": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Only in ECC",
+      "Only for Assets"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "Ledgers",
+    "q": "Which ledger type is commonly used for management adjustments and simulations?",
+    "fact": "Extension Ledger",
+    "opts": [
+      "Leading Ledger",
+      "Extension Ledger",
+      "Asset Ledger",
+      "Tax Ledger"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "Ledgers",
+    "q": "What is the key benefit of Ledgers in SAP S/4HANA?",
+    "fact": "Parallel Accounting and Flexible Financial Reporting",
+    "opts": [
+      "Faster Vendor Payments",
+      "Better Inventory Management",
+      "Parallel Accounting and Flexible Financial Reporting",
+      "Material Planning"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Landscape Quiz (with Answers)",
+    "q": "What is meant by SAP Landscape?",
+    "fact": "SAP Landscape refers to the arrangement of SAP systems such as Development, Quality, and Production.",
+    "opts": [
+      "A group of SAP modules",
+      "The arrangement of SAP systems in an environment",
+      "SAP GUI screen design",
+      "SAP authorization concept"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Landscape Quiz (with Answers)",
+    "q": "Which system is used for configuration and development activities?",
+    "fact": "Development System",
+    "opts": [
+      "Production System",
+      "Quality System",
+      "Development System",
+      "Sandbox System"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Landscape Quiz (with Answers)",
+    "q": "What is the primary purpose of the Quality (QAS) system?",
+    "fact": "Testing configurations and developments",
+    "opts": [
+      "End-user transactions",
+      "Testing configurations and developments",
+      "Master data creation",
+      "Financial closing"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Landscape Quiz (with Answers)",
+    "q": "Which system contains live business data?",
+    "fact": "Production",
+    "opts": [
+      "Development",
+      "Sandbox",
+      "Quality",
+      "Production"
+    ],
+    "ans": 3
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Landscape Quiz (with Answers)",
+    "q": "What is the typical 3-system SAP landscape?",
+    "fact": "DEV → QAS → PRD",
+    "opts": [
+      "DEV → QAS → PRD",
+      "PRD → DEV → QAS",
+      "DEV → PRD → QAS",
+      "QAS → DEV → PRD"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Landscape Quiz (with Answers)",
+    "q": "What does DEV stand for?",
+    "fact": "Development System",
+    "opts": [
+      "Device System",
+      "Development System",
+      "Deployment System",
+      "Delivery System"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Landscape Quiz (with Answers)",
+    "q": "What does QAS stand for?",
+    "fact": "Quality Assurance System",
+    "opts": [
+      "Quick Access System",
+      "Quality Assurance System",
+      "Query Analysis System",
+      "Qualification System"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Landscape Quiz (with Answers)",
+    "q": "What does PRD stand for?",
+    "fact": "Production System",
+    "opts": [
+      "Product System",
+      "Production System",
+      "Project System",
+      "Program Development"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Landscape Quiz (with Answers)",
+    "q": "What is a Sandbox system?",
+    "fact": "Training and experimentation system",
+    "opts": [
+      "Live Production System",
+      "Training and experimentation system",
+      "Backup System",
+      "Reporting System"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Landscape Quiz (with Answers)",
+    "q": "Why are transport Request used in SAP Landscape?",
+    "fact": "To move configurations and developments between systems",
+    "opts": [
+      "To move configurations and developments between systems",
+      "To create users",
+      "To post documents",
+      "To run reports"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Landscape Quiz (with Answers)",
+    "q": "Can direct configuration changes be made in Production?",
+    "fact": "Never (best practice)",
+    "opts": [
+      "Always",
+      "Never (best practice)",
+      "Only for FI module",
+      "Only by end users"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Landscape Quiz (with Answers)",
+    "q": "Which transaction code is used to manage Transport Requests?",
+    "fact": "SE09 / SE10",
+    "opts": [
+      "SE11",
+      "SE38",
+      "SE09 / SE10",
+      "SM35"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Landscape Quiz (with Answers)",
+    "q": "What are the two main types of Transport Requests?",
+    "fact": "Workbench and Customizing",
+    "opts": [
+      "Local and Global",
+      "Workbench and Customizing",
+      "Master and Transactional",
+      "Internal and External"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Landscape Quiz (with Answers)",
+    "q": "Which Transport Request is used for configuration changes?",
+    "fact": "Customizing Request",
+    "opts": [
+      "Workbench Request",
+      "Customizing Request",
+      "Repair Request",
+      "Local Request"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Landscape Quiz (with Answers)",
+    "q": "Which Transport Request is used for ABAP developments and Repository objects?",
+    "fact": "Workbench Request",
+    "opts": [
+      "Customizing Request",
+      "Local Request",
+      "Workbench Request",
+      "Repair Request"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Landscape Quiz (with Answers)",
+    "q": "What happens when a Transport Request is released?",
+    "fact": "It is ready to move to another system",
+    "opts": [
+      "It gets deleted",
+      "It becomes editable",
+      "It is ready to move to another system",
+      "It moves automatically to production"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Landscape Quiz (with Answers)",
+    "q": "Which table stores Accounting Document Header information?",
+    "fact": "BKPF contains document header data such as Document Number, Company Code, Fiscal Year, and Posting Date.",
+    "opts": [
+      "BSEG",
+      "BKPF",
+      "BSIS",
+      "SKA1"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Landscape Quiz (with Answers)",
+    "q": "Which table stores Accounting Document Line Items?",
+    "fact": "SEG",
+    "opts": [
+      "BKPF",
+      "BSEG",
+      "BSAS",
+      "ANLA"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP ASAP Methodology Phases – Quiz with Answers",
+    "q": "How many phases are there in ASAP Methodology?",
+    "fact": "– 5 Phases",
+    "opts": [
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP ASAP Methodology Phases – Quiz with Answers",
+    "q": "Which is the first phase of ASAP Methodology?",
+    "fact": "Project Preparation",
+    "opts": [
+      "Business Blueprint",
+      "Realization",
+      "Project Preparation",
+      "Final Preparation"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP ASAP Methodology Phases – Quiz with Answers",
+    "q": "What is the main objective of the Project Preparation phase?",
+    "fact": "Define project scope, team, and project plan",
+    "opts": [
+      "End-user training",
+      "Define project scope, team, and project plan",
+      "Production support",
+      "Data migration"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP ASAP Methodology Phases – Quiz with Answers",
+    "q": "During which phase is the Project Charter prepared?",
+    "fact": "Project Preparation",
+    "opts": [
+      "Project Preparation",
+      "Business Blueprint",
+      "Realization",
+      "Go-Live"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP ASAP Methodology Phases – Quiz with Answers",
+    "q": "Which phase focuses on gathering business requirements?",
+    "fact": "Business Blueprint",
+    "opts": [
+      "Realization",
+      "Business Blueprint",
+      "Final Preparation",
+      "Go-Live"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP ASAP Methodology Phases – Quiz with Answers",
+    "q": "What is the key deliverable of the Business Blueprint phase?",
+    "fact": "Business Blueprint Document (BBP)",
+    "opts": [
+      "Functional Specification",
+      "Business Blueprint Document (BBP)",
+      "Cutover Plan",
+      "End User Manual"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP ASAP Methodology Phases – Quiz with Answers",
+    "q": "In which phase are AS-IS and TO-BE processes documented?",
+    "fact": "Business Blueprint",
+    "opts": [
+      "Project Preparation",
+      "Business Blueprint",
+      "Realization",
+      "Final Preparation"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP ASAP Methodology Phases – Quiz with Answers",
+    "q": "Which ASAP phase involves system configuration?",
+    "fact": "Realization",
+    "opts": [
+      "Project Preparation",
+      "Business Blueprint",
+      "Realization",
+      "Go-Live Support"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP ASAP Methodology Phases – Quiz with Answers",
+    "q": "During Realization, consultants perform:",
+    "fact": "System Configuration and Unit Testing",
+    "opts": [
+      "User Training",
+      "System Configuration and Unit Testing",
+      "Production Support",
+      "Data Archiving"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP ASAP Methodology Phases – Quiz with Answers",
+    "q": "What are the two stages of Realization?",
+    "fact": "Basic Configuration and Final Configuration",
+    "opts": [
+      "Basic Configuration and Final Configuration",
+      "Unit Testing and UAT",
+      "Development and Production",
+      "Design and Support"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP ASAP Methodology Phases – Quiz with Answers",
+    "q": "Which phase includes User Acceptance Testing (UAT)?",
+    "fact": "Final Preparation",
+    "opts": [
+      "Business Blueprint",
+      "Realization",
+      "Final Preparation",
+      "Go-Live"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP ASAP Methodology Phases – Quiz with Answers",
+    "q": "End-user training is conducted during which phase?",
+    "fact": "Final Preparation",
+    "opts": [
+      "Project Preparation",
+      "Realization",
+      "Final Preparation",
+      "Go-Live"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP ASAP Methodology Phases – Quiz with Answers",
+    "q": "Which ASAP phase includes cutover activities?",
+    "fact": "Final Preparation",
+    "opts": [
+      "Business Blueprint",
+      "Realization",
+      "Final Preparation",
+      "Support"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP ASAP Methodology Phases – Quiz with Answers",
+    "q": "What is the purpose of Go-Live & Support phase?",
+    "fact": "Production Startup and Hypercare Support",
+    "opts": [
+      "Requirement Gathering",
+      "Configuration",
+      "Production Startup and Hypercare Support",
+      "Blueprint Preparation"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP ASAP Methodology Phases – Quiz with Answers",
+    "q": "Which phase marks the start of live business transactions?",
+    "fact": "Go-Live & Support",
+    "opts": [
+      "Realization",
+      "Final Preparation",
+      "Go-Live & Support",
+      "Business Blueprint"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Activate Methodology Quiz (with Answers)",
+    "q": "What is SAP Activate?",
+    "fact": "SAP Implementation Methodology for S/4HANA",
+    "opts": [
+      "SAP Security Tool",
+      "SAP Implementation Methodology for S/4HANA",
+      "SAP Database",
+      "SAP Reporting Tool"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Activate Methodology Quiz (with Answers)",
+    "q": "SAP Activate is primarily used for:",
+    "fact": "SAP S/4HANA Implementations",
+    "opts": [
+      "SAP R/3 Implementations",
+      "SAP ECC Implementations Only",
+      "SAP S/4HANA Implementations",
+      "SAP Basis Administration"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Activate Methodology Quiz (with Answers)",
+    "q": "Which methodology replaced ASAP for SAP S/4HANA projects?",
+    "fact": "SAP Activate",
+    "opts": [
+      "Agile",
+      "Waterfall",
+      "SAP Activate",
+      "Scrum"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Activate Methodology Quiz (with Answers)",
+    "q": "How many phases are there in SAP Activate?",
+    "fact": "6",
+    "opts": [
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Activate Methodology Quiz (with Answers)",
+    "q": "Which is the first phase of SAP Activate?",
+    "fact": "Discover",
+    "opts": [
+      "Explore",
+      "Prepare",
+      "Discover",
+      "Realize"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Activate Methodology Quiz (with Answers)",
+    "q": "What is the purpose of the Discover phase?",
+    "fact": "Understand solution capabilities and business value",
+    "opts": [
+      "Configure SAP",
+      "Understand solution capabilities and business value",
+      "Data Migration",
+      "User Training"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Activate Methodology Quiz (with Answers)",
+    "q": "Which phase involves project planning and team setup?",
+    "fact": "Prepare",
+    "opts": [
+      "Explore",
+      "Discover",
+      "Prepare",
+      "Deploy"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Activate Methodology Quiz (with Answers)",
+    "q": "During which phase are Fit-to-Standard workshops conducted?",
+    "fact": "Explore",
+    "opts": [
+      "Prepare",
+      "Explore",
+      "Realize",
+      "Run"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Activate Methodology Quiz (with Answers)",
+    "q": "What is the primary objective of the Explore phase?",
+    "fact": "Gap Analysis and Fit-to-Standard Validation",
+    "opts": [
+      "Production Support",
+      "Gap Analysis and Fit-to-Standard Validation",
+      "Data Archiving",
+      "Security Testing"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Activate Methodology Quiz (with Answers)",
+    "q": "Which phase includes system configuration and development?",
+    "fact": "Realize",
+    "opts": [
+      "Explore",
+      "Prepare",
+      "Realize",
+      "Run"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Activate Methodology Quiz (with Answers)",
+    "q": "User Acceptance Testing (UAT) is mainly performed during:",
+    "fact": "Realize",
+    "opts": [
+      "Prepare",
+      "Explore",
+      "Realize",
+      "Run"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Activate Methodology Quiz (with Answers)",
+    "q": "Which phase includes cutover and production migration?",
+    "fact": "Deploy",
+    "opts": [
+      "Explore",
+      "Realize",
+      "Deploy",
+      "Run"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Activate Methodology Quiz (with Answers)",
+    "q": "Go-Live occurs during which phase?",
+    "fact": "Deploy",
+    "opts": [
+      "Explore",
+      "Deploy",
+      "Prepare",
+      "Discover"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Activate Methodology Quiz (with Answers)",
+    "q": "Which phase provides ongoing support after Go-Live?",
+    "fact": "Run",
+    "opts": [
+      "Realize",
+      "Deploy",
+      "Run",
+      "Explore"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "S/4HANA & Project",
+    "subclass": "SAP Activate Methodology Quiz (with Answers)",
+    "q": "SAP Activate is based on which project approach?",
+    "fact": "Agile Methodology",
+    "opts": [
+      "Waterfall Only",
+      "Agile Methodology",
+      "Six Sigma",
+      "Lean Manufacturing"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Controlling",
+    "q": "What is the primary purpose of SAP Controlling (CO)?",
+    "fact": "CO helps management analyze costs, revenues, and profitability for internal decision-making.",
+    "opts": [
+      "External Reporting",
+      "Internal Cost Monitoring and Management",
+      "Tax Calculation",
+      "Payroll Processing"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Controlling",
+    "q": "Which component of CO is used to track costs by department?",
+    "fact": "Cost Centers represent departments or functional areas where costs are incurred.",
+    "opts": [
+      "Profit Center Accounting",
+      "Cost Center Accounting",
+      "Asset Accounting",
+      "Treasury Management"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Controlling",
+    "q": "What is a Cost Center?",
+    "fact": "Organizational unit where costs are collected",
+    "opts": [
+      "Revenue-generating unit",
+      "Organizational unit where costs are collected",
+      "Vendor Account",
+      "Material Group"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Controlling",
+    "q": "Which transaction code is used to create a Cost Center?",
+    "fact": "KS01 is used to create a Cost Center.",
+    "opts": [
+      "KA01",
+      "KS01",
+      "KP06",
+      "KSB1"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Controlling",
+    "q": "What is a Cost Element?",
+    "fact": "A G/L Account used for Cost Accounting",
+    "opts": [
+      "A Cost Center Group",
+      "A G/L Account used for Cost Accounting",
+      "A Profit Center",
+      "A Company Code"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Controlling",
+    "q": "In SAP S/4HANA, Cost Elements are created using:",
+    "fact": "In S/4HANA, G/L Accounts and Cost Elements are unified and created using FS00.",
+    "opts": [
+      "KA01",
+      "FS00",
+      "XK01",
+      "KS01"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Controlling",
+    "q": "Which Cost Element category is used for Primary Costs?",
+    "fact": "Category 01 represents Primary Cost Elements.",
+    "opts": [
+      "01",
+      "21",
+      "42",
+      "43"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Controlling",
+    "q": "Which Cost Element category is used for Internal Activity Allocation?",
+    "fact": "43",
+    "opts": [
+      "01",
+      "43",
+      "31",
+      "90"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Controlling",
+    "q": "Which transaction is used to post Activity Prices?",
+    "fact": "KP26",
+    "opts": [
+      "KP26",
+      "KS01",
+      "KA01",
+      "KE51"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Controlling",
+    "q": "What is a Profit Center?",
+    "fact": "Unit responsible for generating profits",
+    "opts": [
+      "Unit responsible for generating profits",
+      "Vendor Group",
+      "Material Group",
+      "Plant"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Controlling",
+    "q": "Which T-Code is used to create a Profit Center?",
+    "fact": "KE51",
+    "opts": [
+      "KE51",
+      "KS01",
+      "KP26",
+      "KSB1"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Internal Orders",
+    "q": "What is Internal Order used for?",
+    "fact": "Temporary cost collection and monitoring",
+    "opts": [
+      "Long-term cost tracking",
+      "Temporary cost collection and monitoring",
+      "Tax Reporting",
+      "Vendor Reconciliation"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Internal Orders",
+    "q": "Which T-Code is used to create an Internal Order?",
+    "fact": "KO01",
+    "opts": [
+      "KO01",
+      "KS01",
+      "KP26",
+      "KA01"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Internal Orders",
+    "q": "What is the purpose of Assessment in CO?",
+    "fact": "Cost Allocation using Secondary Cost Elements",
+    "opts": [
+      "Direct Cost Posting",
+      "Cost Allocation using Secondary Cost Elements",
+      "Asset Transfer",
+      "Bank Reconciliation"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Internal Orders",
+    "q": "Which transaction is used for Assessment Cycle?",
+    "fact": "KSU1",
+    "opts": [
+      "KSU1",
+      "KSV1",
+      "KS01",
+      "KP06"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Internal Orders",
+    "q": "What is Distribution in SAP CO?",
+    "fact": "Allocation using Primary Cost Elements",
+    "opts": [
+      "Allocation using Primary Cost Elements",
+      "Vendor Distribution",
+      "Asset Allocation",
+      "Revenue Posting"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Internal Orders",
+    "q": "Which transaction is used for Distribution Cycle?",
+    "fact": "KSV1",
+    "opts": [
+      "KSV1",
+      "KSU1",
+      "KP06",
+      "KS01"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Internal Orders",
+    "q": "What is the relationship between FI and CO?",
+    "fact": "FI postings automatically update CO when relevant cost objects exist",
+    "opts": [
+      "They are separate modules with no integration",
+      "FI postings automatically update CO when relevant cost objects exist",
+      "CO updates FI only during year-end closing",
+      "CO is a sub-module of MM"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Internal Orders",
+    "q": "Which transaction code displays line items posted to an Internal Order?",
+    "fact": "KOB1",
+    "opts": [
+      "KOB1",
+      "KSB1",
+      "KO03",
+      "FBL3N"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Internal Orders",
+    "q": "What is budgeting in Internal Orders?",
+    "fact": "Setting spending limits for an order",
+    "opts": [
+      "Setting spending limits for an order",
+      "Vendor Budgeting",
+      "Asset Planning",
+      "Tax Planning"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Internal Orders",
+    "q": "Which transaction code is used to enter the budget for an Internal Order?",
+    "fact": "KO22",
+    "opts": [
+      "KO22",
+      "KO88",
+      "KO02",
+      "KOB1"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Internal Orders",
+    "q": "What is settlement in Internal Orders?",
+    "fact": "Transferring collected costs to a receiver object",
+    "opts": [
+      "Closing Vendor Accounts",
+      "Transferring collected costs to a receiver object",
+      "Clearing Customer Accounts",
+      "Posting Depreciation"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Internal Orders",
+    "q": "Which transaction code is used for Individual Order Settlement?",
+    "fact": "KO88",
+    "opts": [
+      "KO88",
+      "KO02",
+      "KO03",
+      "KO22"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Internal Orders",
+    "q": "Which transaction code is used for Mass Settlement of Internal Orders?",
+    "fact": "KO8G",
+    "opts": [
+      "KO8G",
+      "KO88",
+      "KO01",
+      "KO02"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Internal Orders",
+    "q": "Which objects can be settlement receivers?",
+    "fact": "All of the Above",
+    "opts": [
+      "Cost Center",
+      "Asset",
+      "Profitability Segment (CO-PA)",
+      "All of the Above"
+    ],
+    "ans": 3
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Internal Orders",
+    "q": "Which transaction code is used to maintain settlement rules?",
+    "fact": "KO02",
+    "opts": [
+      "KO02",
+      "KO88",
+      "KO22",
+      "KOB1"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Internal Orders",
+    "q": "Can revenues be posted to an Internal Order?",
+    "fact": "Yes, if configured accordingly",
+    "opts": [
+      "No",
+      "Yes, if configured accordingly",
+      "Only in Asset Accounting",
+      "Only in CO-PA"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Internal Orders",
+    "q": "What is the advantage of using Internal Orders?",
+    "fact": "All of the Above",
+    "opts": [
+      "Detailed tracking of specific events, projects, campaigns, or investments",
+      "Better cost control and reporting",
+      "Flexible settlement options",
+      "All of the Above"
+    ],
+    "ans": 3
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Internal Orders",
+    "q": "What does CAPEX stand for?",
+    "fact": "CAPEX refers to expenses incurred for acquiring or improving long-term assets such as buildings, machinery, and equipment.",
+    "opts": [
+      "Capital Expenditure",
+      "Cost Allocation Process",
+      "Capital Expense Process",
+      "Cost Accounting Expenditure"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Internal Orders",
+    "q": "What does OPEX stand for?",
+    "fact": "OPEX refers to day-to-day business operating expenses such as salaries, rent, electricity, and maintenance.",
+    "opts": [
+      "Operational Expenditure",
+      "Operating Expenditure",
+      "Order Processing Expenditure",
+      "Organization Expense"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Internal Orders",
+    "q": "Which Internal Order type is generally used for CAPEX?",
+    "fact": "Investment Order",
+    "opts": [
+      "Overhead Order",
+      "Investment Order",
+      "Accrual Order",
+      "Statistical Order"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Internal Orders",
+    "q": "Which Internal Order type is generally used for OPEX?",
+    "fact": "Overhead Order",
+    "opts": [
+      "Overhead Order",
+      "Investment Order",
+      "Asset Order",
+      "Production Order"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Internal Orders",
+    "q": "Purchase of a new machine worth ₹10 Lakhs is an example of:",
+    "fact": "CAPEX",
+    "opts": [
+      "OPEX",
+      "CAPEX",
+      "Revenue Expense",
+      "Accrual Expense"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Internal Orders",
+    "q": "Monthly office rent is an example of:",
+    "fact": "OPEX",
+    "opts": [
+      "CAPEX",
+      "Asset Acquisition",
+      "OPEX",
+      "Investment Cost"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "Controlling",
+    "subclass": "Internal Orders",
+    "q": "What is the role of an Allocation Structure in settlement?",
+    "fact": "Maps source cost elements to settlement cost elements",
+    "opts": [
+      "Defines number ranges",
+      "Maps source cost elements to settlement cost elements",
+      "Creates Internal Orders",
+      "Maintains budgets"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Accounts Receivables",
+    "q": "What is the main purpose of Accounts Receivable (AR) in SAP FI?",
+    "fact": "AR is used to record and monitor all transactions related to customers, such as invoices, incoming payments, and credit memos.",
+    "opts": [
+      "Manage company assets",
+      "Manage vendor payments",
+      "Manage customer transactions and receivables",
+      "Manage cost centers"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Accounts Receivables",
+    "q": "Which account type is used for Customer Accounts?",
+    "fact": "Account Type \\"D\\" represents Customer Accounts in SAP FI.",
+    "opts": [
+      "A",
+      "D",
+      "K",
+      "M"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Accounts Receivables",
+    "q": "What is the reconciliation account in customer master?",
+    "fact": "Customer balances automatically update the reconciliation account in the General Ledger.",
+    "opts": [
+      "Temporary account",
+      "Expense account",
+      "G/L account linked to subledger",
+      "Tax account"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Accounts Receivables",
+    "q": "Which transaction is used to post a customer invoice?",
+    "fact": "F-22 and FB70 can be used for customer invoice posting.",
+    "opts": [
+      "F-22",
+      "F-28",
+      "FB70",
+      "Both A and D"
+    ],
+    "ans": 3
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Accounts Receivables",
+    "q": "Which transaction code is used to post incoming customer payments?",
+    "fact": "F-28 is used for posting customer incoming payments.",
+    "opts": [
+      "F-53",
+      "F-28",
+      "F-32",
+      "F-44"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Accounts Receivables",
+    "q": "What is an Open Item in AR?",
+    "fact": "Outstanding customer transaction not yet cleared",
+    "opts": [
+      "Cleared customer invoice",
+      "Outstanding customer transaction not yet cleared",
+      "Posted asset transaction",
+      "Tax posting"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Accounts Receivables",
+    "q": "Which report displays customer balances?",
+    "fact": "FBL5N displays Customer Line Items.",
+    "opts": [
+      "FBL3N",
+      "FBL5N",
+      "FBL1N",
+      "FAGLL03"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Accounts Receivables",
+    "q": "Which document is used to reduce customer receivables?",
+    "fact": "Credit Memo",
+    "opts": [
+      "Debit Memo",
+      "Credit Memo",
+      "Vendor Invoice",
+      "Goods Receipt"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Accounts Receivables",
+    "q": "What is a Special G/L Transaction in AR?",
+    "fact": "Down Payment from Customer",
+    "opts": [
+      "Normal Invoice",
+      "Down Payment from Customer",
+      "Tax Posting",
+      "Depreciation"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Accounts Receivables",
+    "q": "Which transaction code displays customer balances?",
+    "fact": "FD10N",
+    "opts": [
+      "FD10N",
+      "FK10N",
+      "FS10N",
+      "FBL5N"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Accounts Receivables",
+    "q": "What happens when a customer invoice is posted?",
+    "fact": "Customer account is debited Accounting Entry: Customer A/c Dr To Revenue A/c",
+    "opts": [
+      "Customer account is debited",
+      "Revenue account is debited",
+      "Vendor account is credited",
+      "Asset account is credited"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Accounts Receivables",
+    "q": "In SAP FI, a Customer Account is classified as:",
+    "fact": "Customer accounts are subledger accounts used to record detailed customer transactions.",
+    "opts": [
+      "General Ledger Account",
+      "Cost Element",
+      "Subledger Account",
+      "Asset Account"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Accounts Receivables",
+    "q": "Why are Customer Accounts called Subledger Accounts?",
+    "fact": "They store detailed customer-wise transactions and are linked to a G/L Reconciliation Account.",
+    "opts": [
+      "They are created in CO Module.",
+      "They store detailed customer-wise transactions and are linked to a G/L Reconciliation Account.",
+      "They replace G/L Accounts.",
+      "They are temporary accounts."
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Accounts Receivables",
+    "q": "Which account in the Customer Master links the customer subledger to the General Ledger?",
+    "fact": "Reconciliation Account",
+    "opts": [
+      "Tax Account",
+      "Revenue Account",
+      "Reconciliation Account",
+      "Cash Account"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Accounts Receivables",
+    "q": "Can postings be made directly to a Customer Reconciliation Account?",
+    "fact": "SAP automatically updates the reconciliation account through customer transactions.",
+    "opts": [
+      "Yes, always",
+      "Yes, through FB50",
+      "No, direct postings are not allowed",
+      "Only during year-end closing"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Accounts Receivables",
+    "q": "What is the main advantage of using Customer Subledger Accounts?",
+    "fact": "Tracks customer-wise balances and transactions",
+    "opts": [
+      "Reduces master data",
+      "Tracks customer-wise balances and transactions",
+      "Eliminates G/L Accounts",
+      "Avoids clearing"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Accounts Receivables",
+    "q": "A Customer Account balance is automatically updated in:",
+    "fact": "Reconciliation Account Customer Advance",
+    "opts": [
+      "Cost Center",
+      "Internal Order",
+      "Reconciliation Account",
+      "Profit Center"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Accounts Receivables",
+    "q": "Which transaction code is used to post a customer down payment?",
+    "fact": "F-29",
+    "opts": [
+      "F-29",
+      "F-48",
+      "F-22",
+      "F-32"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Accounts Receivables",
+    "q": "What is a Customer Advance in SAP FI?",
+    "fact": "A customer advance (down payment) is money received from a customer before the invoice is issued.",
+    "opts": [
+      "Payment received after invoice posting",
+      "Payment received before goods/services are delivered or invoiced",
+      "Vendor payment",
+      "Credit Memo"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Accounts Receivables",
+    "q": "Customer Advance is posted using which SAP functionality?",
+    "fact": "Special G/L Transaction",
+    "opts": [
+      "Normal G/L Transaction",
+      "Special G/L Transaction",
+      "Asset Posting",
+      "Accrual Posting"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Accounts Receivables",
+    "q": "Why is a Special G/L Indicator used for Customer Advance?",
+    "fact": "To separate advance payments from normal receivables",
+    "opts": [
+      "To calculate depreciation",
+      "To separate advance payments from normal receivables",
+      "To create assets",
+      "To calculate taxes"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Accounts Receivables",
+    "q": "What is the accounting entry when a Customer Advance of ₹50,000 is received?",
+    "fact": "Bank A/c Dr ₹50,000 To Customer Down Payment A/c ₹50,000",
+    "opts": [
+      "Customer A/c Dr ₹50,000 To Bank A/c ₹50,000",
+      "Bank A/c Dr ₹50,000 To Customer Down Payment A/c ₹50,000",
+      "Revenue A/c Dr ₹50,000 To Customer A/c ₹50,000",
+      "Customer A/c Dr ₹50,000 To Revenue A/c ₹50,000"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Accounts Receivables",
+    "q": "Can Customer Advances be viewed separately from normal customer invoices?",
+    "fact": "Yes, through Special G/L Transactions",
+    "opts": [
+      "No",
+      "Only in G/L",
+      "Yes, through Special G/L Transactions",
+      "Only in Asset Accounting"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Accounts Receivables",
+    "q": "Which transaction code is used to clear customer open items manually?",
+    "fact": "F-32 is specifically used for Customer Account Clearing.",
+    "opts": [
+      "F-44",
+      "F-03",
+      "F-32",
+      "F-28"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Dunning",
+    "q": "What is the purpose of Dunning in SAP?",
+    "fact": "Dunning is the process of sending payment reminders to customers for overdue invoices.",
+    "opts": [
+      "To post customer invoices",
+      "To remind customers about overdue payments",
+      "To create vendors",
+      "To calculate depreciation"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Dunning",
+    "q": "Which transaction code is commonly used for Dunning Run?",
+    "fact": "F150",
+    "opts": [
+      "F110",
+      "FBZP",
+      "F150",
+      "F-28"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Dunning",
+    "q": "Where is the Dunning Procedure assigned?",
+    "fact": "Customer Master",
+    "opts": [
+      "Material Master",
+      "Vendor Master",
+      "Customer Master",
+      "Cost Center"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Dunning",
+    "q": "What is a Dunning Level?",
+    "fact": "Severity of reminder notices based on overdue days",
+    "opts": [
+      "Number of company codes",
+      "Severity of reminder notices based on overdue days",
+      "Number of customers",
+      "Payment method"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Dunning",
+    "q": "A customer invoice is overdue by 10 days. What determines whether a dunning notice is generated?",
+    "fact": "Dunning Procedure Configuration",
+    "opts": [
+      "Material Type",
+      "Dunning Procedure Configuration",
+      "Plant",
+      "Cost Center"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Dunning",
+    "q": "How many Dunning Levels can be configured in a Dunning Procedure?",
+    "fact": "Maximum 9",
+    "opts": [
+      "Maximum 3",
+      "Maximum 5",
+      "Maximum 9",
+      "Unlimited"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Dunning",
+    "q": "What are the main steps in the Dunning Process?",
+    "fact": "Proposal Run → Dunning Run → Print Notices",
+    "opts": [
+      "Proposal Run → Dunning Run → Print Notices",
+      "Invoice → Payment → Clearing",
+      "PO → GR → IR",
+      "Asset Acquisition → Depreciation"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Dunning",
+    "q": "What is a Dunning Area in SAP?",
+    "fact": "A Dunning Area allows separate dunning procedures for different business areas, divisions, or regions within the same company code.",
+    "opts": [
+      "A company code",
+      "An organizational unit used for dunning within a company code",
+      "A customer account group",
+      "A payment method"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "Dunning",
+    "q": "Which organizational level is a Dunning Area assigned to?",
+    "fact": "Company Code",
+    "opts": [
+      "Client",
+      "Controlling Area",
+      "Company Code",
+      "Plant"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "O2C cycle",
+    "q": "What does O2C stand for in SAP?",
+    "fact": "Order to Cash",
+    "opts": [
+      "Order to Cost",
+      "Order to Cash",
+      "Order to Credit",
+      "Order to Company"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "O2C cycle",
+    "q": "What is the correct O2C process sequence?",
+    "fact": "Sales Order → Delivery → PGI → Billing → Customer Payment",
+    "opts": [
+      "Invoice → Sales Order → Delivery → Payment",
+      "Sales Order → Delivery → PGI → Billing → Customer Payment",
+      "PR → PO → GR → IR → Payment",
+      "Sales Order → Payment → Delivery → Invoice"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "O2C cycle",
+    "q": "A billing document for ₹1,00,000 is created. Which FI entry is generated?",
+    "fact": "Customer ₹1,00,000 Dr To Revenue ₹1,00,000",
+    "opts": [
+      "Revenue Dr ₹1,00,000 To Customer ₹1,00,000",
+      "Customer ₹1,00,000 Dr To Revenue ₹1,00,000",
+      "Bank ₹1,00,000 Dr To Customer ₹1,00,000",
+      "Inventory ₹1,00,000 Dr To Revenue ₹1,00,000"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "O2C cycle",
+    "q": "A customer payment is received after billing. What is the accounting entry?",
+    "fact": "Bank Dr To Customer",
+    "opts": [
+      "Customer Dr To Bank",
+      "Bank Dr To Customer",
+      "Revenue Dr To Customer",
+      "Customer Dr To Revenue"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "O2C cycle",
+    "q": "Does creation of an Outbound Delivery generate an accounting document?",
+    "fact": "Creating an Outbound Delivery (VL01N) is a logistics activity. No FI accounting document is generated at this stage.",
+    "opts": [
+      "Yes",
+      "No",
+      "Only for stock materials",
+      "Only for services"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "O2C cycle",
+    "q": "At which stage is the first accounting entry generated in the delivery process?",
+    "fact": "Post Goods Issue (PGI)",
+    "opts": [
+      "Sales Order",
+      "Outbound Delivery",
+      "Post Goods Issue (PGI)",
+      "Billing"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "O2C cycle",
+    "q": "What is the accounting entry during PGI?",
+    "fact": "COGS A/c Dr To Inventory A/c",
+    "opts": [
+      "Customer A/c Dr To Revenue A/c",
+      "COGS A/c Dr To Inventory A/c",
+      "Bank A/c Dr To Customer A/c",
+      "Revenue A/c Dr To Customer A/c"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "O2C cycle",
+    "q": "Why is Inventory credited during PGI?",
+    "fact": "Inventory leaves the warehouse",
+    "opts": [
+      "Inventory increases",
+      "Inventory leaves the warehouse",
+      "Revenue is recognized",
+      "Customer pays"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "O2C cycle",
+    "q": "Which configuration determines the inventory and COGS accounts during PGI?",
+    "fact": "OBYC controls automatic account determination for inventory postings.",
+    "opts": [
+      "VKOA",
+      "OBYC",
+      "FBN1",
+      "OBA7"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "O2C cycle",
+    "q": "What happens to stock quantity after PGI?",
+    "fact": "Decreases",
+    "opts": [
+      "Increases",
+      "Remains unchanged",
+      "Decreases",
+      "Doubles"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "O2C cycle",
+    "q": "Which movement type is commonly used during PGI for sales delivery?",
+    "fact": "601",
+    "opts": [
+      "101",
+      "261",
+      "601",
+      "122"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "O2C cycle",
+    "q": "Which document is created after successful PGI?",
+    "fact": "Material Document and Accounting Document",
+    "opts": [
+      "Asset Document",
+      "Material Document and Accounting Document",
+      "Vendor Invoice",
+      "Purchase Order"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "O2C cycle",
+    "q": "When is Revenue recognized in the O2C cycle?",
+    "fact": "Billing",
+    "opts": [
+      "Sales Order",
+      "Delivery Creation",
+      "PGI",
+      "Billing"
+    ],
+    "ans": 3
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "O2C cycle",
+    "q": "What is the purpose of a Billing Document in SAP SD?",
+    "fact": "To generate a customer invoice and update FI",
+    "opts": [
+      "To create a Purchase Order",
+      "To generate a customer invoice and update FI",
+      "To create a Delivery Document",
+      "To create a Material Master"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "O2C cycle",
+    "q": "Which transaction code is used to create a Billing Document?",
+    "fact": "VF01",
+    "opts": [
+      "VA01",
+      "VL01N",
+      "VF01",
+      "FB70"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "O2C cycle",
+    "q": "Which document is generally required before creating a Billing Document?",
+    "fact": "Delivery Document",
+    "opts": [
+      "Purchase Requisition",
+      "Delivery Document (for standard sales process)",
+      "Asset Master",
+      "Vendor Invoice"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "O2C cycle",
+    "q": "At which stage is Revenue recognized in SAP SD?",
+    "fact": "Billing Document Creation",
+    "opts": [
+      "Sales Order",
+      "Delivery Creation",
+      "Billing Document Creation",
+      "Customer Payment"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "O2C cycle",
+    "q": "Which accounting entry is generated during Billing?",
+    "fact": "Customer A/c Dr / Revenue A/c Cr",
+    "opts": [
+      "COGS Dr / Inventory Cr",
+      "Customer A/c Dr / Revenue A/c Cr",
+      "Bank A/c Dr / Customer A/c Cr",
+      "Revenue A/c Dr / Customer A/c Cr"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "O2C cycle",
+    "q": "Which integration point connects SD Billing with FI?",
+    "fact": "VKOA determines Revenue, Freight, Discount, and Tax G/L Accounts during billing.",
+    "opts": [
+      "OBYC",
+      "VKOA",
+      "OBA5",
+      "FBN1"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "O2C cycle",
+    "q": "Which document is automatically created in FI after billing?",
+    "fact": "Accounting Document",
+    "opts": [
+      "Material Document",
+      "Accounting Document",
+      "Purchase Order",
+      "Asset Document"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "O2C cycle",
+    "q": "What is the relationship between Billing Document and Accounting Document?",
+    "fact": "Billing automatically generates an Accounting Document",
+    "opts": [
+      "No relationship",
+      "Billing automatically generates an Accounting Document",
+      "Accounting Document creates Billing",
+      "Billing updates only CO"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "O2C cycle",
+    "q": "Which account is debited during customer billing?",
+    "fact": "Customer Reconciliation Account",
+    "opts": [
+      "Revenue Account",
+      "Tax Account",
+      "Customer Reconciliation Account",
+      "Inventory Account"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "AR & O2C",
+    "subclass": "O2C cycle",
+    "q": "Can taxes be posted through the Billing Document?",
+    "fact": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Only manually",
+      "Only in ECC"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "P2P Cycle",
+    "subclass": "P2P Cycle",
+    "q": "Which transaction in MM creates an accounting document in FI during Goods Receipt?",
+    "fact": "When Goods Receipt (GR) is posted through MIGO for a stock material, SAP generates an accounting document in FI.",
+    "opts": [
+      "ME21N",
+      "MIGO",
+      "MIRO",
+      "XK01"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "P2P Cycle",
+    "subclass": "P2P Cycle",
+    "q": "Which accounts are typically affected during Goods Receipt (GR) for a standard PO?",
+    "fact": "Inventory A/c & GR/IR A/c",
+    "opts": [
+      "Vendor A/c & Expense A/c",
+      "Inventory A/c & GR/IR A/c",
+      "Cash A/c & Vendor A/c",
+      "Expense A/c & Cash A/c Inventory Account → Debit GR/IR Account → Credit"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "P2P Cycle",
+    "subclass": "P2P Cycle",
+    "q": "During Invoice Receipt (MIRO), which accounts are generally posted?",
+    "fact": "Vendor & GR/IR",
+    "opts": [
+      "Inventory & Bank",
+      "Vendor & GR/IR",
+      "Vendor & Cash",
+      "Expense & Cash GR/IR → Debit Vendor → Credit"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "P2P Cycle",
+    "subclass": "P2P Cycle",
+    "q": "What is the purpose of the GR/IR account?",
+    "fact": "GR/IR clears the difference in timing between Goods Receipt and Invoice Receipt.",
+    "opts": [
+      "Tax Calculation",
+      "Payment Processing",
+      "clearing account between GR and Invoice Receipt",
+      "Asset Accounting"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "P2P Cycle",
+    "subclass": "P2P Cycle",
+    "q": "Which transaction is used for Invoice Verification?",
+    "fact": "MIRO posts the vendor invoice against the PO and Goods Receipt.",
+    "opts": [
+      "MIGO",
+      "MIRO",
+      "FB60",
+      "F-53"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "P2P Cycle",
+    "subclass": "P2P Cycle",
+    "q": "Which FI configuration is mandatory for automatic account determination in MM?",
+    "fact": "OBYC is used to define automatic postings from MM transactions to FI G/L accounts.",
+    "opts": [
+      "OB52",
+      "OBYC",
+      "OBA7",
+      "FBN1"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "P2P Cycle",
+    "subclass": "P2P Cycle",
+    "q": "Which helps determine the G/L account during inventory postings?",
+    "fact": "Valuation Class links materials to specific G/L accounts through OBYC.",
+    "opts": [
+      "Material Group",
+      "Material Type",
+      "Valuation Class",
+      "Purchasing Group"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "P2P Cycle",
+    "subclass": "P2P Cycle",
+    "q": "Where is the Valuation Class maintained?",
+    "fact": "Material Master - Accounting View",
+    "opts": [
+      "Vendor Master",
+      "Purchasing Info Record",
+      "Material Master - Accounting View",
+      "Company Code"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "P2P Cycle",
+    "subclass": "P2P Cycle",
+    "q": "Which transaction key is used for Inventory Posting in OBYC?",
+    "fact": "BSX controls Inventory Account postings.",
+    "opts": [
+      "WRX",
+      "BSX",
+      "GBB",
+      "PRD"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "P2P Cycle",
+    "subclass": "P2P Cycle",
+    "q": "Which transaction key is used for GR/IR postings?",
+    "fact": "WRX determines the GR/IR clearing account.",
+    "opts": [
+      "WRX",
+      "BSX",
+      "GBB",
+      "PRD"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "P2P Cycle",
+    "subclass": "P2P Cycle",
+    "q": "Which transaction key is used for Goods Issue postings?",
+    "fact": "GBB controls offsetting entries for goods movements such as consumption and scrapping.",
+    "opts": [
+      "BSX",
+      "WRX",
+      "GBB",
+      "PRD"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "P2P Cycle",
+    "subclass": "P2P Cycle",
+    "q": "Which transaction key handles price differences?",
+    "fact": "PRD is used when there are differences between standard price and actual purchase price",
+    "opts": [
+      "PRD",
+      "WRX",
+      "BSX",
+      "GBB"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "P2P Cycle",
+    "subclass": "P2P Cycle",
+    "q": "What happens if a G/L account is not maintained in OBYC?",
+    "fact": "Accounting document cannot be generated",
+    "opts": [
+      "System posts automatically",
+      "Material is blocked",
+      "Accounting document cannot be generated",
+      "Vendor is blocked"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "P2P Cycle",
+    "subclass": "P2P Cycle",
+    "q": "What is the accounting entry during Vendor Payment?",
+    "fact": "Vendor liability is cleared when payment is made.",
+    "opts": [
+      "Vendor Dr / Bank Cr",
+      "Bank Dr / Vendor Cr",
+      "Inventory Dr / Vendor Cr",
+      "GR/IR Dr / Vendor Cr"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "P2P Cycle",
+    "subclass": "P2P Cycle",
+    "q": "A material has a Standard Price of ₹100. Invoice is received for ₹110. What is the Price Difference?",
+    "fact": "Actual Price (₹110) - Standard Price (₹100) = ₹10 Price Difference.",
+    "opts": [
+      "₹0",
+      "₹5",
+      "₹10",
+      "₹20"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "P2P Cycle",
+    "subclass": "P2P Cycle",
+    "q": "Which Price Control updates inventory value automatically with each procurement?",
+    "fact": "Under MAP, inventory value adjusts automatically based on procurement cost.",
+    "opts": [
+      "Standard Price (S)",
+      "Moving Average Price (V)",
+      "Both",
+      "None"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "P2P Cycle",
+    "subclass": "P2P Cycle",
+    "q": "Which Movement Type is used for Goods Receipt against a Purchase Order?",
+    "fact": "Movement Type 101 is used for Goods Receipt (GR) against a Purchase Order.",
+    "opts": [
+      "101",
+      "201",
+      "261",
+      "601"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "P2P Cycle",
+    "subclass": "P2P Cycle",
+    "q": "Which Movement Type is used to cancel a Goods Receipt posted with 101?",
+    "fact": "Movement Type 102 reverses a 101 Goods Receipt.",
+    "opts": [
+      "102",
+      "122",
+      "262",
+      "602"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "P2P Cycle",
+    "subclass": "P2P Cycle",
+    "q": "Which Movement Type is used for Goods Issue to a Cost Center?",
+    "fact": "Material is consumed directly by a Cost Center.",
+    "opts": [
+      "201",
+      "261",
+      "301",
+      "551"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "P2P Cycle",
+    "subclass": "P2P Cycle",
+    "q": "Which Movement Type is used for Goods Issue to a Production Order?",
+    "fact": "261 is used to issue raw materials to a Production Order.",
+    "opts": [
+      "201",
+      "261",
+      "311",
+      "601"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "P2P Cycle",
+    "subclass": "P2P Cycle",
+    "q": "Which Movement Type is used to reverse a Goods Issue posted with 261?",
+    "fact": "262 is the reversal movement for 261.",
+    "opts": [
+      "262",
+      "202",
+      "312",
+      "602"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "P2P Cycle",
+    "subclass": "P2P Cycle",
+    "q": "Which Movement Type is used for Goods Issue to Customer (Outbound Delivery)?",
+    "fact": "601 is used when goods are issued to a customer during delivery.",
+    "opts": [
+      "601",
+      "641",
+      "261",
+      "201"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Accounts Payables",
+    "q": "What is the main purpose of Accounts Payable in SAP FI?",
+    "fact": "Accounts Payable (AP) is used to record and manage all transactions related to vendors, such as invoices, payments, and credit memos.",
+    "opts": [
+      "Manage customer transactions",
+      "Manage vendor transactions",
+      "Manage asset transactions",
+      "Manage cost centers"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Accounts Payables",
+    "q": "Which T-Code is used to create a Vendor Invoice?",
+    "fact": "FB60 is used to post vendor invoices without reference to a purchase order.",
+    "opts": [
+      "F-02",
+      "FB60",
+      "F-53",
+      "F-28"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Accounts Payables",
+    "q": "Which T-Code is used for Vendor Payment?",
+    "fact": "F-53 is used for manual outgoing payments to vendors.",
+    "opts": [
+      "F-28",
+      "F-53",
+      "FB60",
+      "FBL1N"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Accounts Payables",
+    "q": "Which report displays Vendor Line Items?",
+    "fact": "FBL1N displays vendor account line items.",
+    "opts": [
+      "FBL3N",
+      "FBL5N",
+      "FBL1N",
+      "FS10N"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Accounts Payables",
+    "q": "Which account type is used for Vendors?",
+    "fact": "In SAP, account type \\"K\\" represents Vendors (Creditor).",
+    "opts": [
+      "D",
+      "S",
+      "K",
+      "A"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Accounts Payables",
+    "q": "What happens when a Vendor Invoice is posted?",
+    "fact": "Vendor liability increases, so Vendor Account is credited and Expense Account is debited.",
+    "opts": [
+      "Vendor Account is Debited",
+      "Expense Account is Credited",
+      "Vendor Account is Credited",
+      "Customer Account is Credited"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Accounts Payables",
+    "q": "What is a Vendor Reconciliation Account?",
+    "fact": "Vendor balances are automatically updated in the reconciliation account.",
+    "opts": [
+      "Expense Account",
+      "Revenue Account",
+      "Control Account linked to Vendor Subledger",
+      "Asset Account"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Accounts Payables",
+    "q": "Can postings be made directly to a Vendor Reconciliation Account?",
+    "fact": "Direct postings are not allowed. Updates happen automatically through vendor transactions.",
+    "opts": [
+      "Yes",
+      "No",
+      "Only by FI Consultant",
+      "Only through F-02"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Accounts Payables",
+    "q": "Which transaction displays Vendor Balances?",
+    "fact": "Vendor line items and balances can be viewed using FBL1N.",
+    "opts": [
+      "FS10N",
+      "FBL1N",
+      "FBL5N",
+      "FD10N"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Accounts Payables",
+    "q": "What is the purpose of a Credit Memo in Accounts Payable?",
+    "fact": "A credit memo is received from the vendor and reduces the amount payable.",
+    "opts": [
+      "Increase Vendor Liability",
+      "Reduce Vendor Liability",
+      "Increase Revenue",
+      "Increase Assets"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Accounts Payable Quiz",
+    "q": "Which T-Code is used to display Vendor Master Data?",
+    "fact": "XK03 displays vendor master data at all organizational levels.",
+    "opts": [
+      "XK03",
+      "XK01",
+      "XK02",
+      "FK02"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Accounts Payable Quiz",
+    "q": "What is the purpose of Payment Terms?",
+    "fact": "Payment terms define due dates and cash discount periods.",
+    "opts": [
+      "Determine Tax",
+      "Determine Due Date and Discount",
+      "Determine Exchange Rate",
+      "Determine GL Account"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Accounts Payable Quiz",
+    "q": "Which T-Code is used for Automatic Payment Program?",
+    "fact": "F110 is used to execute automatic payments to vendors and customers.",
+    "opts": [
+      "F110",
+      "F111",
+      "FBZP",
+      "F-53"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Accounts Payable Quiz",
+    "q": "Which configuration transaction is used for Automatic Payment Program settings?",
+    "fact": "FBZP is used to configure payment methods, bank determination, and company code settings.",
+    "opts": [
+      "OB52",
+      "FBZP",
+      "OBA7",
+      "FSP0"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Accounts Payable Quiz",
+    "q": "Which T-Code is used to create Vendor Master?",
+    "fact": "XK01 creates vendor master data centrally.",
+    "opts": [
+      "XK01",
+      "XK02",
+      "XK03",
+      "FK03"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Accounts Payable Quiz",
+    "q": "What is a Down Payment to a Vendor?",
+    "fact": "Down payments are advance payments made to vendors before invoice receipt.",
+    "opts": [
+      "Invoice Adjustment",
+      "Advance Payment before Goods/Services",
+      "Credit Memo",
+      "Tax Posting"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Accounts Payable Quiz",
+    "q": "Which Special G/L Indicator is commonly used for Vendor Down Payments?",
+    "fact": "Special G/L Indicator \\"A\\" is generally used for Vendor Down Payments.",
+    "opts": [
+      "A",
+      "F",
+      "H",
+      "D"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Accounts Payable Quiz",
+    "q": "What is the accounting entry for a Vendor Invoice?",
+    "fact": "Expense increases (Debit) and Vendor Liability increases (Credit).",
+    "opts": [
+      "Vendor Dr / Expense Cr",
+      "Expense Dr / Vendor Cr",
+      "Cash Dr / Vendor Cr",
+      "Vendor Dr / Cash Cr"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Accounts Payable Quiz",
+    "q": "What is the purpose of Open Item Management in Vendor Accounts?",
+    "fact": "Open Item Management helps track unpaid invoices and payments.",
+    "opts": [
+      "Manage Assets",
+      "Track Outstanding Vendor Items",
+      "Calculate Depreciation",
+      "Post Taxes"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Accounts Payables",
+    "q": "Vendor Number Ranges are created at which level in SAP?",
+    "fact": "Client Level",
+    "opts": [
+      "Company Code Level",
+      "Purchasing Organization Level",
+      "Plant Level",
+      "Client Level"
+    ],
+    "ans": 3
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Accounts Payables",
+    "q": "Vendor Document Number Ranges are created at which level in SAP?",
+    "fact": "Company Code Level",
+    "opts": [
+      "Client Level",
+      "Company Code Level",
+      "Purchasing Organization Level",
+      "Plant Level"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Accounts Payables",
+    "q": "Which transaction is used to clear Vendor Open Items manually?",
+    "fact": "F-44 is used for manual clearing of vendor open items.",
+    "opts": [
+      "F-44",
+      "F-32",
+      "F-03",
+      "F-28"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Accounts Payables",
+    "q": "Which transaction code is commonly used to post a Vendor Down Payment?",
+    "fact": "F-48 is used to post a Vendor Down Payment request or advance payment.",
+    "opts": [
+      "F-28",
+      "F-53",
+      "F-48",
+      "FB60"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Accounts Payables",
+    "q": "A Vendor Down Payment is recorded as:",
+    "fact": "Down Payments are managed through Special G/L transactions.",
+    "opts": [
+      "Normal Vendor Liability",
+      "Special G/L Transaction",
+      "Asset Transaction",
+      "Customer Transaction"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Accounts Payables",
+    "q": "Which account is usually debited when making a Vendor Advance Payment?",
+    "fact": "The Vendor Down Payment Account (Special G/L Account) is debited when an advance payment is made.",
+    "opts": [
+      "Vendor Reconciliation Account",
+      "Expense Account",
+      "Vendor Spl GL Reconciliation Account",
+      "Revenue Account"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Accounts Payables",
+    "q": "Why do we use Special G/L Transactions for Down Payments?",
+    "fact": "Special G/L transactions keep advance payments separate from regular vendor balances.",
+    "opts": [
+      "To post tax automatically",
+      "To separate advance payments from normal vendor liabilities",
+      "To create assets automatically",
+      "To calculate depreciation"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Accounts Payables",
+    "q": "Which report can display Vendor Down Payment items?",
+    "fact": "FBL1N can display normal and Special G/L transactions by selecting Special G/L indicators.",
+    "opts": [
+      "FBL1N",
+      "FBL3N",
+      "FBL5N",
+      "FS10N"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Accounts Payables",
+    "q": "What happens when the Vendor Invoice is received after an advance payment?",
+    "fact": "The advance payment is cleared and adjusted against the vendor invoice through F-54 or F-53",
+    "opts": [
+      "Advance Payment is ignored",
+      "Advance Payment is adjusted against the invoice using clearing",
+      "New vendor is created",
+      "Asset is created automatically"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Reversals",
+    "q": "What is the purpose of a document reversal in SAP?",
+    "fact": "SAP does not allow deletion of posted accounting documents. Instead, a reversal document is created to negate the original posting.",
+    "opts": [
+      "To delete a posted document permanently",
+      "To cancel the effect of an incorrect posting",
+      "To archive documents",
+      "To create a new company code"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Reversals",
+    "q": "Which T-Code is commonly used to reverse an accounting document?",
+    "fact": "FB08 is the standard transaction used to reverse FI documents.",
+    "opts": [
+      "FB60",
+      "F-53",
+      "FB08",
+      "FBL3N"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Reversals",
+    "q": "What happens when a document is reversed?",
+    "fact": "SAP creates a reversal document that contains opposite debit and credit entries.",
+    "opts": [
+      "The original document is deleted",
+      "A new reversal document is created with opposite postings",
+      "The vendor is deleted",
+      "The GL account is blocked"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Reversals",
+    "q": "What is a Reversal Reason in SAP?",
+    "fact": "Reversal reasons determine whether the reversal is posted in the current date or original posting period.",
+    "opts": [
+      "A reason for creating a company code",
+      "A reason that controls reversal posting behavior",
+      "A vendor classification",
+      "A tax code"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Payment Terms & Cash Discount",
+    "q": "Where are Payment Terms maintained in SAP?",
+    "fact": "Payment Terms are maintained in Vendor and Customer master records and can be defaulted during document posting.",
+    "opts": [
+      "Vendor Master and Customer Master",
+      "Material Master",
+      "Asset Master",
+      "Cost Center Master"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Payment Terms & Cash Discount",
+    "q": "Which transaction code is used to define Payment Terms?",
+    "fact": "OBB8 is used to create and maintain Payment Terms.",
+    "opts": [
+      "OBB8",
+      "OB52",
+      "FBN1",
+      "FS00"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Payment Terms & Cash Discount",
+    "q": "Which of the following can be controlled by Payment Terms?",
+    "fact": "Payment Terms determine the baseline date, discount periods, discount percentages, and net due date.",
+    "opts": [
+      "Baseline Date",
+      "Cash Discount Percentage",
+      "Due Date",
+      "All of the Above"
+    ],
+    "ans": 3
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Payment Terms & Cash Discount",
+    "q": "The Baseline Date is used to:",
+    "fact": "SAP calculates payment due dates and discount dates based on the baseline date.",
+    "opts": [
+      "Calculate Depreciation",
+      "Calculate Due Date and Discount Date",
+      "Determine Tax Amount",
+      "Create Vendor Master"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Payment Terms & Cash Discount",
+    "q": "Can Payment Terms entered in an invoice override the Vendor Master Payment Terms?",
+    "fact": "Users can overwrite default payment terms during document entry if authorized.",
+    "opts": [
+      "No",
+      "Yes",
+      "Only by SAP Basis",
+      "Only in S/4HANA"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Payment Terms & Cash Discount",
+    "q": "What happens if payment is made after the discount period but before the due date?",
+    "fact": "Once the discount period expires, the full invoice amount becomes payable until the due date.",
+    "opts": [
+      "Cash Discount is available",
+      "Full Invoice Amount must be paid",
+      "Vendor is blocked",
+      "Invoice is reversed"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "House Bank",
+    "q": "What is a House Bank in SAP?",
+    "fact": "A House Bank represents the organization's bank account used for payments.",
+    "opts": [
+      "Customer Bank",
+      "Company's Own Bank Account",
+      "Vendor Bank",
+      "Central Bank"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Automatic Payment Program (APP) - FBZP",
+    "q": "What is the purpose of the Automatic Payment Program (APP) in SAP?",
+    "fact": "APP automates the payment process for vendors and customers, reducing manual effort and errors.",
+    "opts": [
+      "Create Vendor Master Data",
+      "Automatically process customer and vendor payments",
+      "Create G/L Accounts",
+      "Calculate Depreciation"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Automatic Payment Program (APP) - FBZP",
+    "q": "APP can process payments for:",
+    "fact": "APP supports both outgoing and incoming payments.",
+    "opts": [
+      "Vendors Only",
+      "Customers Only",
+      "Vendors and Customers",
+      "Assets Only"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Automatic Payment Program (APP) - FBZP",
+    "q": "What is the purpose of the Proposal Run?",
+    "fact": "The proposal allows users to verify payment selections before posting.",
+    "opts": [
+      "Create Payment Document",
+      "Test and review payments before execution",
+      "Reverse Payments",
+      "Create Vendor Master"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Automatic Payment Program (APP) - FBZP",
+    "q": "Which step creates accounting entries and payment documents?",
+    "fact": "The Payment Run posts accounting entries and clears open items.",
+    "opts": [
+      "Proposal Run",
+      "Edit Proposal",
+      "Payment Run",
+      "Payment Medium Workbench"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Automatic Payment Program (APP) - FBZP",
+    "q": "APP selects invoices based on:",
+    "fact": "APP evaluates all payment-related criteria before selecting items.",
+    "opts": [
+      "Payment Terms",
+      "Due Date",
+      "Payment Method",
+      "All of the Above"
+    ],
+    "ans": 3
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Automatic Payment Program (APP) - FBZP",
+    "q": "Which table stores House Bank information?",
+    "fact": "House Bank master data is stored in table T012",
+    "opts": [
+      "T012",
+      "BKPF",
+      "BSEG",
+      "LFA1"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Automatic Payment Program (APP) - FBZP",
+    "q": "What happens after a successful Payment Run?",
+    "fact": "APP clears the selected vendor/customer open items",
+    "opts": [
+      "Open Items remain unchanged",
+      "Open Items are cleared",
+      "Vendor Master is updated",
+      "Fiscal Year is closed"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Automatic Payment Program (APP) - FBZP",
+    "q": "What is Bank Determination in APP?",
+    "fact": "SAP determines from which House Bank and account the payment should be made",
+    "opts": [
+      "Selecting the appropriate bank account for payment processing",
+      "Creating Vendor Banks",
+      "Maintaining Exchange Rates",
+      "Creating Payment Terms"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Automatic Payment Program (APP) - FBZP",
+    "q": "Which payment method can be used in APP?",
+    "fact": "APP supports multiple payment methods based on configuration.",
+    "opts": [
+      "Cheque",
+      "Bank Transfer",
+      "Electronic Transfer",
+      "All of the Above"
+    ],
+    "ans": 3
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Automatic Payment Program (APP) - FBZP",
+    "q": "What is the purpose of Ranking Order in APP?",
+    "fact": "Ranking Order defines the sequence in which House Banks are used.",
+    "opts": [
+      "Select Vendor Priority",
+      "Select Customer Priority",
+      "Determine which House Bank is used first",
+      "Determine Tax Calculation"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Automatic Payment Program (APP) - FBZP",
+    "q": "Which transaction is used to display APP payment logs?",
+    "fact": "Payment logs and proposal logs can be viewed within F110.",
+    "opts": [
+      "F110",
+      "FB03",
+      "FBL1N",
+      "F-53"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Automatic Payment Program (APP) - FBZP",
+    "q": "Which master data must contain bank details for electronic payments?",
+    "fact": "Vendor bank details are required for electronic fund transfers",
+    "opts": [
+      "G/L Master",
+      "Vendor Master",
+      "Cost Center Master",
+      "Asset Master"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "GST (Goods and Service Tax)",
+    "q": "What is GST?",
+    "fact": "GST is an indirect tax levied on the supply of goods and services.",
+    "opts": [
+      "General Sales Tax",
+      "Goods and Services Tax",
+      "Global Service Tax",
+      "Government Service Tax"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "GST (Goods and Service Tax)",
+    "q": "What is the primary purpose of a Tax Code in SAP?",
+    "fact": "Tax Codes enable SAP to calculate tax and post it to the appropriate tax accounts.",
+    "opts": [
+      "Create Vendors",
+      "Calculate and Post Taxes Automatically",
+      "Create Assets",
+      "Determine Payment Terms"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "GST (Goods and Service Tax)",
+    "q": "Which transaction code is used to create Tax Codes?",
+    "fact": "FTXP is used to create and maintain tax codes.",
+    "opts": [
+      "FTXP",
+      "OB40",
+      "OBCN",
+      "FBN1"
+    ],
+    "ans": 0
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "GST (Goods and Service Tax)",
+    "q": "Which configuration transaction is used to assign G/L Accounts to Tax Codes?",
+    "fact": "OB40 is used to assign input and output tax accounts",
+    "opts": [
+      "OBB8",
+      "OB40",
+      "FBZP",
+      "OB52"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "GST (Goods and Service Tax)",
+    "q": "What is Input GST?",
+    "fact": "Input GST is the tax paid on purchases and can generally be claimed as Input Tax Credit (ITC).",
+    "opts": [
+      "GST collected from customers",
+      "GST paid on purchases",
+      "GST payable to government",
+      "GST on exports"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "GST (Goods and Service Tax)",
+    "q": "What is Output GST?",
+    "fact": "Output GST is collected from customers and paid to the government.",
+    "opts": [
+      "GST paid on purchases",
+      "GST collected from customers on sales",
+      "GST refund received",
+      "GST on imports"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "GST (Goods and Service Tax)",
+    "q": "During a Vendor Invoice posting, GST is usually treated as:",
+    "fact": "Purchase transactions result in Input GST.",
+    "opts": [
+      "Output Tax",
+      "Input Tax",
+      "Withholding Tax",
+      "Service Tax"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "GST (Goods and Service Tax)",
+    "q": "During a Customer Invoice posting, GST is usually treated as:",
+    "fact": "Sales transactions result in Output GST.",
+    "opts": [
+      "Input Tax",
+      "Output Tax",
+      "Advance Tax",
+      "TDS"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Withholding Tax/TDS",
+    "q": "What is the purpose of Withholding Tax in SAP?",
+    "fact": "Withholding Tax (WHT) is used to deduct tax at source from vendor payments as per statutory requirements.",
+    "opts": [
+      "To calculate GST",
+      "To deduct tax at source during payment or invoice posting",
+      "To calculate depreciation",
+      "To determine exchange rates"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Withholding Tax/TDS",
+    "q": "Which transaction code is commonly used to configure Withholding Tax?",
+    "fact": "Withholding Tax settings are configured through SPRO under Financial Accounting → Accounts Receivable and Accounts Payable.",
+    "opts": [
+      "FB60",
+      "OBY6",
+      "SPRO (Extended Withholding Tax Configuration)",
+      "F-53"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Withholding Tax/TDS",
+    "q": "At which level is Withholding Tax information maintained for vendors?",
+    "fact": "Vendor withholding tax details are maintained at the Company Code segment of the vendor master.",
+    "opts": [
+      "Client Level",
+      "Company Code Level",
+      "Purchasing Organization Level",
+      "Plant Level"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Withholding Tax/TDS",
+    "q": "Which master data contains Withholding Tax information for Vendors?",
+    "fact": "Vendor Master contains withholding tax type, code, exemption details, etc.",
+    "opts": [
+      "Material Master",
+      "Customer Master",
+      "Vendor Master",
+      "Cost Center Master"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Withholding Tax/TDS",
+    "q": "When can Withholding Tax be calculated?",
+    "fact": "Depending on configuration, WHT can be deducted during invoice or payment processing.",
+    "opts": [
+      "At Invoice Posting",
+      "At Payment Posting",
+      "Both Invoice and Payment Time whatever is early",
+      "Only Year-End"
+    ],
+    "ans": 2
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Withholding Tax/TDS",
+    "q": "Can one vendor have multiple Withholding Tax Types?",
+    "fact": "Extended WHT allows multiple tax types for the same vendor.",
+    "opts": [
+      "No",
+      "Yes",
+      "Only in ECC",
+      "Only in MM"
+    ],
+    "ans": 1
+  },
+  {
+    "type": "mc",
+    "section": "Accounts Payable",
+    "subclass": "Withholding Tax/TDS",
+    "q": "What is the impact of Withholding Tax on vendor payment?",
+    "fact": "Tax amount is deducted and only the net amount is paid to the vendor.",
+    "opts": [
+      "Increases payment amount",
+      "Reduces payment amount paid to vendor",
+      "No impact",
+      "Deletes invoice"
+    ],
+    "ans": 1
+  }
+];
+const LABELS = ['A','B','C','D'];
+const SECTION_ORDER = [
+  'General Ledger',
+  'Accounts Payable',
+  'P2P Cycle',
+  'AR & O2C',
+  'Controlling',
+  'S/4HANA & Project'
+];
+const SUBCLASS_ORDER = {
+  'General Ledger': [
+    'SAP FICO Enterprise Structure',
+    'General Ledger Accounting (New)',
+    'Financial Accounting Global Settings (New)',
+    'Accounting Concepts',
+    'Controlling',
+    'Master data'
+  ]
+};
+let current = 0, score = 0, triedWrong = false;
+let streak = 0, bestStreak = 0;
+let selectedSection = 'ALL', selectedSubclass = 'ALL';
+let pool = []; // shuffled question pool for the current cycle
+
+const root      = document.getElementById('quiz-root');
+const heroFill  = document.getElementById('hero-fill');
+const heroLabel = document.getElementById('hero-label');
+const heroTitle = document.getElementById('hero-title');
+const heroSub   = document.getElementById('hero-sub');
+const streakValue = document.getElementById('streak-value');
+const bestStreakValue = document.getElementById('best-streak-value');
+
+// Fisher-Yates shuffle — returns a new shuffled copy, never mutates original
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// Shuffle a single MC question's options and update the correct-answer index
+function shuffleOpts(q) {
+  if (q.type !== 'mc') return { ...q };
+  // pair each option text with whether it is the correct answer
+  const pairs = q.opts.map((opt, i) => ({ opt, correct: i === q.ans }));
+  const shuffled = shuffleArray(pairs);
+  return {
+    ...q,
+    opts: shuffled.map(p => p.opt),
+    ans:  shuffled.findIndex(p => p.correct)
+  };
+}
+
+// Build a fresh pool for one cycle:
+// 1. Shuffle question order
+// 2. For every MC question, also shuffle its answer options
+function getFilteredQuestions() {
+  return QUESTIONS.filter(q =>
+    (selectedSection === 'ALL' || q.section === selectedSection) &&
+    (selectedSubclass === 'ALL' || q.subclass === selectedSubclass)
+  );
+}
+
+function buildPool() {
+  return shuffleArray(getFilteredQuestions()).map(q => shuffleOpts(q));
+}
+
+function uniqueSorted(items) {
+  return [...new Set(items.filter(Boolean))].sort((a, b) => a.localeCompare(b));
+}
+
+function sectionOptions() {
+  const available = new Set(QUESTIONS.map(q => q.section));
+  return ['ALL', ...SECTION_ORDER.filter(section => available.has(section))];
+}
+
+function subclassOptions() {
+  const scoped = selectedSection === 'ALL'
+    ? QUESTIONS
+    : QUESTIONS.filter(q => q.section === selectedSection);
+  const available = new Set(scoped.map(q => q.subclass).filter(Boolean));
+  const preferred = SUBCLASS_ORDER[selectedSection] || [];
+  const ordered = preferred.filter(subclass => available.has(subclass));
+  const remaining = uniqueSorted([...available].filter(subclass => !preferred.includes(subclass)));
+  return ['ALL', ...ordered, ...remaining];
+}
+
+function optionLabel(value, allLabel) {
+  return value === 'ALL' ? allLabel : value;
+}
+
+function renderSelectOptions(values, selected, allLabel) {
+  return values.map(value => \`
+    <option value="\${value}" \${value === selected ? 'selected' : ''}>\${optionLabel(value, allLabel)}</option>
+  \`).join('');
+}
+
+function renderStart() {
+  document.body.classList.add('start-mode');
+  const available = getFilteredQuestions().length;
+  heroFill.style.width = '0%';
+  heroLabel.textContent = '';
+  heroTitle.innerHTML = 'SAP FICO <span class="gold">Challenge</span>';
+  heroSub.textContent = '';
+  streakValue.textContent = 0;
+  bestStreakValue.textContent = 0;
+  root.innerHTML = \`
+    <div class="start-card">
+      <div class="start-icon">🎯</div>
+      <div class="start-title">\${available} Questions · 1 Score · ∞ Bragging Rights</div>
+      <div class="topic-picker">
+        <div class="topic-field">
+          <label for="section-select">Section</label>
+          <select class="topic-select" id="section-select" onchange="changeSection(this.value)">
+            \${renderSelectOptions(sectionOptions(), selectedSection, 'All Sections')}
+          </select>
+        </div>
+        <div class="topic-field">
+          <label for="subclass-select">Subclass</label>
+          <select class="topic-select" id="subclass-select" onchange="changeSubclass(this.value)">
+            \${renderSelectOptions(subclassOptions(), selectedSubclass, 'All Subclasses')}
+          </select>
+        </div>
+      </div>
+      <div class="topic-count">\${available} questions selected</div>
+      <button class="start-btn" onclick="startChallenge()">Start the Challenge <span>→</span></button>
+    </div>
+  \`;
+}
+
+function changeSection(value) {
+  selectedSection = value;
+  selectedSubclass = 'ALL';
+  renderStart();
+}
+
+function changeSubclass(value) {
+  selectedSubclass = value;
+  renderStart();
+}
+
+function startChallenge() {
+  document.body.classList.remove('start-mode');
+  current = 0;
+  score = 0;
+  streak = 0;
+  bestStreak = 0;
+  pool = buildPool();
+  if (!pool.length) {
+    renderStart();
+    return;
+  }
+  render();
+}
+
+function updateHero(pct, qNum, total) {
+  heroFill.style.width = pct + '%';
+  heroLabel.textContent = \`Question \${qNum} of \${total}\`;
+  heroTitle.innerHTML = 'SAP FICO <span class="gold">Challenge</span>';
+  heroSub.textContent   = \`\${score} correct so far\`;
+  streakValue.textContent = streak;
+  bestStreakValue.textContent = bestStreak;
+}
+
+function render() {
+  document.body.classList.remove('start-mode');
+  if (current >= pool.length) { renderResult(); return; }
+
+  const q   = pool[current];
+  const pct = Math.round((current / pool.length) * 100);
+  triedWrong = false;
+
+  updateHero(pct, current + 1, pool.length);
+
+  const typeTag = q.type === 'yn'
+    ? '<span class="question-type-tag">Yes / No</span>'
+    : '<span class="question-type-tag">Multiple Choice</span>';
+
+  root.innerHTML = \`
+    <div class="question-card" id="q-card">
+      <div class="question-label">Question \${current + 1} &nbsp;·&nbsp; \${typeTag}</div>
+      <div class="question-topic">\${q.section} &nbsp;·&nbsp; \${q.subclass}</div>
+      <div class="question-text">\${q.q}</div>
+      \${q.type === 'mc' ? buildMC(q) : buildYN()}
+      <div class="hint-text" id="hint">That's not right — try again!</div>
+      <div class="explanation" id="expl"></div>
+    </div>
+    <div class="next-wrap">
+      <button class="next-btn" id="next-btn" onclick="advance()">
+        \${current + 1 === pool.length ? 'See results \\u2192' : 'Next question \\u2192'}
+      </button>
+    </div>
+  \`;
+}
+
+function buildMC(q) {
+  return \`<div class="mc-options">
+    \${q.opts.map((opt, i) => \`
+      <button class="mc-btn" id="mc-\${i}" onclick="pickMC(\${i})">
+        <span class="mc-letter">\${LABELS[i]}</span>\${opt}
+      </button>\`).join('')}
+  </div>\`;
+}
+
+function buildYN() {
+  return \`<div class="yn-options">
+    <button class="yn-btn yes-btn" id="btn-yes" onclick="pickYN(true)">
+      <span class="yn-icon">\\u2705</span>Yes
+    </button>
+    <button class="yn-btn no-btn" id="btn-no" onclick="pickYN(false)">
+      <span class="yn-icon">\\u274c</span>No
+    </button>
+  </div>\`;
+}
+
+function onCorrect(el) {
+  if (!triedWrong) score++;
+  streak++;
+  bestStreak = Math.max(bestStreak, streak);
+  document.querySelectorAll('.mc-btn, .yn-btn').forEach(b => b.disabled = true);
+  el.classList.add('correct');
+  showSuccess();
+  launchConfetti(el);
+  document.getElementById('hint').classList.remove('show');
+  const expl = document.getElementById('expl');
+  expl.innerHTML = \`<div class="expl-title">\\ud83d\\udca1 Explanation</div>\${pool[current].fact}\`;
+  expl.classList.add('show');
+  document.getElementById('next-btn').classList.add('show');
+  heroSub.textContent = \`\${score} correct so far\`;
+  streakValue.textContent = streak;
+  bestStreakValue.textContent = bestStreak;
+}
+
+function onWrong(el) {
+  triedWrong = true;
+  streak = 0;
+  streakValue.textContent = streak;
+  el.classList.add('wrong');
+  el.disabled = true;
+  const card = document.getElementById('q-card');
+  card.classList.remove('shake');
+  void card.offsetWidth;
+  card.classList.add('shake');
+  document.getElementById('oops-overlay').classList.add('show');
+}
+
+function closeOops() {
+  document.getElementById('oops-overlay').classList.remove('show');
+}
+
+function showSuccess() {
+  const popup = document.getElementById('success-overlay');
+  popup.classList.add('show');
+  setTimeout(() => popup.classList.remove('show'), 900);
+}
+
+function launchConfetti(origin) {
+  const rect = origin.getBoundingClientRect();
+  const colors = ['#1d4ed8', '#38bdf8', '#facc15', '#22c55e', '#94a3b8'];
+  for (let i = 0; i < 52; i++) {
+    const piece = document.createElement('span');
+    const angle = (Math.PI * 2 * i) / 52;
+    const distance = 120 + Math.random() * 280;
+    piece.className = 'confetti-piece';
+    piece.style.setProperty('--x', \`\${rect.left + rect.width / 2 + (Math.random() - 0.5) * 220}px\`);
+    piece.style.setProperty('--y', \`\${rect.top + rect.height / 2 + (Math.random() - 0.5) * 120}px\`);
+    piece.style.setProperty('--dx', \`\${Math.cos(angle) * distance}px\`);
+    piece.style.setProperty('--dy', \`\${Math.sin(angle) * distance - 80}px\`);
+    piece.style.setProperty('--c', colors[i % colors.length]);
+    document.body.appendChild(piece);
+    setTimeout(() => piece.remove(), 1250);
+  }
+}
+
+function pickMC(idx) {
+  const btn = document.getElementById(\`mc-\${idx}\`);
+  if (!btn || btn.disabled) return;
+  idx === pool[current].ans ? onCorrect(btn) : onWrong(btn);
+}
+
+function pickYN(val) {
+  const btn = document.getElementById(val ? 'btn-yes' : 'btn-no');
+  if (!btn || btn.disabled) return;
+  val === pool[current].ans ? onCorrect(btn) : onWrong(btn);
+}
+
+function advance() {
+  current++;
+  // Re-shuffle the next MC question's options so every visit is fresh
+  if (current < pool.length && pool[current].type === 'mc') {
+    pool[current] = shuffleOpts(pool[current]);
+  }
+  render();
+}
+
+function renderResult() {
+  const pct = Math.round((score / pool.length) * 100);
+  heroFill.style.width = '100%';
+  heroLabel.textContent = 'Quiz Complete!';
+  heroSub.textContent   = \`Final score: \${score} / \${pool.length}\`;
+
+  const tiers = [
+    { max: 40,  emoji: '\\ud83d\\ude05', msg: "Keep going — every expert started somewhere!" },
+    { max: 65,  emoji: '\\ud83d\\ude42', msg: "Not bad! You have a solid SAP FICO base." },
+    { max: 85,  emoji: '\\ud83d\\ude0a', msg: "Great work! You are strong on SAP FICO concepts." },
+    { max: 100, emoji: '\\ud83c\\udfc6', msg: "Outstanding! You are ready for SAP FICO interview questions." }
+  ];
+  const t = tiers.find(x => pct <= x.max) || tiers[tiers.length - 1];
+
+  root.innerHTML = \`
+    <div class="result-card">
+      <div class="result-emoji">\${t.emoji}</div>
+      <div class="result-score-lbl">Your final score</div>
+      <div class="result-score">\${score} / \${pool.length}</div>
+      <p class="result-msg">\${t.msg}</p>
+      <div class="stats-grid">
+        <div class="stat-box"><div class="stat-val green">\${score}</div><div class="stat-lbl">Correct</div></div>
+        <div class="stat-box"><div class="stat-val red">\${pool.length - score}</div><div class="stat-lbl">Wrong</div></div>
+        <div class="stat-box"><div class="stat-val">\${pct}%</div><div class="stat-lbl">Accuracy</div></div>
+      </div>
+      <button class="restart-btn" onclick="restart()">Play again</button>
+    </div>
+  \`;
+}
+
+// Each new game gets a freshly shuffled pool
+function restart() { renderStart(); }
+
+renderStart();
+<\/script>
+</body>
+</html>
+`,r=e();function i(){let e=new URL(`/assets/nextgen-logo-CgROJ8Ty.png`,``+import.meta.url).href,i=n.replace(`src="next-gen-logo.png"`,`src="${e}"`);return(0,r.jsxs)(t,{children:[(0,r.jsx)(`section`,{className:`bg-gradient-hero py-8 md:py-12`,children:(0,r.jsxs)(`div`,{className:`mx-auto max-w-5xl px-4 text-center`,children:[(0,r.jsx)(`div`,{className:`inline-block rounded-full bg-brand-dark px-4 py-1 text-xs font-bold uppercase tracking-widest text-white`,children:`Quiz Experience`}),(0,r.jsx)(`h1`,{className:`mt-4 text-4xl font-black md:text-6xl`,children:`SAP FICO Challenge`}),(0,r.jsx)(`p`,{className:`mx-auto mt-5 max-w-3xl text-lg text-muted-foreground`,children:`The full quiz experience from the provided HTML page has been embedded directly into this route.`})]})}),(0,r.jsx)(`div`,{className:`mx-auto w-full max-w-7xl px-4 py-6 pb-12 md:py-8`,children:(0,r.jsx)(`iframe`,{title:`SAP FICO quiz`,srcDoc:i,className:`min-h-[1400px] w-full rounded-3xl border border-border bg-background shadow-[0_20px_80px_rgba(7,17,38,0.16)]`,sandbox:`allow-scripts allow-same-origin`})})]})}export{i as component};
