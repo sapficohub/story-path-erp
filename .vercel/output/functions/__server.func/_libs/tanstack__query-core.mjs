@@ -1,78 +1,4 @@
-//#region ../node_modules/.pnpm/@tanstack+query-core@5.101.0/node_modules/@tanstack/query-core/build/modern/subscribable.js
-var Subscribable = class {
-	constructor() {
-		this.listeners = /* @__PURE__ */ new Set();
-		this.subscribe = this.subscribe.bind(this);
-	}
-	subscribe(listener) {
-		this.listeners.add(listener);
-		this.onSubscribe();
-		return () => {
-			this.listeners.delete(listener);
-			this.onUnsubscribe();
-		};
-	}
-	hasListeners() {
-		return this.listeners.size > 0;
-	}
-	onSubscribe() {}
-	onUnsubscribe() {}
-};
-//#endregion
-//#region ../node_modules/.pnpm/@tanstack+query-core@5.101.0/node_modules/@tanstack/query-core/build/modern/focusManager.js
-var FocusManager = class extends Subscribable {
-	#focused;
-	#cleanup;
-	#setup;
-	constructor() {
-		super();
-		this.#setup = (onFocus) => {
-			if (typeof window !== "undefined" && window.addEventListener) {
-				const listener = () => onFocus();
-				window.addEventListener("visibilitychange", listener, false);
-				return () => {
-					window.removeEventListener("visibilitychange", listener);
-				};
-			}
-		};
-	}
-	onSubscribe() {
-		if (!this.#cleanup) this.setEventListener(this.#setup);
-	}
-	onUnsubscribe() {
-		if (!this.hasListeners()) {
-			this.#cleanup?.();
-			this.#cleanup = void 0;
-		}
-	}
-	setEventListener(setup) {
-		this.#setup = setup;
-		this.#cleanup?.();
-		this.#cleanup = setup((focused) => {
-			if (typeof focused === "boolean") this.setFocused(focused);
-			else this.onFocus();
-		});
-	}
-	setFocused(focused) {
-		if (this.#focused !== focused) {
-			this.#focused = focused;
-			this.onFocus();
-		}
-	}
-	onFocus() {
-		const isFocused = this.isFocused();
-		this.listeners.forEach((listener) => {
-			listener(isFocused);
-		});
-	}
-	isFocused() {
-		if (typeof this.#focused === "boolean") return this.#focused;
-		return globalThis.document?.visibilityState !== "hidden";
-	}
-};
-var focusManager = new FocusManager();
-//#endregion
-//#region ../node_modules/.pnpm/@tanstack+query-core@5.101.0/node_modules/@tanstack/query-core/build/modern/timeoutManager.js
+//#region node_modules/@tanstack/query-core/build/modern/timeoutManager.js
 var defaultTimeoutProvider = {
 	setTimeout: (callback, delay) => setTimeout(callback, delay),
 	clearTimeout: (timeoutId) => clearTimeout(timeoutId),
@@ -103,7 +29,7 @@ function systemSetTimeoutZero(callback) {
 	setTimeout(callback, 0);
 }
 //#endregion
-//#region ../node_modules/.pnpm/@tanstack+query-core@5.101.0/node_modules/@tanstack/query-core/build/modern/utils.js
+//#region node_modules/@tanstack/query-core/build/modern/utils.js
 var isServer = typeof window === "undefined" || "Deno" in globalThis;
 function noop() {}
 function functionalUpdate(updater, input) {
@@ -252,58 +178,7 @@ function addConsumeAwareSignal(object, getSignal, onCancelled) {
 	return object;
 }
 //#endregion
-//#region ../node_modules/.pnpm/@tanstack+query-core@5.101.0/node_modules/@tanstack/query-core/build/modern/environmentManager.js
-var environmentManager = /* @__PURE__ */ (() => {
-	let isServerFn = () => isServer;
-	return {
-		/**
-		* Returns whether the current runtime should be treated as a server environment.
-		*/
-		isServer() {
-			return isServerFn();
-		},
-		/**
-		* Overrides the server check globally.
-		*/
-		setIsServer(isServerValue) {
-			isServerFn = isServerValue;
-		}
-	};
-})();
-//#endregion
-//#region ../node_modules/.pnpm/@tanstack+query-core@5.101.0/node_modules/@tanstack/query-core/build/modern/thenable.js
-function pendingThenable() {
-	let resolve;
-	let reject;
-	const thenable = new Promise((_resolve, _reject) => {
-		resolve = _resolve;
-		reject = _reject;
-	});
-	thenable.status = "pending";
-	thenable.catch(() => {});
-	function finalize(data) {
-		Object.assign(thenable, data);
-		delete thenable.resolve;
-		delete thenable.reject;
-	}
-	thenable.resolve = (value) => {
-		finalize({
-			status: "fulfilled",
-			value
-		});
-		resolve(value);
-	};
-	thenable.reject = (reason) => {
-		finalize({
-			status: "rejected",
-			reason
-		});
-		reject(reason);
-	};
-	return thenable;
-}
-//#endregion
-//#region ../node_modules/.pnpm/@tanstack+query-core@5.101.0/node_modules/@tanstack/query-core/build/modern/notifyManager.js
+//#region node_modules/@tanstack/query-core/build/modern/notifyManager.js
 var defaultScheduler = systemSetTimeoutZero;
 function createNotifyManager() {
 	let queue = [];
@@ -376,7 +251,81 @@ function createNotifyManager() {
 }
 var notifyManager = createNotifyManager();
 //#endregion
-//#region ../node_modules/.pnpm/@tanstack+query-core@5.101.0/node_modules/@tanstack/query-core/build/modern/onlineManager.js
+//#region node_modules/@tanstack/query-core/build/modern/subscribable.js
+var Subscribable = class {
+	constructor() {
+		this.listeners = /* @__PURE__ */ new Set();
+		this.subscribe = this.subscribe.bind(this);
+	}
+	subscribe(listener) {
+		this.listeners.add(listener);
+		this.onSubscribe();
+		return () => {
+			this.listeners.delete(listener);
+			this.onUnsubscribe();
+		};
+	}
+	hasListeners() {
+		return this.listeners.size > 0;
+	}
+	onSubscribe() {}
+	onUnsubscribe() {}
+};
+//#endregion
+//#region node_modules/@tanstack/query-core/build/modern/focusManager.js
+var FocusManager = class extends Subscribable {
+	#focused;
+	#cleanup;
+	#setup;
+	constructor() {
+		super();
+		this.#setup = (onFocus) => {
+			if (typeof window !== "undefined" && window.addEventListener) {
+				const listener = () => onFocus();
+				window.addEventListener("visibilitychange", listener, false);
+				return () => {
+					window.removeEventListener("visibilitychange", listener);
+				};
+			}
+		};
+	}
+	onSubscribe() {
+		if (!this.#cleanup) this.setEventListener(this.#setup);
+	}
+	onUnsubscribe() {
+		if (!this.hasListeners()) {
+			this.#cleanup?.();
+			this.#cleanup = void 0;
+		}
+	}
+	setEventListener(setup) {
+		this.#setup = setup;
+		this.#cleanup?.();
+		this.#cleanup = setup((focused) => {
+			if (typeof focused === "boolean") this.setFocused(focused);
+			else this.onFocus();
+		});
+	}
+	setFocused(focused) {
+		if (this.#focused !== focused) {
+			this.#focused = focused;
+			this.onFocus();
+		}
+	}
+	onFocus() {
+		const isFocused = this.isFocused();
+		this.listeners.forEach((listener) => {
+			listener(isFocused);
+		});
+	}
+	isFocused() {
+		if (typeof this.#focused === "boolean") return this.#focused;
+		return globalThis.document?.visibilityState !== "hidden";
+	}
+};
+var focusManager = new FocusManager();
+//#endregion
+//#region node_modules/@tanstack/query-core/build/modern/onlineManager.js
 var OnlineManager = class extends Subscribable {
 	#online = true;
 	#cleanup;
@@ -424,7 +373,58 @@ var OnlineManager = class extends Subscribable {
 };
 var onlineManager = new OnlineManager();
 //#endregion
-//#region ../node_modules/.pnpm/@tanstack+query-core@5.101.0/node_modules/@tanstack/query-core/build/modern/retryer.js
+//#region node_modules/@tanstack/query-core/build/modern/thenable.js
+function pendingThenable() {
+	let resolve;
+	let reject;
+	const thenable = new Promise((_resolve, _reject) => {
+		resolve = _resolve;
+		reject = _reject;
+	});
+	thenable.status = "pending";
+	thenable.catch(() => {});
+	function finalize(data) {
+		Object.assign(thenable, data);
+		delete thenable.resolve;
+		delete thenable.reject;
+	}
+	thenable.resolve = (value) => {
+		finalize({
+			status: "fulfilled",
+			value
+		});
+		resolve(value);
+	};
+	thenable.reject = (reason) => {
+		finalize({
+			status: "rejected",
+			reason
+		});
+		reject(reason);
+	};
+	return thenable;
+}
+//#endregion
+//#region node_modules/@tanstack/query-core/build/modern/environmentManager.js
+var environmentManager = /* @__PURE__ */ (() => {
+	let isServerFn = () => isServer;
+	return {
+		/**
+		* Returns whether the current runtime should be treated as a server environment.
+		*/
+		isServer() {
+			return isServerFn();
+		},
+		/**
+		* Overrides the server check globally.
+		*/
+		setIsServer(isServerValue) {
+			isServerFn = isServerValue;
+		}
+	};
+})();
+//#endregion
+//#region node_modules/@tanstack/query-core/build/modern/retryer.js
 function defaultRetryDelay(failureCount) {
 	return Math.min(1e3 * 2 ** failureCount, 3e4);
 }
@@ -530,7 +530,7 @@ function createRetryer(config) {
 	};
 }
 //#endregion
-//#region ../node_modules/.pnpm/@tanstack+query-core@5.101.0/node_modules/@tanstack/query-core/build/modern/removable.js
+//#region node_modules/@tanstack/query-core/build/modern/removable.js
 var Removable = class {
 	#gcTimeout;
 	destroy() {
@@ -553,7 +553,7 @@ var Removable = class {
 	}
 };
 //#endregion
-//#region ../node_modules/.pnpm/@tanstack+query-core@5.101.0/node_modules/@tanstack/query-core/build/modern/infiniteQueryBehavior.js
+//#region node_modules/@tanstack/query-core/build/modern/infiniteQueryBehavior.js
 function infiniteQueryBehavior(pages) {
 	return { onFetch: (context, query) => {
 		const options = context.options;
@@ -631,7 +631,7 @@ function getPreviousPageParam(options, { pages, pageParams }) {
 	return pages.length > 0 ? options.getPreviousPageParam?.(pages[0], pages, pageParams[0], pageParams) : void 0;
 }
 //#endregion
-//#region ../node_modules/.pnpm/@tanstack+query-core@5.101.0/node_modules/@tanstack/query-core/build/modern/query.js
+//#region node_modules/@tanstack/query-core/build/modern/query.js
 var Query = class extends Removable {
 	#queryType;
 	#initialState;
@@ -1003,7 +1003,99 @@ function getDefaultState$1(options) {
 	};
 }
 //#endregion
-//#region ../node_modules/.pnpm/@tanstack+query-core@5.101.0/node_modules/@tanstack/query-core/build/modern/mutation.js
+//#region node_modules/@tanstack/query-core/build/modern/queryCache.js
+var QueryCache = class extends Subscribable {
+	constructor(config = {}) {
+		super();
+		this.config = config;
+		this.#queries = /* @__PURE__ */ new Map();
+	}
+	#queries;
+	build(client, options, state) {
+		const queryKey = options.queryKey;
+		const queryHash = options.queryHash ?? hashQueryKeyByOptions(queryKey, options);
+		let query = this.get(queryHash);
+		if (!query) {
+			query = new Query({
+				client,
+				queryKey,
+				queryHash,
+				options: client.defaultQueryOptions(options),
+				state,
+				defaultOptions: client.getQueryDefaults(queryKey)
+			});
+			this.add(query);
+		}
+		return query;
+	}
+	add(query) {
+		if (!this.#queries.has(query.queryHash)) {
+			this.#queries.set(query.queryHash, query);
+			this.notify({
+				type: "added",
+				query
+			});
+		}
+	}
+	remove(query) {
+		const queryInMap = this.#queries.get(query.queryHash);
+		if (queryInMap) {
+			query.destroy();
+			if (queryInMap === query) this.#queries.delete(query.queryHash);
+			this.notify({
+				type: "removed",
+				query
+			});
+		}
+	}
+	clear() {
+		notifyManager.batch(() => {
+			this.getAll().forEach((query) => {
+				this.remove(query);
+			});
+		});
+	}
+	get(queryHash) {
+		return this.#queries.get(queryHash);
+	}
+	getAll() {
+		return [...this.#queries.values()];
+	}
+	find(filters) {
+		const defaultedFilters = {
+			exact: true,
+			...filters
+		};
+		return this.getAll().find((query) => matchQuery(defaultedFilters, query));
+	}
+	findAll(filters = {}) {
+		const queries = this.getAll();
+		return Object.keys(filters).length > 0 ? queries.filter((query) => matchQuery(filters, query)) : queries;
+	}
+	notify(event) {
+		notifyManager.batch(() => {
+			this.listeners.forEach((listener) => {
+				listener(event);
+			});
+		});
+	}
+	onFocus() {
+		notifyManager.batch(() => {
+			this.getAll().forEach((query) => {
+				query.onFocus();
+			});
+		});
+	}
+	onOnline() {
+		notifyManager.batch(() => {
+			this.getAll().forEach((query) => {
+				query.onOnline();
+			});
+		});
+	}
+};
+//#endregion
+//#region node_modules/@tanstack/query-core/build/modern/mutation.js
 var Mutation = class extends Removable {
 	#client;
 	#observers;
@@ -1217,7 +1309,7 @@ function getDefaultState() {
 	};
 }
 //#endregion
-//#region ../node_modules/.pnpm/@tanstack+query-core@5.101.0/node_modules/@tanstack/query-core/build/modern/mutationCache.js
+//#region node_modules/@tanstack/query-core/build/modern/mutationCache.js
 var MutationCache = class extends Subscribable {
 	constructor(config = {}) {
 		super();
@@ -1324,99 +1416,7 @@ function scopeFor(mutation) {
 	return mutation.options.scope?.id;
 }
 //#endregion
-//#region ../node_modules/.pnpm/@tanstack+query-core@5.101.0/node_modules/@tanstack/query-core/build/modern/queryCache.js
-var QueryCache = class extends Subscribable {
-	constructor(config = {}) {
-		super();
-		this.config = config;
-		this.#queries = /* @__PURE__ */ new Map();
-	}
-	#queries;
-	build(client, options, state) {
-		const queryKey = options.queryKey;
-		const queryHash = options.queryHash ?? hashQueryKeyByOptions(queryKey, options);
-		let query = this.get(queryHash);
-		if (!query) {
-			query = new Query({
-				client,
-				queryKey,
-				queryHash,
-				options: client.defaultQueryOptions(options),
-				state,
-				defaultOptions: client.getQueryDefaults(queryKey)
-			});
-			this.add(query);
-		}
-		return query;
-	}
-	add(query) {
-		if (!this.#queries.has(query.queryHash)) {
-			this.#queries.set(query.queryHash, query);
-			this.notify({
-				type: "added",
-				query
-			});
-		}
-	}
-	remove(query) {
-		const queryInMap = this.#queries.get(query.queryHash);
-		if (queryInMap) {
-			query.destroy();
-			if (queryInMap === query) this.#queries.delete(query.queryHash);
-			this.notify({
-				type: "removed",
-				query
-			});
-		}
-	}
-	clear() {
-		notifyManager.batch(() => {
-			this.getAll().forEach((query) => {
-				this.remove(query);
-			});
-		});
-	}
-	get(queryHash) {
-		return this.#queries.get(queryHash);
-	}
-	getAll() {
-		return [...this.#queries.values()];
-	}
-	find(filters) {
-		const defaultedFilters = {
-			exact: true,
-			...filters
-		};
-		return this.getAll().find((query) => matchQuery(defaultedFilters, query));
-	}
-	findAll(filters = {}) {
-		const queries = this.getAll();
-		return Object.keys(filters).length > 0 ? queries.filter((query) => matchQuery(filters, query)) : queries;
-	}
-	notify(event) {
-		notifyManager.batch(() => {
-			this.listeners.forEach((listener) => {
-				listener(event);
-			});
-		});
-	}
-	onFocus() {
-		notifyManager.batch(() => {
-			this.getAll().forEach((query) => {
-				query.onFocus();
-			});
-		});
-	}
-	onOnline() {
-		notifyManager.batch(() => {
-			this.getAll().forEach((query) => {
-				query.onOnline();
-			});
-		});
-	}
-};
-//#endregion
-//#region ../node_modules/.pnpm/@tanstack+query-core@5.101.0/node_modules/@tanstack/query-core/build/modern/queryClient.js
+//#region node_modules/@tanstack/query-core/build/modern/queryClient.js
 var QueryClient = class {
 	#queryCache;
 	#mutationCache;

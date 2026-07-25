@@ -1,7 +1,7 @@
 import { o as __toESM } from "../_runtime.mjs";
 import { r as require_react } from "./react+tanstack__react-query.mjs";
-import { m as require_react_dom } from "./@tanstack/react-router+[...].mjs";
-//#region ../node_modules/.pnpm/sonner@2.0.7_react-dom@19.2.7_react@19.2.7__react@19.2.7/node_modules/sonner/dist/index.mjs
+import { P as require_react_dom } from "./@tanstack/react-router+[...].mjs";
+//#region node_modules/sonner/dist/index.mjs
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 var import_react_dom = /* @__PURE__ */ __toESM(require_react_dom(), 1);
 function __insertCSS(code) {

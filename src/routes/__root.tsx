@@ -11,7 +11,9 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { JsonLd } from "@/components/JsonLd";
 import { Toaster } from "@/components/ui/sonner";
+import { organizationSchema, websiteSchema } from "@/lib/schema";
 
 function NotFoundComponent() {
   return (
@@ -74,31 +76,148 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Next-Gen ERP Solutions — SAP Training & Placement" },
-      { name: "description", content: "India's career transformation platform for SAP training & placement. For freshers, experienced professionals and career-gap candidates." },
-      { name: "author", content: "Next-Gen ERP Solutions" },
-      { property: "og:title", content: "Next-Gen ERP Solutions — SAP Training & Placement" },
-      { property: "og:description", content: "India's career transformation platform for SAP training & placement. For freshers, experienced professionals and career-gap candidates." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Next-Gen ERP Solutions — SAP Training & Placement" },
-      { name: "twitter:description", content: "India's career transformation platform for SAP training & placement. For freshers, experienced professionals and career-gap candidates." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/af57bbe9-a35d-4c25-bfae-7f27d731b468" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/af57bbe9-a35d-4c25-bfae-7f27d731b468" },
-    ],
-    links: [
-      { rel: "icon", type: "image/png", sizes: "512x512", href: "/favicon.png" },
-      { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" },
-      { rel: "stylesheet", href: appCss },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&family=Bangers&display=swap" },
-    ],
-  }),
+ head: () => ({
+  links: [
+    {
+      rel: "stylesheet",
+      href: appCss,
+    },
+    {
+      rel: "stylesheet",
+      href: "https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&family=Bangers&display=swap",
+    },
+    {
+      rel: "canonical",
+      href: "https://www.next-generpsolutions.com",
+    },
+    {
+      rel: "icon",
+      type: "image/png",
+      href: "/favicon.png",
+    },
+    {
+      rel: "apple-touch-icon",
+      href: "/apple-touch-icon.png",
+    },
+    {
+      rel: "manifest",
+      href: "/site.webmanifest",
+    },
+    {
+      rel: "preconnect",
+      href: "https://fonts.googleapis.com",
+    },
+    {
+      rel: "preconnect",
+      href: "https://fonts.gstatic.com",
+      crossOrigin: "anonymous",
+    },
+    {
+      rel: "dns-prefetch",
+      href: "https://fonts.googleapis.com",
+    },
+    {
+      rel: "dns-prefetch",
+      href: "https://fonts.gstatic.com",
+    },
+  ],
+
+  meta: [
+    {
+      charSet: "utf-8",
+    },
+    {
+      name: "viewport",
+      content: "width=device-width, initial-scale=1",
+    },
+
+    {
+      title: "Next-Gen ERP Solutions | SAP Training & Placement",
+    },
+
+    {
+      name: "description",
+      content:
+        "Next-Gen ERP Solutions offers SAP Training, real-time projects, certification guidance and placement assistance for freshers, experienced professionals and career-gap candidates.",
+    },
+
+    {
+      name: "keywords",
+      content:
+        "SAP Training, SAP FICO, SAP MM, SAP SD, SAP ABAP, SAP BASIS, SAP HCM, SAP SuccessFactors, SAP Course, SAP Institute Hyderabad, ERP Training",
+    },
+
+    {
+      name: "robots",
+      content:
+        "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+    },
+
+    {
+      name: "author",
+      content: "Next-Gen ERP Solutions",
+    },
+
+    {
+      name: "theme-color",
+      content: "#0B1C9C",
+    },
+
+    {
+      property: "og:type",
+      content: "website",
+    },
+
+    {
+      property: "og:site_name",
+      content: "Next-Gen ERP Solutions",
+    },
+
+    {
+      property: "og:title",
+      content: "Next-Gen ERP Solutions | SAP Training & Placement",
+    },
+
+    {
+      property: "og:description",
+      content:
+        "Transform your career with SAP Training, live projects and placement support.",
+    },
+
+    {
+      property: "og:url",
+      content: "https://www.next-generpsolutions.com",
+    },
+
+    {
+      property: "og:image",
+      content:
+        "https://www.next-generpsolutions.com/og-image.jpg",
+    },
+
+    {
+      name: "twitter:card",
+      content: "summary_large_image",
+    },
+
+    {
+      name: "twitter:title",
+      content: "Next-Gen ERP Solutions",
+    },
+
+    {
+      name: "twitter:description",
+      content:
+        "SAP Training & Placement Institute",
+    },
+
+    {
+      name: "twitter:image",
+      content:
+        "https://www.next-generpsolutions.com/og-image.jpg",
+    },
+  ],
+}),
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
@@ -109,7 +228,9 @@ function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
-       <HeadContent />
+        <HeadContent />
+        <JsonLd data={organizationSchema} />
+        <JsonLd data={websiteSchema} />
       </head>
       <body>
          {children}

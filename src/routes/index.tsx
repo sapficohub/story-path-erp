@@ -6,16 +6,125 @@ import { Logo } from "@/components/Logo";
 import { COURSES } from "@/lib/courses";
 import { LeadForm } from "@/components/LeadForm";
 import { SalaryGraph } from "@/components/ComicCharacter";
+import { JsonLd } from "@/components/JsonLd";
 
+import {
+  educationalOrganizationSchema,
+  breadcrumbSchema,
+  SITE_URL,
+} from "@/lib/schema";
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Next-Gen ERP Solutions — SAP Training & Placement in India" },
-      { name: "description", content: "Transform your career with SAP. Hands-on training, real projects, and end-to-end placement support for freshers, working professionals and career-gap candidates." },
-      { property: "og:title", content: "Next-Gen ERP Solutions — SAP Training & Placement" },
-      { property: "og:description", content: "India's career transformation platform for SAP training & placement." },
-    ],
-  }),
+head: () => ({
+  links: [
+    {
+      rel: "canonical",
+      href: "https://www.next-generpsolutions.com/",
+    },
+  ],
+
+  meta: [
+    // SEO
+    {
+      title:
+        "Best SAP Training Institute in Hyderabad | SAP FICO, MM, SD, ABAP Courses | Next-Gen ERP Solutions",
+    },
+    {
+      name: "description",
+      content:
+        "Join Next-Gen ERP Solutions, one of the leading SAP Training Institutes in Hyderabad. Learn SAP FICO, MM, SD, ABAP, BASIS, HCM and SuccessFactors with real-time projects, live SAP server access and placement assistance.",
+    },
+    {
+      name: "keywords",
+      content:
+        "SAP Training Hyderabad, SAP FICO Training, SAP MM Training, SAP SD Training, SAP ABAP Training, SAP BASIS Training, SAP HCM Training, SAP SuccessFactors Training, SAP Institute Hyderabad, SAP Course, SAP Certification, SAP Placement",
+    },
+    {
+      name: "robots",
+      content:
+        "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+    },
+
+    // Open Graph
+    {
+      property: "og:type",
+      content: "website",
+    },
+    {
+      property: "og:site_name",
+      content: "Next-Gen ERP Solutions",
+    },
+    {
+      property: "og:title",
+      content:
+        "Best SAP Training Institute in Hyderabad | Next-Gen ERP Solutions",
+    },
+    {
+      property: "og:description",
+      content:
+        "Master SAP with live projects, certified trainers, interview preparation and placement assistance.",
+    },
+    {
+      property: "og:url",
+      content: "https://www.next-generpsolutions.com/",
+    },
+    {
+      property: "og:image",
+      content: "https://www.next-generpsolutions.com/og-image.jpg",
+    },
+    {
+      property: "og:image:alt",
+      content:
+        "Next-Gen ERP Solutions - SAP Training & Placement Institute",
+    },
+    {
+      property: "og:locale",
+      content: "en_IN",
+    },
+
+    // Twitter
+    {
+      name: "twitter:card",
+      content: "summary_large_image",
+    },
+    {
+      name: "twitter:title",
+      content:
+        "Best SAP Training Institute in Hyderabad | Next-Gen ERP Solutions",
+    },
+    {
+      name: "twitter:description",
+      content:
+        "Industry-oriented SAP Training with real-time projects and placement assistance.",
+    },
+    {
+      name: "twitter:image",
+      content: "https://www.next-generpsolutions.com/og-image.jpg",
+    },
+    {
+      name: "twitter:image:alt",
+      content:
+        "Next-Gen ERP Solutions - SAP Training & Placement Institute",
+    },
+
+    // Author
+    {
+      name: "author",
+      content: "Next-Gen ERP Solutions",
+    },
+
+    // Classification
+    {
+      name: "classification",
+      content: "Education",
+    },
+
+    // Category
+    {
+      name: "category",
+      content: "SAP Training Institute",
+    },
+  ],
+}),
   component: HomePage,
 });
 
@@ -36,7 +145,19 @@ const PROCESS = [
 
 function HomePage() {
   return (
-    <SiteLayout>
+    <>
+      <JsonLd data={educationalOrganizationSchema} />
+
+      <JsonLd
+        data={breadcrumbSchema([
+          {
+            name: "Home",
+            url: SITE_URL,
+          },
+        ])}
+      />
+
+      <SiteLayout>
       {/* HERO */}
       <section className="relative overflow-hidden bg-gradient-hero">
         <div className="halftone absolute inset-0" />
@@ -340,6 +461,7 @@ function HomePage() {
         </div>
       </section>
     </SiteLayout>
+    </>
   );
 }
 
