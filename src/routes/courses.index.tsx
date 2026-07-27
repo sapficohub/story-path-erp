@@ -9,6 +9,18 @@ import {
   SITE_URL,
   breadcrumbSchema,
 } from "@/lib/schema";
+
+const HIDDEN_COURSES = new Set([
+  "SAP PP",
+  "SAP QM",
+  "SAP WM",
+  "SAP EWM",
+  "SAP Ariba",
+  "SAP Security & GRC",
+  "SAP BASIS",
+  "SAP Fiori",
+]);
+
 export const Route = createFileRoute("/courses/")({
 head: () => ({
   links: [
@@ -120,7 +132,9 @@ function CoursesPage() {
 
         <section className="mx-auto max-w-7xl px-4 py-16">
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {COURSES.map((c, i) => (
+            {COURSES.filter(
+              (course) => !HIDDEN_COURSES.has(course.title),
+            ).map((c, i) => (
               <motion.div
                 key={c.slug}
                 initial={{ opacity: 0, y: 30 }}

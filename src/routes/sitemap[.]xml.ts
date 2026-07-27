@@ -20,6 +20,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/success-stories" },
           { path: "/blog" },
           { path: "/contact" },
+          { path: "/terms" },
 
           // Dynamic Course Pages
           ...COURSES.map((c) => ({

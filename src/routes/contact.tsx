@@ -3,12 +3,25 @@ import { SiteLayout } from "@/components/SiteLayout";
 import { LeadForm } from "@/components/LeadForm";
 import { Phone, MessageCircle, Mail, MapPin, Youtube, Instagram, Facebook } from "lucide-react";
 import { JsonLd } from "@/components/JsonLd";
+import { COURSES } from "@/lib/courses";
 
 import {
   SITE_URL,
   breadcrumbSchema,
   localBusinessSchema,
 } from "@/lib/schema";
+
+const HIDDEN_CONTACT_COURSES = new Set([
+  "SAP PP",
+  "SAP QM",
+  "SAP WM",
+  "SAP EWM",
+  "SAP Ariba",
+  "SAP Security & GRC",
+  "SAP BASIS",
+  "SAP Fiori",
+]);
+
 export const Route = createFileRoute("/contact")({
 head: () => ({
   links: [
@@ -152,6 +165,21 @@ return (
             { name: "name", label: "Full Name", required: true },
             { name: "phone", label: "Phone", type: "tel", required: true },
             { name: "email", label: "Email", type: "email", required: true },
+            {
+              name: "module",
+              label: "SAP Courses",
+              required: true,
+              options: [
+                ...["SAP FICO", "SAP ABAP"],
+                ...COURSES.filter(
+                  (course) =>
+                    !HIDDEN_CONTACT_COURSES.has(course.title) &&
+                    course.title !== "SAP FICO" &&
+                    course.title !== "SAP ABAP",
+                ).map((course) => course.title),
+                "Not sure yet",
+              ],
+            },
             { name: "message", label: "Message", placeholder: "Tell us how we can help…" },
           ]}
           cta="Send Message"

@@ -58,7 +58,7 @@ export function SiteFooter() {
           <p>© {new Date().getFullYear()} Next-Gen ERP Solutions. All rights reserved.</p>
           <div className="flex gap-4">
             <a href="#" className="hover:text-white">Privacy Policy</a>
-            <a href="#" className="hover:text-white">Terms</a>
+            <Link to="/terms" className="hover:text-white">Terms</Link>
             <a href="/sitemap.xml" className="hover:text-white">Sitemap</a>
           </div>
         </div>
