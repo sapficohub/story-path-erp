@@ -1,1 +1,0 @@
-import{d as e}from"./useStore-Cbq7rcj4.js";import{g as t}from"./index-CF6gat_-.js";var n=e(),r=()=>(0,n.jsx)(t,{});export{r as component};

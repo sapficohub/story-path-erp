@@ -1,9 +1,9 @@
 import { n as require_jsx_runtime } from "../_libs/react+tanstack__react-query.mjs";
 import { n as SITE_URL, r as breadcrumbSchema, s as localBusinessSchema, t as JsonLd } from "./schema-De0q4zeh.mjs";
-import { t as LeadForm } from "./LeadForm-fl9XhbCp.mjs";
+import { t as LeadForm } from "./LeadForm-CJs2UsGV.mjs";
 import { d as MessageCircle, h as Instagram, m as Mail, p as MapPin, t as Youtube, u as Phone, v as Facebook } from "../_libs/lucide-react.mjs";
 import { n as SiteLayout } from "./SiteLayout-pfClKc0L.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/contact-WV3sjd1k.js
+//#region node_modules/.nitro/vite/services/ssr/assets/contact-BAxvkZu9.js
 var import_jsx_runtime = require_jsx_runtime();
 function ContactPage() {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [

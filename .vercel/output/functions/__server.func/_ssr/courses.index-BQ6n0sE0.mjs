@@ -1,6 +1,6 @@
+import { h as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { n as require_jsx_runtime } from "../_libs/react+tanstack__react-query.mjs";
 import { n as SITE_URL, r as breadcrumbSchema, t as JsonLd } from "./schema-De0q4zeh.mjs";
-import { h as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { w as ArrowRight } from "../_libs/lucide-react.mjs";
 import { n as SiteLayout } from "./SiteLayout-pfClKc0L.mjs";
 import { a as motion } from "../_libs/framer-motion.mjs";

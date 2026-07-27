@@ -1,4 +1,4 @@
-//#region node_modules/.nitro/vite/services/ssr/assets/_tanstack-start-manifest_v-DyFYqKPO.js
+//#region node_modules/.nitro/vite/services/ssr/assets/_tanstack-start-manifest_v-CXzS-YkU.js
 var tsrStartManifest = () => ({ routes: {
 	__root__: {
 		filePath: "A:/my erp hub/story-path-erp-main/src/routes/__root.tsx",
@@ -21,23 +21,24 @@ var tsrStartManifest = () => ({ routes: {
 			"/journey/fresher"
 		],
 		preloads: [
-			"/assets/index-CF6gat_-.js",
+			"/assets/index-D9E3BNhh.js",
 			"/assets/useStore-Cbq7rcj4.js",
 			"/assets/link-DLgsgCO9.js",
-			"/assets/matchContext-AGroyYe6.js",
+			"/assets/redirect-Coy-z-9D.js",
+			"/assets/matchContext-DI2hWMRC.js",
 			"/assets/proxy-_l-e36v-.js"
 		],
 		scripts: [{ attrs: {
 			type: "module",
 			async: !0,
-			src: "/assets/index-CF6gat_-.js"
+			src: "/assets/index-D9E3BNhh.js"
 		} }]
 	},
 	"/": {
 		filePath: "A:/my erp hub/story-path-erp-main/src/routes/index.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/routes-BLOm0lvG.js",
+			"/assets/routes-D2r3CMre.js",
 			"/assets/SiteLayout-1bIhYgKx.js",
 			"/assets/trending-up-CzyVpRaK.js",
 			"/assets/sparkles-D4ZFcKoy.js",
@@ -51,7 +52,7 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "A:/my erp hub/story-path-erp-main/src/routes/about.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/about-usoqds86.js",
+			"/assets/about-DEM0yZyZ.js",
 			"/assets/SiteLayout-1bIhYgKx.js",
 			"/assets/sparkles-D4ZFcKoy.js",
 			"/assets/users-C1fa0nl6.js"
@@ -66,7 +67,7 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "A:/my erp hub/story-path-erp-main/src/routes/career-gap.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/career-gap-XD3y6VNk.js",
+			"/assets/career-gap-g9EMdm36.js",
 			"/assets/use-spring-B7ulfn8F.js",
 			"/assets/ComicPanel-Bjqalzcd.js",
 			"/assets/SiteLayout-1bIhYgKx.js"
@@ -86,18 +87,18 @@ var tsrStartManifest = () => ({ routes: {
 	"/contact": {
 		filePath: "A:/my erp hub/story-path-erp-main/src/routes/contact.tsx",
 		children: void 0,
-		preloads: ["/assets/contact-CrudN8XT.js", "/assets/SiteLayout-1bIhYgKx.js"]
+		preloads: ["/assets/contact-BdT3m9YX.js", "/assets/SiteLayout-1bIhYgKx.js"]
 	},
 	"/courses": {
 		filePath: "A:/my erp hub/story-path-erp-main/src/routes/courses.tsx",
 		children: ["/courses/$slug", "/courses/"],
-		preloads: ["/assets/courses-DuPGF69A.js"]
+		preloads: ["/assets/courses-EuscRwD6.js"]
 	},
 	"/experienced-professional": {
 		filePath: "A:/my erp hub/story-path-erp-main/src/routes/experienced-professional.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/experienced-professional-DUTTEAlq.js",
+			"/assets/experienced-professional-Da1ecU94.js",
 			"/assets/use-spring-B7ulfn8F.js",
 			"/assets/ComicPanel-Bjqalzcd.js",
 			"/assets/SiteLayout-1bIhYgKx.js"
@@ -107,7 +108,7 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "A:/my erp hub/story-path-erp-main/src/routes/fresher-journey.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/fresher-journey-Bnk5knQG.js",
+			"/assets/fresher-journey-D0SFk0L-.js",
 			"/assets/use-spring-B7ulfn8F.js",
 			"/assets/ComicPanel-Bjqalzcd.js",
 			"/assets/SiteLayout-1bIhYgKx.js"
@@ -116,7 +117,7 @@ var tsrStartManifest = () => ({ routes: {
 	"/placements": {
 		filePath: "A:/my erp hub/story-path-erp-main/src/routes/placements.tsx",
 		children: void 0,
-		preloads: ["/assets/placements-BZwc1fkL.js", "/assets/SiteLayout-1bIhYgKx.js"]
+		preloads: ["/assets/placements-Xlazohfc.js", "/assets/SiteLayout-1bIhYgKx.js"]
 	},
 	"/quiz": {
 		filePath: "A:/my erp hub/story-path-erp-main/src/routes/quiz.tsx",
@@ -132,7 +133,7 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "A:/my erp hub/story-path-erp-main/src/routes/courses.$slug.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/courses._slug-DMm-taWA.js",
+			"/assets/courses._slug-Cpp0-sAs.js",
 			"/assets/SiteLayout-1bIhYgKx.js",
 			"/assets/trending-up-CzyVpRaK.js",
 			"/assets/briefcase-DUulMP0C.js",
@@ -158,7 +159,7 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "A:/my erp hub/story-path-erp-main/src/routes/courses.index.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/courses.index-COHf3Jcb.js",
+			"/assets/courses.index-BmPqO_6H.js",
 			"/assets/SiteLayout-1bIhYgKx.js",
 			"/assets/arrow-right-B99Wdfa2.js"
 		]

@@ -2,9 +2,9 @@ import { n as require_jsx_runtime } from "../_libs/react+tanstack__react-query.m
 import { n as SiteLayout } from "./SiteLayout-pfClKc0L.mjs";
 import { a as motion, i as useScroll, n as useSpring } from "../_libs/framer-motion.mjs";
 import { n as SalaryGraph, t as ComicCharacter } from "./ComicCharacter-BoqAiTyB.mjs";
-import { n as JourneyHero, t as FinalCTA } from "./fresher-journey-wT7eVrEp.mjs";
+import { n as JourneyHero, t as FinalCTA } from "./fresher-journey-DxzhqGbX.mjs";
 import { t as ComicPanel } from "./ComicPanel-ClrGAn44.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/experienced-professional-Ch4BVj_Q.js
+//#region node_modules/.nitro/vite/services/ssr/assets/experienced-professional-CGr8WNmr.js
 var import_jsx_runtime = require_jsx_runtime();
 var CHAPTERS = [
 	{

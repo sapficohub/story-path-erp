@@ -1,13 +1,13 @@
 import { o as __toESM } from "../_runtime.mjs";
+import { c as HeadContent, d as Outlet, f as lazyRouteComponent, g as useRouter, h as Link, m as createRootRouteWithContext, p as createFileRoute, s as Scripts, u as createRouter } from "../_libs/@tanstack/react-router+[...].mjs";
 import { n as require_jsx_runtime, r as require_react, t as QueryClientProvider } from "../_libs/react+tanstack__react-query.mjs";
 import { c as organizationSchema, l as websiteSchema, n as SITE_URL, t as JsonLd } from "./schema-De0q4zeh.mjs";
-import { N as useRouter, c as HeadContent, d as Outlet, f as lazyRouteComponent, h as Link, m as createRootRouteWithContext, p as createFileRoute, s as Scripts, u as createRouter } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as Toaster } from "../_libs/sonner.mjs";
-import { r as Route$17 } from "./fresher-journey-wT7eVrEp.mjs";
+import { r as Route$17 } from "./fresher-journey-DxzhqGbX.mjs";
 import { t as COURSES } from "./courses-BfBEczWU.mjs";
-import { t as Route$18 } from "./courses._slug-C7nkfyQy.mjs";
+import { t as Route$18 } from "./courses._slug-BP4VLcze.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-D2hGZLn3.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-B_1rm-3S.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var styles_default = "/assets/styles-C51wNmvV.css";
@@ -312,7 +312,7 @@ var Route$13 = createFileRoute("/quiz")({
 	] }),
 	component: lazyRouteComponent($$splitComponentImporter$13, "component")
 });
-var $$splitComponentImporter$12 = () => import("./placements-KEm18yRd.mjs");
+var $$splitComponentImporter$12 = () => import("./placements-Dkovon0i.mjs");
 var Route$12 = createFileRoute("/placements")({
 	head: () => ({ meta: [
 		{ title: "Placements — Next-Gen ERP Solutions" },
@@ -331,7 +331,7 @@ var Route$12 = createFileRoute("/placements")({
 	] }),
 	component: lazyRouteComponent($$splitComponentImporter$12, "component")
 });
-var $$splitComponentImporter$11 = () => import("./experienced-professional-Ch4BVj_Q.mjs");
+var $$splitComponentImporter$11 = () => import("./experienced-professional-CGr8WNmr.mjs");
 var Route$11 = createFileRoute("/experienced-professional")({
 	head: () => ({ meta: [
 		{ title: "Experienced Professional Journey — Rahul's SAP Story" },
@@ -352,7 +352,7 @@ var Route$11 = createFileRoute("/experienced-professional")({
 });
 var $$splitComponentImporter$10 = () => import("./courses-CpxS_IJr.mjs");
 var Route$10 = createFileRoute("/courses")({ component: lazyRouteComponent($$splitComponentImporter$10, "component") });
-var $$splitComponentImporter$9 = () => import("./contact-WV3sjd1k.mjs");
+var $$splitComponentImporter$9 = () => import("./contact-BAxvkZu9.mjs");
 var Route$9 = createFileRoute("/contact")({
 	head: () => ({
 		links: [{
@@ -432,7 +432,7 @@ var Route$8 = createFileRoute("/career-journeys")({
 	] }),
 	component: lazyRouteComponent($$splitComponentImporter$8, "component")
 });
-var $$splitComponentImporter$7 = () => import("./career-gap-BuszeeCD.mjs");
+var $$splitComponentImporter$7 = () => import("./career-gap-BDVBXK8T.mjs");
 var Route$7 = createFileRoute("/career-gap")({
 	head: () => ({ meta: [
 		{ title: "Career Gap Restart — Priya's SAP Comeback Story" },
@@ -470,7 +470,7 @@ var Route$6 = createFileRoute("/blog")({
 	] }),
 	component: lazyRouteComponent($$splitComponentImporter$6, "component")
 });
-var $$splitComponentImporter$5 = () => import("./about-C5_9fezz.mjs");
+var $$splitComponentImporter$5 = () => import("./about-C5b-Fi_j.mjs");
 var Route$5 = createFileRoute("/about")({
 	head: () => ({
 		links: [{
@@ -531,7 +531,7 @@ var Route$5 = createFileRoute("/about")({
 	}),
 	component: lazyRouteComponent($$splitComponentImporter$5, "component")
 });
-var $$splitComponentImporter$4 = () => import("./routes-Dd-EyAwd.mjs");
+var $$splitComponentImporter$4 = () => import("./routes-6Ycr3d2N.mjs");
 var Route$4 = createFileRoute("/")({
 	head: () => ({
 		links: [{

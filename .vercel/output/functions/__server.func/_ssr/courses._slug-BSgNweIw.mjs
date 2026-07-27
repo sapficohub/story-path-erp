@@ -1,13 +1,13 @@
+import { h as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { n as require_jsx_runtime } from "../_libs/react+tanstack__react-query.mjs";
 import { i as courseSchema, n as SITE_URL, o as faqSchema, r as breadcrumbSchema, t as JsonLd } from "./schema-De0q4zeh.mjs";
-import { h as Link } from "../_libs/@tanstack/react-router+[...].mjs";
-import { t as LeadForm } from "./LeadForm-fl9XhbCp.mjs";
+import { t as LeadForm } from "./LeadForm-CJs2UsGV.mjs";
 import { C as Award, E as CircleCheck, S as Briefcase, a as TrendingUp, d as MessageCircle, r as Users, y as Clock } from "../_libs/lucide-react.mjs";
 import { n as SiteLayout } from "./SiteLayout-pfClKc0L.mjs";
 import { a as motion } from "../_libs/framer-motion.mjs";
 import { t as COURSES } from "./courses-BfBEczWU.mjs";
-import { t as Route } from "./courses._slug-C7nkfyQy.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/courses._slug-D95NI0y3.js
+import { t as Route } from "./courses._slug-BP4VLcze.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/courses._slug-BSgNweIw.js
 var import_jsx_runtime = require_jsx_runtime();
 function CoursePage() {
 	const { course } = Route.useLoaderData();

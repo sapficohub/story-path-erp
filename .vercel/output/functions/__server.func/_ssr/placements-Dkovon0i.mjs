@@ -1,8 +1,8 @@
 import { n as require_jsx_runtime } from "../_libs/react+tanstack__react-query.mjs";
-import { t as LeadForm } from "./LeadForm-fl9XhbCp.mjs";
+import { t as LeadForm } from "./LeadForm-CJs2UsGV.mjs";
 import { n as SiteLayout } from "./SiteLayout-pfClKc0L.mjs";
 import { a as motion } from "../_libs/framer-motion.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/placements-KEm18yRd.js
+//#region node_modules/.nitro/vite/services/ssr/assets/placements-Dkovon0i.js
 var import_jsx_runtime = require_jsx_runtime();
 var COMPANIES = [
 	"TCS",

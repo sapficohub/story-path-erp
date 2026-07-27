@@ -1,7 +1,52 @@
 import { useState } from "react";
+import { createServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
+import { z } from "zod";
 
 type Field = { name: string; label: string; type?: string; required?: boolean; options?: string[]; placeholder?: string };
+
+const leadSchema = z.object({
+  name: z.string().trim().min(1).max(100),
+  phone: z.string().trim().min(7).max(20),
+  email: z.string().trim().email().max(254),
+  message: z.string().trim().max(2000).optional(),
+  qualification: z.string().trim().max(100).optional(),
+  status: z.string().trim().max(100).optional(),
+  module: z.string().trim().max(100).optional(),
+});
+
+const submitLead = createServerFn({ method: "POST" })
+  .validator(leadSchema)
+  .handler(async ({ data }) => {
+    const webhookUrl = process.env.TELECRM_WEBHOOK_URL;
+    const webhookSecret = process.env.TELECRM_WEBHOOK_SECRET;
+
+    if (!webhookUrl) {
+      console.error("TELECRM_WEBHOOK_URL is not configured");
+      throw new Error("Lead submission is temporarily unavailable.");
+    }
+
+    const response = await fetch(webhookUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(webhookSecret ? { Authorization: `Bearer ${webhookSecret}` } : {}),
+      },
+      body: JSON.stringify({
+        ...data,
+        phone: data.phone.replace(/[^\d+]/g, ""),
+        source: "Website",
+        submitted_at: new Date().toISOString(),
+      }),
+    });
+
+    if (!response.ok) {
+      console.error(`TeleCRM rejected a lead submission with status ${response.status}`);
+      throw new Error("Lead submission failed.");
+    }
+
+    return { success: true };
+  });
 
 export function LeadForm({
   title = "Book a Free Demo",
@@ -27,14 +72,22 @@ export function LeadForm({
 
   return (
     <form
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault();
+        const form = e.currentTarget;
         setLoading(true);
-        setTimeout(() => {
-          setLoading(false);
+
+        try {
+          const values = Object.fromEntries(new FormData(form).entries());
+          await submitLead({ data: leadSchema.parse(values) });
           toast.success("Thank you! A career advisor will call you shortly.");
-          (e.target as HTMLFormElement).reset();
-        }, 700);
+          form.reset();
+        } catch (error) {
+          console.error(error);
+          toast.error("We couldn't send your details. Please try again or call us.");
+        } finally {
+          setLoading(false);
+        }
       }}
       className="rounded-2xl border border-border bg-card p-6 shadow-card md:p-8"
     >
@@ -64,6 +117,7 @@ export function LeadForm({
         ))}
       </div>
       <button
+        type="submit"
         disabled={loading}
         className="mt-5 w-full rounded-full bg-gradient-brand px-6 py-3 font-semibold text-white shadow-glow transition hover:scale-[1.02] disabled:opacity-60"
       >

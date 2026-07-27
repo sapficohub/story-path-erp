@@ -1,9 +1,34 @@
 import { o as __toESM } from "../_runtime.mjs";
+import { i as TSS_SERVER_FUNCTION, l as createServerFn } from "./esm-Dova13aH.mjs";
+import { n as stringType, t as objectType } from "../_libs/zod.mjs";
 import { n as require_jsx_runtime, r as require_react } from "../_libs/react+tanstack__react-query.mjs";
+import { t as getServerFnById } from "../__23tanstack-start-server-fn-resolver-LstzLPWu.mjs";
 import { n as toast } from "../_libs/sonner.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/LeadForm-fl9XhbCp.js
+//#region node_modules/.nitro/vite/services/ssr/assets/LeadForm-CJs2UsGV.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
+var createSsrRpc = (functionId) => {
+	const url = "/_serverFn/" + functionId;
+	const serverFnMeta = { id: functionId };
+	const fn = async (...args) => {
+		return (await getServerFnById(functionId, { origin: "server" }))(...args);
+	};
+	return Object.assign(fn, {
+		url,
+		serverFnMeta,
+		[TSS_SERVER_FUNCTION]: true
+	});
+};
+var leadSchema = objectType({
+	name: stringType().trim().min(1).max(100),
+	phone: stringType().trim().min(7).max(20),
+	email: stringType().trim().email().max(254),
+	message: stringType().trim().max(2e3).optional(),
+	qualification: stringType().trim().max(100).optional(),
+	status: stringType().trim().max(100).optional(),
+	module: stringType().trim().max(100).optional()
+});
+var submitLead = createServerFn({ method: "POST" }).validator(leadSchema).handler(createSsrRpc("ad925a28d9f3b5aa94ca8b2b92fb4c554ed45a62cbb1fb3e4b62e10d6a1f0695"));
 function LeadForm({ title = "Book a Free Demo", subtitle = "A career advisor will call you within 1 working hour.", fields, cta = "Book Free Demo" }) {
 	const defaultFields = fields ?? [
 		{
@@ -56,14 +81,21 @@ function LeadForm({ title = "Book a Free Demo", subtitle = "A career advisor wil
 	];
 	const [loading, setLoading] = (0, import_react.useState)(false);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
-		onSubmit: (e) => {
+		onSubmit: async (e) => {
 			e.preventDefault();
+			const form = e.currentTarget;
 			setLoading(true);
-			setTimeout(() => {
-				setLoading(false);
+			try {
+				const values = Object.fromEntries(new FormData(form).entries());
+				await submitLead({ data: leadSchema.parse(values) });
 				toast.success("Thank you! A career advisor will call you shortly.");
-				e.target.reset();
-			}, 700);
+				form.reset();
+			} catch (error) {
+				console.error(error);
+				toast.error("We couldn't send your details. Please try again or call us.");
+			} finally {
+				setLoading(false);
+			}
 		},
 		className: "rounded-2xl border border-border bg-card p-6 shadow-card md:p-8",
 		children: [
@@ -103,6 +135,7 @@ function LeadForm({ title = "Book a Free Demo", subtitle = "A career advisor wil
 				}, f.name))
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+				type: "submit",
 				disabled: loading,
 				className: "mt-5 w-full rounded-full bg-gradient-brand px-6 py-3 font-semibold text-white shadow-glow transition hover:scale-[1.02] disabled:opacity-60",
 				children: loading ? "Sending…" : cta

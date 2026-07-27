@@ -1,6 +1,6 @@
 import { o as __toESM } from "../_runtime.mjs";
-import { n as require_jsx_runtime, r as require_react } from "../_libs/react+tanstack__react-query.mjs";
 import { h as Link } from "../_libs/@tanstack/react-router+[...].mjs";
+import { n as require_jsx_runtime, r as require_react } from "../_libs/react+tanstack__react-query.mjs";
 import { a as motion, i as useScroll, n as useSpring, r as useTransform } from "../_libs/framer-motion.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/chapter-visuals-CIvq81yw.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
