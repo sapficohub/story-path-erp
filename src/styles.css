@@ -124,10 +124,6 @@
   .shadow-glow { box-shadow: var(--shadow-glow); }
   .shadow-card { box-shadow: var(--shadow-card); }
   .font-comic { font-family: var(--font-comic); }
-  .content-auto {
-    content-visibility: auto;
-    contain-intrinsic-size: auto 800px;
-  }
 
   /* Comic panel */
   .comic-panel {
@@ -192,11 +188,3 @@
 @keyframes draw-line { from{stroke-dashoffset:1000} to{stroke-dashoffset:0} }
 .animate-float-slow { animation: float-slow 5s ease-in-out infinite; }
 .animate-blink { animation: blink 4s infinite; transform-origin: center; }
-
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  .animate-float-slow,
-  .animate-blink {
-    animation: none;
-  }
-}

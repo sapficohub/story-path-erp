@@ -118,7 +118,7 @@ export function SalaryGraph({ growth = 1 }: { growth?: number }) {
         strokeWidth="4"
         strokeLinecap="round"
         strokeDasharray="500"
-        initial={false}
+        initial={{ strokeDashoffset: 500 }}
         animate={{ strokeDashoffset: 500 - 500 * growth }}
         transition={{ duration: 2, ease: "easeOut" }}
       />
@@ -127,7 +127,7 @@ export function SalaryGraph({ growth = 1 }: { growth?: number }) {
           key={i}
           cx={x} cy={y} r="4"
           fill={i === points.length - 1 ? "#09B83E" : "#1686F5"}
-          initial={false}
+          initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: 0.3 + i * 0.2 }}
         />

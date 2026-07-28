@@ -28,7 +28,6 @@ import { Route as JourneyFresherRouteImport } from './routes/journey.fresher'
 import { Route as JourneyExperiencedRouteImport } from './routes/journey.experienced'
 import { Route as JourneyCareerGapRouteImport } from './routes/journey.career-gap'
 import { Route as CoursesSlugRouteImport } from './routes/courses.$slug'
-import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
@@ -125,16 +124,12 @@ const CoursesSlugRoute = CoursesSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => CoursesRoute,
 } as any)
-const BlogSlugRoute = BlogSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => BlogRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
+  '/terms': typeof TermsRoute
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRouteWithChildren
+  '/blog': typeof BlogRoute
   '/career-gap': typeof CareerGapRoute
   '/career-journeys': typeof CareerJourneysRoute
   '/contact': typeof ContactRoute
@@ -145,8 +140,6 @@ export interface FileRoutesByFullPath {
   '/quiz': typeof QuizRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/success-stories': typeof SuccessStoriesRoute
-  '/terms': typeof TermsRoute
-  '/blog/$slug': typeof BlogSlugRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/journey/career-gap': typeof JourneyCareerGapRoute
   '/journey/experienced': typeof JourneyExperiencedRoute
@@ -154,9 +147,10 @@ export interface FileRoutesByFullPath {
   '/courses/': typeof CoursesIndexRoute
 }
 export interface FileRoutesByTo {
+  '/terms': typeof TermsRoute
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRouteWithChildren
+  '/blog': typeof BlogRoute
   '/career-gap': typeof CareerGapRoute
   '/career-journeys': typeof CareerJourneysRoute
   '/contact': typeof ContactRoute
@@ -166,8 +160,6 @@ export interface FileRoutesByTo {
   '/quiz': typeof QuizRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/success-stories': typeof SuccessStoriesRoute
-  '/terms': typeof TermsRoute
-  '/blog/$slug': typeof BlogSlugRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/journey/career-gap': typeof JourneyCareerGapRoute
   '/journey/experienced': typeof JourneyExperiencedRoute
@@ -176,9 +168,10 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/terms': typeof TermsRoute
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRouteWithChildren
+  '/blog': typeof BlogRoute
   '/career-gap': typeof CareerGapRoute
   '/career-journeys': typeof CareerJourneysRoute
   '/contact': typeof ContactRoute
@@ -189,8 +182,6 @@ export interface FileRoutesById {
   '/quiz': typeof QuizRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/success-stories': typeof SuccessStoriesRoute
-  '/terms': typeof TermsRoute
-  '/blog/$slug': typeof BlogSlugRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/journey/career-gap': typeof JourneyCareerGapRoute
   '/journey/experienced': typeof JourneyExperiencedRoute
@@ -201,6 +192,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/terms'
     | '/about'
     | '/blog'
     | '/career-gap'
@@ -213,8 +205,6 @@ export interface FileRouteTypes {
     | '/quiz'
     | '/sitemap.xml'
     | '/success-stories'
-    | '/terms'
-    | '/blog/$slug'
     | '/courses/$slug'
     | '/journey/career-gap'
     | '/journey/experienced'
@@ -223,6 +213,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/terms'
     | '/about'
     | '/blog'
     | '/career-gap'
@@ -234,8 +225,6 @@ export interface FileRouteTypes {
     | '/quiz'
     | '/sitemap.xml'
     | '/success-stories'
-    | '/terms'
-    | '/blog/$slug'
     | '/courses/$slug'
     | '/journey/career-gap'
     | '/journey/experienced'
@@ -244,6 +233,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/terms'
     | '/about'
     | '/blog'
     | '/career-gap'
@@ -256,8 +246,6 @@ export interface FileRouteTypes {
     | '/quiz'
     | '/sitemap.xml'
     | '/success-stories'
-    | '/terms'
-    | '/blog/$slug'
     | '/courses/$slug'
     | '/journey/career-gap'
     | '/journey/experienced'
@@ -266,9 +254,10 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  TermsRoute: typeof TermsRoute
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  BlogRoute: typeof BlogRouteWithChildren
+  BlogRoute: typeof BlogRoute
   CareerGapRoute: typeof CareerGapRoute
   CareerJourneysRoute: typeof CareerJourneysRoute
   ContactRoute: typeof ContactRoute
@@ -279,7 +268,6 @@ export interface RootRouteChildren {
   QuizRoute: typeof QuizRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SuccessStoriesRoute: typeof SuccessStoriesRoute
-  TermsRoute: typeof TermsRoute
   JourneyCareerGapRoute: typeof JourneyCareerGapRoute
   JourneyExperiencedRoute: typeof JourneyExperiencedRoute
   JourneyFresherRoute: typeof JourneyFresherRoute
@@ -420,25 +408,8 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoursesSlugRouteImport
       parentRoute: typeof CoursesRoute
     }
-    '/blog/$slug': {
-      id: '/blog/$slug'
-      path: '/$slug'
-      fullPath: '/blog/$slug'
-      preLoaderRoute: typeof BlogSlugRouteImport
-      parentRoute: typeof BlogRoute
-    }
   }
 }
-
-interface BlogRouteChildren {
-  BlogSlugRoute: typeof BlogSlugRoute
-}
-
-const BlogRouteChildren: BlogRouteChildren = {
-  BlogSlugRoute: BlogSlugRoute,
-}
-
-const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
 
 interface CoursesRouteChildren {
   CoursesSlugRoute: typeof CoursesSlugRoute
@@ -454,9 +425,10 @@ const CoursesRouteWithChildren =
   CoursesRoute._addFileChildren(CoursesRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
+  TermsRoute: TermsRoute,
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  BlogRoute: BlogRouteWithChildren,
+  BlogRoute: BlogRoute,
   CareerGapRoute: CareerGapRoute,
   CareerJourneysRoute: CareerJourneysRoute,
   ContactRoute: ContactRoute,
@@ -467,7 +439,6 @@ const rootRouteChildren: RootRouteChildren = {
   QuizRoute: QuizRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SuccessStoriesRoute: SuccessStoriesRoute,
-  TermsRoute: TermsRoute,
   JourneyCareerGapRoute: JourneyCareerGapRoute,
   JourneyExperiencedRoute: JourneyExperiencedRoute,
   JourneyFresherRoute: JourneyFresherRoute,

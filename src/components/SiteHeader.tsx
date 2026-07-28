@@ -4,15 +4,15 @@ import { Menu, X } from "lucide-react";
 import { Logo } from "./Logo";
 
 const   NAV = [
-  { to: "/", label: "Home", mobileLabel: "Go to Homepage" },
+  { to: "/", label: "Home" },
   // { to: "/about", label: "About" },
-  { to: "/courses", label: "SAP Courses", mobileLabel: "Browse SAP Courses" },
-  { to: "/career-journeys", label: "Career Journeys", mobileLabel: "Explore Career Journeys" },
-  { to: "/placements", label: "Placements", mobileLabel: "View Placement Support" },
-  { to: "/success-stories", label: "Success Stories", mobileLabel: "Read Student Success Stories" },
-  { to: "/blog", label: "Blog", mobileLabel: "Read the SAP Career Blog" },
-  { to: "/quiz", label: "Quiz", mobileLabel: "Take the SAP Quiz" },
-  { to: "/about", label: "About", mobileLabel: "About Next-Gen ERP" },
+  { to: "/courses", label: "SAP Courses" },
+  { to: "/career-journeys", label: "Career Journeys" },
+  { to: "/placements", label: "Placements" },
+  { to: "/success-stories", label: "Success Stories" },
+  { to: "/blog", label: "Blog" },
+  { to: "/quiz", label: "Quiz" },
+  { to: "/about", label: "About" },
 ] as const;
 
 export function SiteHeader() {
@@ -20,13 +20,8 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3">
-        <Link
-          to="/"
-          aria-label="Next-Gen ERP Solutions homepage"
-          className="flex shrink-0 items-center gap-2"
-        >
+        <Link to="/" className="flex shrink-0 items-center gap-2">
           <Logo className="h-10 w-auto" />
-          <span className="sr-only">Next-Gen ERP Solutions homepage</span>
         </Link>
         <nav className="hidden lg:flex items-center gap-1">
           {NAV.map((n) => (
@@ -67,7 +62,7 @@ export function SiteHeader() {
                 onClick={() => setOpen(false)}
                 className="rounded-lg px-3 py-2.5 text-sm font-medium text-foreground/80 hover:bg-secondary"
               >
-                {n.mobileLabel}
+                {n.label}
               </Link>
             ))}
             <Link
@@ -75,7 +70,7 @@ export function SiteHeader() {
               onClick={() => setOpen(false)}
               className="mt-2 rounded-full bg-gradient-brand px-5 py-3 text-center text-sm font-semibold text-white"
             >
-              Schedule Free SAP Demo
+              Book Free Demo
             </Link>
           </nav>
         </div>

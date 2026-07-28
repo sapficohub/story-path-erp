@@ -79,21 +79,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
  head: () => ({
   links: [
     {
-      rel: "preconnect",
-      href: "https://fonts.googleapis.com",
-    },
-    {
-      rel: "preconnect",
-      href: "https://fonts.gstatic.com",
-      crossOrigin: "anonymous",
-    },
-    {
       rel: "stylesheet",
       href: appCss,
     },
     {
       rel: "stylesheet",
       href: "https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&family=Bangers&display=swap",
+    },
+    {
+      rel: "canonical",
+      href: "https://www.next-generpsolutions.com",
     },
     {
       rel: "icon",
@@ -108,6 +103,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       rel: "manifest",
       href: "/site.webmanifest",
     },
+    {
+      rel: "preconnect",
+      href: "https://fonts.googleapis.com",
+    },
+    {
+      rel: "preconnect",
+      href: "https://fonts.gstatic.com",
+      crossOrigin: "anonymous",
+    },
+    {
+      rel: "dns-prefetch",
+      href: "https://fonts.googleapis.com",
+    },
+    {
+      rel: "dns-prefetch",
+      href: "https://fonts.gstatic.com",
+    },
   ],
 
   meta: [
@@ -121,6 +133,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
     {
       title: "Next-Gen ERP Solutions | SAP Training & Placement",
+    },
+
+    {
+      name: "description",
+      content:
+        "Next-Gen ERP Solutions offers SAP Training, real-time projects, certification guidance and placement assistance for freshers, experienced professionals and career-gap candidates.",
     },
 
     {

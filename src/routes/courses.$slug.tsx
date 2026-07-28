@@ -210,12 +210,7 @@ function CoursePage() {
               </div>
             </div>
             <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
-              <LeadForm
-                title={`Apply for ${course.title}`}
-                subtitle="Get curriculum, fees & batch dates instantly."
-                cta="Apply Now"
-                selectedCourse={course.title}
-              />
+              <LeadForm title={`Apply for ${course.title}`} subtitle="Get curriculum, fees & batch dates instantly." cta="Apply Now" />
             </motion.div>
           </div>
         </section>
