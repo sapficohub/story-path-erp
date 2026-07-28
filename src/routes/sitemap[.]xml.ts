@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
+import { BLOG_POSTS } from "@/lib/blog-posts";
 import { COURSES } from "@/lib/courses";
 
 const BASE_URL = "https://www.next-generpsolutions.com";
@@ -25,6 +26,11 @@ export const Route = createFileRoute("/sitemap.xml")({
           // Dynamic Course Pages
           ...COURSES.map((c) => ({
             path: `/courses/${c.slug}`,
+          })),
+
+          // Blog Articles
+          ...BLOG_POSTS.map((post) => ({
+            path: `/blog/${post.slug}`,
           })),
         ];
 

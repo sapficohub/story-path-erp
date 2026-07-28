@@ -20,6 +20,21 @@ export const organizationSchema = {
 
   telephone: "+91 90003 33859",
 
+  address: {
+    "@type": "PostalAddress",
+
+    streetAddress:
+      "Flat No. 502, PJR Arcade, Plot No.129, Sri Sai Nagar Colony, Near JNTU, Opp. Sri Chaitanya Junior College",
+
+    addressLocality: "Hyderabad",
+
+    addressRegion: "Telangana",
+
+    postalCode: "500085",
+
+    addressCountry: "IN",
+  },
+
   sameAs: [
     "https://www.linkedin.com/company/next-gen-erp-solutions",
     "https://www.facebook.com/NextGenERPSolutions",
@@ -171,7 +186,7 @@ export function localBusinessSchema() {
   return {
     "@context": "https://schema.org",
 
-    "@type": "EducationalOrganization",
+    "@type": "LocalBusiness",
 
     "@id": `${SITE_URL}#business`,
 

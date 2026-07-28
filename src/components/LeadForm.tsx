@@ -3,6 +3,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { Resend } from "resend";
 import { toast } from "sonner";
 import { z } from "zod";
+import { FEATURED_COURSE_TITLES } from "@/lib/courses";
 
 type Field = { name: string; label: string; type?: string; required?: boolean; options?: string[]; placeholder?: string };
 
@@ -187,11 +188,13 @@ export function LeadForm({
   subtitle = "A career advisor will call you within 1 working hour.",
   fields,
   cta = "Book Free Demo",
+  selectedCourse,
 }: {
   title?: string;
   subtitle?: string;
   fields?: Field[];
   cta?: string;
+  selectedCourse?: string;
 }) {
   const defaultFields: Field[] = fields ?? [
     { name: "name", label: "Full Name", required: true, placeholder: "Your name" },
@@ -199,8 +202,16 @@ export function LeadForm({
     { name: "email", label: "Email", type: "email", required: true, placeholder: "you@email.com" },
     { name: "qualification", label: "Qualification", placeholder: "B.Tech, MBA, B.Com…" },
     { name: "status", label: "Current Status", options: ["Fresher", "Experienced", "Career Gap"] },
-    { name: "module", label: "Preferred SAP Module", options: ["SAP FICO", "SAP MM", "SAP SD", "SAP ABAP", "SAP HCM", "SuccessFactors", "Not sure yet"] },
+    {
+      name: "module",
+      label: "SAP Courses",
+      required: true,
+      options: [...FEATURED_COURSE_TITLES, "Not sure yet"],
+    },
   ];
+  const visibleFields = selectedCourse
+    ? defaultFields.filter((field) => field.name !== "module")
+    : defaultFields;
 
   const [loading, setLoading] = useState(false);
 
@@ -228,7 +239,7 @@ export function LeadForm({
       <h3 className="text-2xl font-extrabold text-foreground">{title}</h3>
       <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>
       <div className="mt-5 grid gap-4 sm:grid-cols-2">
-        {defaultFields.map((f) => (
+        {visibleFields.map((f) => (
           <label key={f.name} className={f.name === "name" || f.name === "module" ? "sm:col-span-2 block" : "block"}>
             <span className="mb-1 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               {f.label}{f.required && <span className="text-destructive"> *</span>}
@@ -249,6 +260,19 @@ export function LeadForm({
             )}
           </label>
         ))}
+        {selectedCourse && (
+          <label className="block sm:col-span-2">
+            <span className="mb-1 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              SAP Course
+            </span>
+            <input
+              readOnly
+              name="module"
+              value={selectedCourse}
+              className="w-full cursor-default rounded-lg border border-input bg-secondary px-3 py-2.5 text-sm font-semibold text-foreground focus:outline-none"
+            />
+          </label>
+        )}
       </div>
       <button
         type="submit"

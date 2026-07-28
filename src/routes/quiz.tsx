@@ -15,7 +15,7 @@ export const Route = createFileRoute("/quiz")({
 });
 
 function QuizPage() {
-  const nextGenLogoUrl = new URL("../assets/nextgen-logo.png", import.meta.url).href;
+  const nextGenLogoUrl = new URL("../assets/nextgen-logo-optimized.png", import.meta.url).href;
   const quizHtml = quizPageHtml.replace('src="next-gen-logo.png"', `src="${nextGenLogoUrl}"`);
 
   return (

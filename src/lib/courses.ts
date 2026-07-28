@@ -254,3 +254,16 @@ export const COURSES: Course[] = [
 ];
 
 export const getCourse = (slug: string) => COURSES.find((c) => c.slug === slug);
+
+export const FEATURED_COURSE_TITLES = [
+  "SAP FICO",
+  "SAP ABAP",
+  "SAP MM",
+  "SAP SD",
+  "SAP HCM",
+  "SAP SuccessFactors",
+] as const;
+
+export const FEATURED_COURSES = FEATURED_COURSE_TITLES.map((title) =>
+  COURSES.find((course) => course.title === title),
+).filter((course): course is Course => Boolean(course));
