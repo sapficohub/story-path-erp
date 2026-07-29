@@ -2,6 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { motion } from "framer-motion";
 import { Quote } from "lucide-react";
+import { SITE_URL } from "@/lib/schema";
+import { PageStructuredData } from "@/components/PageStructuredData";
 
 export const Route = createFileRoute("/success-stories")({
   head: () => ({
@@ -11,6 +13,7 @@ export const Route = createFileRoute("/success-stories")({
       { property: "og:title", content: "Real SAP Career Transformations" },
       { property: "og:description", content: "Read how our students transformed their careers with SAP." },
     ],
+    links: [{ rel: "canonical", href: `${SITE_URL}/success-stories` }],
   }),
   component: SuccessStories,
 });
@@ -26,7 +29,17 @@ const STORIES = [
 
 function SuccessStories() {
   return (
-    <SiteLayout>
+    <>
+      <PageStructuredData
+        url={`${SITE_URL}/success-stories`}
+        name="SAP Success Stories"
+        description="Verified SAP career transformation stories from Next-Gen ERP Solutions graduates."
+        breadcrumbs={[
+          { name: "Home", url: `${SITE_URL}/` },
+          { name: "Success Stories", url: `${SITE_URL}/success-stories` },
+        ]}
+      />
+      <SiteLayout>
       <section className="bg-gradient-hero py-20">
         <div className="mx-auto max-w-5xl px-4 text-center">
           <div className="inline-block rounded-full bg-brand-dark px-4 py-1 text-xs font-bold uppercase tracking-widest text-white">Success Stories</div>
@@ -60,6 +73,7 @@ function SuccessStories() {
           </motion.div>
         ))}
       </section>
-    </SiteLayout>
+      </SiteLayout>
+    </>
   );
 }

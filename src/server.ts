@@ -2,12 +2,47 @@ import "./lib/error-capture";
 
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
+import { normalizePagePathname } from "./lib/redirects";
 
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
 };
 
 let serverEntryPromise: Promise<ServerEntry> | undefined;
+
+function getCanonicalRedirect(request: Request) {
+  if (request.method !== "GET" && request.method !== "HEAD") return null;
+
+  const url = new URL(request.url);
+  const isPageRequest = !/\/[^/]+\.[^/]+$/.test(url.pathname);
+  if (!isPageRequest) return null;
+
+  const canonicalPathname = normalizePagePathname(url.pathname);
+  const isProductionHostname =
+    url.hostname === "next-generpsolutions.com" ||
+    url.hostname === "www.next-generpsolutions.com";
+
+  let shouldRedirect =
+    canonicalPathname !== url.pathname || url.search.length > 0;
+
+  if (isProductionHostname) {
+    shouldRedirect ||= url.protocol !== "https:";
+    shouldRedirect ||= url.hostname !== "www.next-generpsolutions.com";
+    url.protocol = "https:";
+    url.hostname = "www.next-generpsolutions.com";
+  }
+
+  if (!shouldRedirect) return null;
+
+  url.pathname = canonicalPathname;
+  url.search = "";
+  url.hash = "";
+
+  return new Response(null, {
+    status: 301,
+    headers: { Location: url.toString() },
+  });
+}
 
 async function getServerEntry(): Promise<ServerEntry> {
   if (!serverEntryPromise) {
@@ -40,6 +75,9 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
+      const canonicalRedirect = getCanonicalRedirect(request);
+      if (canonicalRedirect) return canonicalRedirect;
+
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);

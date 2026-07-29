@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { motion } from "framer-motion";
 import { GraduationCap, Briefcase, RotateCcw, ArrowRight } from "lucide-react";
+import { SITE_URL } from "@/lib/schema";
+import { PageStructuredData } from "@/components/PageStructuredData";
 
 export const Route = createFileRoute("/career-journeys")({
   head: () => ({
@@ -11,19 +13,31 @@ export const Route = createFileRoute("/career-journeys")({
       { property: "og:title", content: "Career Journeys" },
       { property: "og:description", content: "Interactive comic-style career transformation stories." },
     ],
+    links: [{ rel: "canonical", href: `${SITE_URL}/career-journeys` }],
   }),
   component: JourneysPage,
 });
 
 const J = [
-  { to: "/fresher-journey", name: "Arjun", title: "Fresher Journey", desc: "From graduation to first SAP job. 14 chapters of transformation.", icon: GraduationCap, emoji: "🎓", color: "from-[#0B1C9C] to-[#1686F5]" },
-  { to: "/experienced-professional", name: "Rahul", title: "Experienced Professional", desc: "From salary stagnation to corporate leadership.", icon: Briefcase, emoji: "💼", color: "from-[#1686F5] to-[#19C7D8]" },
-  { to: "/career-gap", name: "Priya", title: "Career Gap Restart", desc: "From career break to confident corporate comeback.", icon: RotateCcw, emoji: "🔄", color: "from-[#19C7D8] to-[#09B83E]" },
+  { to: "/journey/fresher", name: "Arjun", title: "Fresher Journey", desc: "From graduation to first SAP job. 15 chapters of transformation.", icon: GraduationCap, emoji: "🎓", color: "from-[#0B1C9C] to-[#1686F5]" },
+  { to: "/journey/experienced", name: "Rahul", title: "Experienced Professional", desc: "From salary stagnation to corporate leadership.", icon: Briefcase, emoji: "💼", color: "from-[#1686F5] to-[#19C7D8]" },
+  { to: "/journey/career-gap", name: "Priya", title: "Career Gap Restart", desc: "From career break to confident corporate comeback.", icon: RotateCcw, emoji: "🔄", color: "from-[#19C7D8] to-[#09B83E]" },
 ] as const;
 
 function JourneysPage() {
   return (
-    <SiteLayout>
+    <>
+      <PageStructuredData
+        type={["WebPage", "CollectionPage"]}
+        url={`${SITE_URL}/career-journeys`}
+        name="Career Journeys"
+        description="Interactive career transformation stories for freshers, experienced professionals and career-gap candidates."
+        breadcrumbs={[
+          { name: "Home", url: `${SITE_URL}/` },
+          { name: "Career Journeys", url: `${SITE_URL}/career-journeys` },
+        ]}
+      />
+      <SiteLayout>
       <section className="bg-gradient-hero py-20">
         <div className="mx-auto max-w-5xl px-4 text-center">
           <div className="inline-block rounded-full bg-brand-dark px-4 py-1 text-xs font-bold uppercase tracking-widest text-white">Career Journeys</div>
@@ -58,6 +72,7 @@ function JourneysPage() {
           </motion.div>
         ))}
       </section>
-    </SiteLayout>
+      </SiteLayout>
+    </>
   );
 }

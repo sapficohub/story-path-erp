@@ -77,14 +77,14 @@ export function Footer() {
         <div>
           <h4 className="font-display font-bold mb-3">Contact</h4>
           <ul className="space-y-2 text-sm text-white/70">
-            <li>hello@nextgenerp.com</li>
-            <li>+91 98765 43210</li>
+            <li><a href="mailto:hello@nextgenerpsolutions.com" className="hover:text-white">hello@nextgenerpsolutions.com</a></li>
+            <li><a href="tel:+919000333859" className="hover:text-white">+91 90003 33859</a></li>
             <li>Hyderabad · India</li>
           </ul>
         </div>
         <div>
           <h4 className="font-display font-bold mb-3">Get Started</h4>
-          <a href="#" className="inline-flex rounded-full bg-growth px-5 py-3 text-sm font-semibold text-white shadow-glow-green">WhatsApp Us</a>
+          <a href="https://wa.me/919000333859" target="_blank" rel="noreferrer" className="inline-flex rounded-full bg-growth px-5 py-3 text-sm font-semibold text-white shadow-glow-green">WhatsApp Us</a>
         </div>
       </div>
       <div className="mx-auto max-w-7xl mt-12 pt-6 border-t border-white/10 text-xs text-white/50 flex justify-between">

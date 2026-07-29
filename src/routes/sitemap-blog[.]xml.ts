@@ -1,16 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { BLOG_POSTS } from "@/lib/blog-posts";
-
-const BASE_URL = "https://www.next-generpsolutions.com";
-const LAST_MODIFIED = "2026-07-29";
+import { SITE_URL } from "@/lib/schema";
+import { SITE_PAGES_LAST_MODIFIED } from "@/lib/site-pages";
 
 export const Route = createFileRoute("/sitemap-blog.xml")({
   server: {
     handlers: {
       GET: async () => {
         const entries = [
-          { path: "/blog", lastModified: LAST_MODIFIED },
+          { path: "/blog", lastModified: SITE_PAGES_LAST_MODIFIED },
           ...BLOG_POSTS.filter((post) => post.indexable).map((post) => ({
             path: `/blog/${post.slug}`,
             lastModified: post.lastModified,
@@ -19,7 +18,7 @@ export const Route = createFileRoute("/sitemap-blog.xml")({
 
         const urls = entries.map(
           (entry) => `  <url>
-    <loc>${BASE_URL}${entry.path}</loc>
+    <loc>${SITE_URL}${entry.path}</loc>
     <lastmod>${entry.lastModified}</lastmod>
   </url>`,
         );

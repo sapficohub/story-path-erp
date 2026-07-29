@@ -29,10 +29,12 @@ import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CoursesIndexRouteImport } from './routes/courses.index'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as JourneyFresherRouteImport } from './routes/journey.fresher'
 import { Route as JourneyExperiencedRouteImport } from './routes/journey.experienced'
 import { Route as JourneyCareerGapRouteImport } from './routes/journey.career-gap'
 import { Route as CoursesSlugRouteImport } from './routes/courses.$slug'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
@@ -134,6 +136,11 @@ const CoursesIndexRoute = CoursesIndexRouteImport.update({
   path: '/',
   getParentRoute: () => CoursesRoute,
 } as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => BlogRoute,
+} as any)
 const JourneyFresherRoute = JourneyFresherRouteImport.update({
   id: '/journey/fresher',
   path: '/journey/fresher',
@@ -154,11 +161,16 @@ const CoursesSlugRoute = CoursesSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => CoursesRoute,
 } as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BlogRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRoute
+  '/blog': typeof BlogRouteWithChildren
   '/career-gap': typeof CareerGapRoute
   '/career-journeys': typeof CareerJourneysRoute
   '/contact': typeof ContactRoute
@@ -175,16 +187,17 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/success-stories': typeof SuccessStoriesRoute
   '/terms': typeof TermsRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/journey/career-gap': typeof JourneyCareerGapRoute
   '/journey/experienced': typeof JourneyExperiencedRoute
   '/journey/fresher': typeof JourneyFresherRoute
+  '/blog/': typeof BlogIndexRoute
   '/courses/': typeof CoursesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRoute
   '/career-gap': typeof CareerGapRoute
   '/career-journeys': typeof CareerJourneysRoute
   '/contact': typeof ContactRoute
@@ -200,17 +213,19 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/success-stories': typeof SuccessStoriesRoute
   '/terms': typeof TermsRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/journey/career-gap': typeof JourneyCareerGapRoute
   '/journey/experienced': typeof JourneyExperiencedRoute
   '/journey/fresher': typeof JourneyFresherRoute
+  '/blog': typeof BlogIndexRoute
   '/courses': typeof CoursesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRoute
+  '/blog': typeof BlogRouteWithChildren
   '/career-gap': typeof CareerGapRoute
   '/career-journeys': typeof CareerJourneysRoute
   '/contact': typeof ContactRoute
@@ -227,10 +242,12 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/success-stories': typeof SuccessStoriesRoute
   '/terms': typeof TermsRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/journey/career-gap': typeof JourneyCareerGapRoute
   '/journey/experienced': typeof JourneyExperiencedRoute
   '/journey/fresher': typeof JourneyFresherRoute
+  '/blog/': typeof BlogIndexRoute
   '/courses/': typeof CoursesIndexRoute
 }
 export interface FileRouteTypes {
@@ -255,16 +272,17 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/success-stories'
     | '/terms'
+    | '/blog/$slug'
     | '/courses/$slug'
     | '/journey/career-gap'
     | '/journey/experienced'
     | '/journey/fresher'
+    | '/blog/'
     | '/courses/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
-    | '/blog'
     | '/career-gap'
     | '/career-journeys'
     | '/contact'
@@ -280,10 +298,12 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/success-stories'
     | '/terms'
+    | '/blog/$slug'
     | '/courses/$slug'
     | '/journey/career-gap'
     | '/journey/experienced'
     | '/journey/fresher'
+    | '/blog'
     | '/courses'
   id:
     | '__root__'
@@ -306,17 +326,19 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/success-stories'
     | '/terms'
+    | '/blog/$slug'
     | '/courses/$slug'
     | '/journey/career-gap'
     | '/journey/experienced'
     | '/journey/fresher'
+    | '/blog/'
     | '/courses/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  BlogRoute: typeof BlogRoute
+  BlogRoute: typeof BlogRouteWithChildren
   CareerGapRoute: typeof CareerGapRoute
   CareerJourneysRoute: typeof CareerJourneysRoute
   ContactRoute: typeof ContactRoute
@@ -480,6 +502,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoursesIndexRouteImport
       parentRoute: typeof CoursesRoute
     }
+    '/blog/': {
+      id: '/blog/'
+      path: '/'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof BlogRoute
+    }
     '/journey/fresher': {
       id: '/journey/fresher'
       path: '/journey/fresher'
@@ -508,8 +537,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoursesSlugRouteImport
       parentRoute: typeof CoursesRoute
     }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof BlogRoute
+    }
   }
 }
+
+interface BlogRouteChildren {
+  BlogSlugRoute: typeof BlogSlugRoute
+  BlogIndexRoute: typeof BlogIndexRoute
+}
+
+const BlogRouteChildren: BlogRouteChildren = {
+  BlogSlugRoute: BlogSlugRoute,
+  BlogIndexRoute: BlogIndexRoute,
+}
+
+const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
 
 interface CoursesRouteChildren {
   CoursesSlugRoute: typeof CoursesSlugRoute
@@ -527,7 +575,7 @@ const CoursesRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  BlogRoute: BlogRoute,
+  BlogRoute: BlogRouteWithChildren,
   CareerGapRoute: CareerGapRoute,
   CareerJourneysRoute: CareerJourneysRoute,
   ContactRoute: ContactRoute,

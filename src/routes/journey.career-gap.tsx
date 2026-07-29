@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { JourneyExperience, type JourneyConfig } from "@/components/journey-experience";
 import { CareerGapVisuals as V } from "@/components/chapter-visuals";
+import { SITE_URL } from "@/lib/schema";
+import { PageStructuredData } from "@/components/PageStructuredData";
 
 const config: JourneyConfig = {
   character: "Priya",
@@ -37,7 +39,21 @@ export const Route = createFileRoute("/journey/career-gap")({
       { property: "og:description", content: "Restart your career with SAP and Next-Gen ERP Solutions." },
       { property: "og:url", content: "/journey/career-gap" },
     ],
-    links: [{ rel: "canonical", href: "/journey/career-gap" }],
+    links: [{ rel: "canonical", href: `${SITE_URL}/journey/career-gap` }],
   }),
-  component: () => <JourneyExperience config={config} />,
+  component: () => (
+    <>
+      <PageStructuredData
+        url={`${SITE_URL}/journey/career-gap`}
+        name="Career Gap Journey — Priya's Story"
+        description="Follow Priya's career comeback after a break through SAP training and mentorship."
+        breadcrumbs={[
+          { name: "Home", url: `${SITE_URL}/` },
+          { name: "Career Journeys", url: `${SITE_URL}/career-journeys` },
+          { name: "Career Gap Journey", url: `${SITE_URL}/journey/career-gap` },
+        ]}
+      />
+      <JourneyExperience config={config} />
+    </>
+  ),
 });

@@ -2,8 +2,10 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, BookOpen, GraduationCap } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { COURSES } from "@/lib/courses";
+import { BLOG_POSTS } from "@/lib/blog-posts";
 import { HTML_SITEMAP_SECTIONS } from "@/lib/site-pages";
 import { SITE_URL } from "@/lib/schema";
+import { PageStructuredData } from "@/components/PageStructuredData";
 
 export const Route = createFileRoute("/sitemap")({
   head: () => ({
@@ -23,7 +25,17 @@ export const Route = createFileRoute("/sitemap")({
 
 function HtmlSitemapPage() {
   return (
-    <SiteLayout>
+    <>
+      <PageStructuredData
+        url={`${SITE_URL}/sitemap`}
+        name="HTML Sitemap"
+        description="Browse all SAP courses, career journeys, placement support, success stories, resources and company pages."
+        breadcrumbs={[
+          { name: "Home", url: `${SITE_URL}/` },
+          { name: "Sitemap", url: `${SITE_URL}/sitemap` },
+        ]}
+      />
+      <SiteLayout>
       <main>
         <section className="bg-gradient-hero py-16 md:py-20">
           <div className="mx-auto max-w-5xl px-4 text-center">
@@ -88,8 +100,34 @@ function HtmlSitemapPage() {
               </section>
             ))}
           </div>
+
+          <section className="mt-8 rounded-2xl border border-border bg-card p-6 shadow-card md:p-8">
+            <div className="mb-6 flex items-center gap-3">
+              <span className="rounded-xl bg-brand/10 p-3 text-brand">
+                <BookOpen className="h-6 w-6" />
+              </span>
+              <h2 className="text-2xl font-black md:text-3xl">
+                SAP Career Articles
+              </h2>
+            </div>
+            <ul className="grid gap-3 md:grid-cols-2">
+              {BLOG_POSTS.filter((post) => post.indexable).map((post) => (
+                <li key={post.slug}>
+                  <Link
+                    to="/blog/$slug"
+                    params={{ slug: post.slug }}
+                    className="group flex items-center justify-between rounded-xl border border-border px-4 py-3 font-semibold transition hover:border-brand/40 hover:bg-brand/5 hover:text-brand"
+                  >
+                    {post.title}
+                    <ArrowRight className="h-4 w-4 shrink-0 transition group-hover:translate-x-1" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
         </section>
       </main>
-    </SiteLayout>
+      </SiteLayout>
+    </>
   );
 }

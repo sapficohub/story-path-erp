@@ -9,7 +9,6 @@ import { SalaryGraph } from "@/components/ComicCharacter";
 import { JsonLd } from "@/components/JsonLd";
 
 import {
-  educationalOrganizationSchema,
   localBusinessSchema,
   webPageSchema,
   breadcrumbSchema,
@@ -71,7 +70,7 @@ head: () => ({
     },
     {
       property: "og:image",
-      content: "https://www.next-generpsolutions.com/logo.webp",
+      content: "https://www.next-generpsolutions.com/next-gen-erp-solutions-sap-training-hyderabad.jpg",
     },
     {
       property: "og:image:alt",
@@ -100,7 +99,7 @@ head: () => ({
     },
     {
       name: "twitter:image",
-      content: "https://www.next-generpsolutions.com/logo.webp",
+      content: "https://www.next-generpsolutions.com/next-gen-erp-solutions-sap-training-hyderabad.jpg",
     },
     {
       name: "twitter:image:alt",
@@ -148,7 +147,6 @@ const PROCESS = [
 function HomePage() {
   return (
     <>
-      <JsonLd data={educationalOrganizationSchema} />
       <JsonLd data={localBusinessSchema} />
       <JsonLd
         data={webPageSchema({
@@ -232,7 +230,7 @@ function HomePage() {
               </div>
               <div className="mt-4 flex items-center justify-center">
                 <motion.div animate={{ scale: [1, 1.05, 1] }} transition={{ duration: 3, repeat: Infinity }}>
-                  <Logo className="h-14" />
+                  <Logo className="h-20 w-auto sm:h-24" />
                 </motion.div>
               </div>
             </div>

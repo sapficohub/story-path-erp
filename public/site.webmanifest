@@ -1,0 +1,22 @@
+{
+  "name": "Next-Gen ERP Solutions",
+  "short_name": "Next-Gen ERP",
+  "description": "SAP training, real-time projects and placement support in Hyderabad.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0B1C9C",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

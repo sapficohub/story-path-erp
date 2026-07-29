@@ -1,18 +1,18 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
-import { INDEXABLE_PAGE_PATHS } from "@/lib/site-pages";
+import { INDEXABLE_PAGES } from "@/lib/site-pages";
+import { SITE_URL } from "@/lib/schema";
 
-const BASE_URL = "https://www.next-generpsolutions.com";
-const LAST_MODIFIED = "2026-07-29";
+const PAGE_ENTRIES = INDEXABLE_PAGES.filter((page) => page.path !== "/blog");
 
 export const Route = createFileRoute("/sitemap-pages.xml")({
   server: {
     handlers: {
       GET: async () => {
-        const entries = INDEXABLE_PAGE_PATHS.map(
-          (path) => `  <url>
-    <loc>${BASE_URL}${path}</loc>
-    <lastmod>${LAST_MODIFIED}</lastmod>
+        const entries = PAGE_ENTRIES.map(
+          (page) => `  <url>
+    <loc>${SITE_URL}${page.path}</loc>
+    <lastmod>${page.lastModified}</lastmod>
   </url>`,
         );
 

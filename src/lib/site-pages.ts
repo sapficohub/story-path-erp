@@ -8,13 +8,18 @@ export type SitemapSection = {
   links: SitemapLink[];
 };
 
+export const SITE_PAGES_LAST_MODIFIED = "2026-07-29";
+
 export const HTML_SITEMAP_SECTIONS: SitemapSection[] = [
   {
     title: "Career Journeys",
     links: [
-      { label: "Freshers", path: "/fresher-journey" },
-      { label: "Working Professionals", path: "/experienced-professional" },
-      { label: "Career Gap", path: "/career-gap" },
+      { label: "Fresher SAP Career Journey", path: "/journey/fresher" },
+      {
+        label: "Experienced Professional SAP Career Journey",
+        path: "/journey/experienced",
+      },
+      { label: "Career Gap SAP Restart Journey", path: "/journey/career-gap" },
     ],
   },
   {
@@ -54,3 +59,8 @@ export const INDEXABLE_PAGE_PATHS = [
     ),
   ),
 ];
+
+export const INDEXABLE_PAGES = INDEXABLE_PAGE_PATHS.map((path) => ({
+  path,
+  lastModified: SITE_PAGES_LAST_MODIFIED,
+}));

@@ -2,6 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import quizPageHtml from "@/general-knowledge-quiz-with-qa.html?raw";
 import nextGenLogoUrl from "@/assets/nextgen-logo-480.webp";
+import { SITE_URL } from "@/lib/schema";
+import { PageStructuredData } from "@/components/PageStructuredData";
 
 export const Route = createFileRoute("/quiz")({
   head: () => ({
@@ -11,6 +13,7 @@ export const Route = createFileRoute("/quiz")({
       { property: "og:title", content: "SAP Quiz at Next-Gen" },
       { property: "og:description", content: "Test your SAP knowledge with our interactive quiz!" },
     ],
+    links: [{ rel: "canonical", href: `${SITE_URL}/quiz` }],
   }),
   component: QuizPage,
 });
@@ -19,7 +22,17 @@ function QuizPage() {
   const quizHtml = quizPageHtml.replace('src="next-gen-logo.png"', `src="${nextGenLogoUrl}"`);
 
   return (
-    <SiteLayout>
+    <>
+      <PageStructuredData
+        url={`${SITE_URL}/quiz`}
+        name="SAP FICO Knowledge Quiz"
+        description="Test your SAP FICO knowledge with an interactive quiz."
+        breadcrumbs={[
+          { name: "Home", url: `${SITE_URL}/` },
+          { name: "SAP Quiz", url: `${SITE_URL}/quiz` },
+        ]}
+      />
+      <SiteLayout>
       <section className="bg-gradient-hero py-8 md:py-12">
         <div className="mx-auto max-w-5xl px-4 text-center">
           <div className="inline-block rounded-full bg-brand-dark px-4 py-1 text-xs font-bold uppercase tracking-widest text-white">
@@ -37,9 +50,10 @@ function QuizPage() {
           title="SAP FICO quiz"
           srcDoc={quizHtml}
           className="min-h-[1400px] w-full rounded-3xl border border-border bg-background shadow-[0_20px_80px_rgba(7,17,38,0.16)]"
-          sandbox="allow-scripts allow-same-origin"
+          sandbox="allow-scripts"
         />
       </div>
-    </SiteLayout>
+      </SiteLayout>
+    </>
   );
 }

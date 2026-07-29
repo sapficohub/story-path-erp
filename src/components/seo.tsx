@@ -2,7 +2,7 @@ import type { AnyRoute } from "@tanstack/react-router";
 
 const SITE_NAME = "Next-Gen ERP Solutions";
 const SITE_URL = "https://www.next-generpsolutions.com";
-const DEFAULT_IMAGE = `${SITE_URL}/logo.webp`;
+const DEFAULT_IMAGE = `${SITE_URL}/next-gen-erp-solutions-sap-training-hyderabad.jpg`;
 
 export interface SEOOptions {
   title: string;
@@ -81,6 +81,18 @@ export function seo({
         property: "og:image",
         content: image,
       },
+      {
+        property: "og:image:width",
+        content: "1200",
+      },
+      {
+        property: "og:image:height",
+        content: "630",
+      },
+      {
+        property: "og:image:alt",
+        content: "Next-Gen ERP Solutions SAP training and placement support",
+      },
 
       // Twitter
       {
@@ -98,6 +110,10 @@ export function seo({
       {
         name: "twitter:image",
         content: image,
+      },
+      {
+        name: "twitter:image:alt",
+        content: "Next-Gen ERP Solutions SAP training and placement support",
       },
 
       // Theme

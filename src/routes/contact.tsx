@@ -8,6 +8,7 @@ import { COURSES } from "@/lib/courses";
 import {
   SITE_URL,
   breadcrumbSchema,
+  GOOGLE_MAP_URL,
   localBusinessSchema,
   LOCAL_BUSINESS_ID,
   webPageSchema,
@@ -80,7 +81,7 @@ head: () => ({
 
     {
       property: "og:image",
-      content: `${SITE_URL}/logo.webp`,
+      content: `${SITE_URL}/next-gen-erp-solutions-sap-training-hyderabad.jpg`,
     },
 
     {
@@ -101,7 +102,7 @@ head: () => ({
 
     {
       name: "twitter:image",
-      content: `${SITE_URL}/logo.webp`,
+      content: `${SITE_URL}/next-gen-erp-solutions-sap-training-hyderabad.jpg`,
     },
   ],
 }),
@@ -114,7 +115,7 @@ return (
     <JsonLd data={localBusinessSchema} />
     <JsonLd
       data={webPageSchema({
-        type: "ContactPage",
+          type: ["WebPage", "ContactPage"],
         url: `${SITE_URL}/contact`,
         name: "Contact Next-Gen ERP Solutions",
         description:
@@ -128,7 +129,7 @@ return (
       data={breadcrumbSchema([
         {
           name: "Home",
-          url: SITE_URL,
+          url: `${SITE_URL}/`,
         },
         {
           name: "Contact",
@@ -151,7 +152,7 @@ return (
           <Card icon={Phone} title="Call us" value="+91 90003 33859" href="tel:+919000333859" color="bg-brand text-white" />
           <Card icon={MessageCircle} title="WhatsApp" value="+91 90003 33859" href="https://wa.me/919000333859" color="bg-[#25D366] text-white" />
           <Card icon={Mail} title="Email" value="hello@nextgenerpsolutions.com" href="mailto:hello@nextgenerpsolutions.com" color="bg-brand-dark text-white" />
-          <Card icon={MapPin} title="Google Business" value="View on Google" href="https://share.google/4ozjmIOp74J2H7OSs" color="bg-brand-green text-white" />
+          <Card icon={MapPin} title="Google Business" value="View on Google" href={GOOGLE_MAP_URL} color="bg-brand-green text-white" />
 
           <div className="rounded-2xl border border-border bg-card p-5 shadow-card">
             <div className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Follow Us</div>

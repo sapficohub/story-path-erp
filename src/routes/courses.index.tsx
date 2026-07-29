@@ -9,19 +9,9 @@ import {
   SITE_URL,
   breadcrumbSchema,
   EDUCATIONAL_ORGANIZATION_ID,
+  itemListSchema,
   webPageSchema,
 } from "@/lib/schema";
-
-const HIDDEN_COURSES = new Set([
-  "SAP PP",
-  "SAP QM",
-  "SAP WM",
-  "SAP EWM",
-  "SAP Ariba",
-  "SAP Security & GRC",
-  "SAP BASIS",
-  "SAP Fiori",
-]);
 
 export const Route = createFileRoute("/courses/")({
 head: () => ({
@@ -72,7 +62,7 @@ head: () => ({
     },
     {
       property: "og:image",
-      content: `${SITE_URL}/logo.webp`,
+      content: `${SITE_URL}/next-gen-erp-solutions-sap-training-hyderabad.jpg`,
     },
 
     {
@@ -90,7 +80,7 @@ head: () => ({
     },
     {
       name: "twitter:image",
-      content: `${SITE_URL}/logo.webp`,
+      content: `${SITE_URL}/next-gen-erp-solutions-sap-training-hyderabad.jpg`,
     },
   ],
 }),
@@ -102,7 +92,7 @@ function CoursesPage() {
     <>
       <JsonLd
         data={webPageSchema({
-          type: "CollectionPage",
+          type: ["WebPage", "CollectionPage"],
           url: `${SITE_URL}/courses`,
           name: "SAP Training Courses",
           description:
@@ -114,13 +104,23 @@ function CoursesPage() {
         data={breadcrumbSchema([
           {
             name: "Home",
-            url: SITE_URL,
+            url: `${SITE_URL}/`,
           },
           {
             name: "Courses",
             url: `${SITE_URL}/courses`,
           },
         ])}
+      />
+      <JsonLd
+        data={itemListSchema(
+          `${SITE_URL}/courses`,
+          "SAP Training Courses",
+          COURSES.map((course) => ({
+            name: `${course.title} Training`,
+            url: `${SITE_URL}/courses/${course.slug}`,
+          })),
+        )}
       />
 
       <SiteLayout>
@@ -144,9 +144,7 @@ function CoursesPage() {
 
         <section className="mx-auto max-w-7xl px-4 py-16">
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {COURSES.filter(
-              (course) => !HIDDEN_COURSES.has(course.title),
-            ).map((c, i) => (
+            {COURSES.map((c, i) => (
               <motion.div
                 key={c.slug}
                 initial={{ opacity: 0, y: 30 }}

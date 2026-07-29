@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
-import { SITE_URL, breadcrumbSchema } from "@/lib/schema";
+import { SITE_URL, breadcrumbSchema, webPageSchema } from "@/lib/schema";
 import { JsonLd } from "@/components/JsonLd";
 
 type Section = {
@@ -314,8 +314,16 @@ function TermsPage() {
   return (
     <>
       <JsonLd
+        data={webPageSchema({
+          url: `${SITE_URL}/terms`,
+          name: "Terms and Conditions",
+          description:
+            "Terms governing the website, SAP training, demo sessions, payments, refunds, server access and placement support.",
+        })}
+      />
+      <JsonLd
         data={breadcrumbSchema([
-          { name: "Home", url: SITE_URL },
+          { name: "Home", url: `${SITE_URL}/` },
           { name: "Terms and Conditions", url: `${SITE_URL}/terms` },
         ])}
       />

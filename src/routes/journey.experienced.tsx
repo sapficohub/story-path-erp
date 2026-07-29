@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { JourneyExperience, type JourneyConfig } from "@/components/journey-experience";
 import { ExperiencedVisuals as V } from "@/components/chapter-visuals";
+import { SITE_URL } from "@/lib/schema";
+import { PageStructuredData } from "@/components/PageStructuredData";
 
 const config: JourneyConfig = {
   character: "Rahul",
@@ -40,7 +42,21 @@ export const Route = createFileRoute("/journey/experienced")({
       { property: "og:description", content: "Break through your career plateau with SAP." },
       { property: "og:url", content: "/journey/experienced" },
     ],
-    links: [{ rel: "canonical", href: "/journey/experienced" }],
+    links: [{ rel: "canonical", href: `${SITE_URL}/journey/experienced` }],
   }),
-  component: () => <JourneyExperience config={config} />,
+  component: () => (
+    <>
+      <PageStructuredData
+        url={`${SITE_URL}/journey/experienced`}
+        name="Experienced Professional Journey — Rahul's Story"
+        description="Follow Rahul's transformation from salary stagnation to a thriving SAP career."
+        breadcrumbs={[
+          { name: "Home", url: `${SITE_URL}/` },
+          { name: "Career Journeys", url: `${SITE_URL}/career-journeys` },
+          { name: "Experienced Journey", url: `${SITE_URL}/journey/experienced` },
+        ]}
+      />
+      <JourneyExperience config={config} />
+    </>
+  ),
 });

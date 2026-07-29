@@ -5,8 +5,17 @@ const BASE_URL = "https://www.next-generpsolutions.com";
 const LAST_MODIFIED = "2026-07-29";
 
 const IMAGES = [
-  { path: "/apple-touch-icon.png", title: "Next-Gen ERP Solutions" },
-  { path: "/favicon.png", title: "Next-Gen ERP Solutions favicon" },
+  {
+    path: "/logo.webp",
+    title: "Next-Gen ERP Solutions logo",
+    caption: "Next-Gen ERP Solutions SAP training institute logo",
+  },
+  {
+    path: "/next-gen-erp-solutions-sap-training-hyderabad.jpg",
+    title: "Next-Gen ERP Solutions SAP Training Hyderabad",
+    caption:
+      "SAP training, real-time projects and placement support from Next-Gen ERP Solutions in Hyderabad",
+  },
 ];
 
 export const Route = createFileRoute("/sitemap-images.xml")({
@@ -17,6 +26,7 @@ export const Route = createFileRoute("/sitemap-images.xml")({
           (image) => `    <image:image>
       <image:loc>${BASE_URL}${image.path}</image:loc>
       <image:title>${image.title}</image:title>
+      <image:caption>${image.caption}</image:caption>
     </image:image>`,
         ).join("\n");
 

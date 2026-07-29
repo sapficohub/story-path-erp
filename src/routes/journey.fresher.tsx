@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { JourneyExperience, type JourneyConfig } from "@/components/journey-experience";
 import { FresherVisuals as V } from "@/components/chapter-visuals";
+import { SITE_URL } from "@/lib/schema";
+import { PageStructuredData } from "@/components/PageStructuredData";
 
 const config: JourneyConfig = {
   character: "Arjun",
@@ -37,7 +39,21 @@ export const Route = createFileRoute("/journey/fresher")({
       { property: "og:description", content: "An interactive 15-chapter career transformation story." },
       { property: "og:url", content: "/journey/fresher" },
     ],
-    links: [{ rel: "canonical", href: "/journey/fresher" }],
+    links: [{ rel: "canonical", href: `${SITE_URL}/journey/fresher` }],
   }),
-  component: () => <JourneyExperience config={config} />,
+  component: () => (
+    <>
+      <PageStructuredData
+        url={`${SITE_URL}/journey/fresher`}
+        name="Fresher Journey — Arjun's Story"
+        description="Follow Arjun's transformation from struggling graduate to successful SAP professional."
+        breadcrumbs={[
+          { name: "Home", url: `${SITE_URL}/` },
+          { name: "Career Journeys", url: `${SITE_URL}/career-journeys` },
+          { name: "Fresher Journey", url: `${SITE_URL}/journey/fresher` },
+        ]}
+      />
+      <JourneyExperience config={config} />
+    </>
+  ),
 });

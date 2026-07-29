@@ -15,6 +15,8 @@ export type Course = {
   salaryExperienced: string;
 };
 
+export const COURSES_LAST_MODIFIED = "2026-07-29";
+
 export const COURSES: Course[] = [
   {
     slug: "sap-fico-training",

@@ -1,8 +1,7 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
   Link,
-  createRootRouteWithContext,
+  createRootRoute,
   useRouter,
   HeadContent,
   Scripts,
@@ -13,7 +12,11 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { JsonLd } from "@/components/JsonLd";
 import { Toaster } from "@/components/ui/sonner";
-import { organizationSchema, websiteSchema } from "@/lib/schema";
+import {
+  educationalOrganizationSchema,
+  organizationSchema,
+  websiteSchema,
+} from "@/lib/schema";
 import logoAvif480 from "@/assets/nextgen-logo-480.avif";
 
 function NotFoundComponent() {
@@ -76,7 +79,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
-export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+export const Route = createRootRoute({
  head: () => ({
   links: [
     {
@@ -93,10 +96,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     {
       rel: "stylesheet",
       href: "https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800;900&family=Inter:wght@400;500;600;700&family=Bangers&display=swap",
-    },
-    {
-      rel: "canonical",
-      href: "https://www.next-generpsolutions.com",
     },
     {
       rel: "icon",
@@ -200,7 +199,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     {
       property: "og:image",
       content:
-        "https://www.next-generpsolutions.com/logo.webp",
+        "https://www.next-generpsolutions.com/next-gen-erp-solutions-sap-training-hyderabad.jpg",
+    },
+    {
+      property: "og:image:width",
+      content: "1200",
+    },
+    {
+      property: "og:image:height",
+      content: "630",
+    },
+    {
+      property: "og:image:alt",
+      content: "Next-Gen ERP Solutions SAP training and placement support",
     },
 
     {
@@ -222,7 +233,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     {
       name: "twitter:image",
       content:
-        "https://www.next-generpsolutions.com/logo.webp",
+        "https://www.next-generpsolutions.com/next-gen-erp-solutions-sap-training-hyderabad.jpg",
+    },
+    {
+      name: "twitter:image:alt",
+      content: "Next-Gen ERP Solutions SAP training and placement support",
     },
   ],
 }),
@@ -249,6 +264,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         {/* End Google Tag Manager */}
         <HeadContent />
         <JsonLd data={organizationSchema} />
+        <JsonLd data={educationalOrganizationSchema} />
         <JsonLd data={websiteSchema} />
       </head>
       <body>
@@ -271,12 +287,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 }
 
 function RootComponent() {
-  const { queryClient } = Route.useRouteContext();
-
   return (
-    <QueryClientProvider client={queryClient}>
+    <>
       <Outlet />
       <Toaster position="top-center" richColors />
-    </QueryClientProvider>
+    </>
   );
 }

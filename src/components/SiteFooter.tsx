@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Logo } from "./Logo";
 import { Youtube, Instagram, Facebook, MapPin, Phone, MessageCircle } from "lucide-react";
+import { GOOGLE_MAP_URL } from "@/lib/schema";
 import { COURSES } from "@/lib/courses";
 
 export function SiteFooter() {
@@ -18,7 +19,7 @@ export function SiteFooter() {
             <a href="https://www.youtube.com/@Next-GenERPSolutions" target="_blank" rel="noreferrer" aria-label="YouTube" className="rounded-full bg-white/10 p-2 hover:bg-white/20"><Youtube className="h-4 w-4" /></a>
             <a href="https://www.instagram.com/nextgenerpsolutions/" target="_blank" rel="noreferrer" aria-label="Instagram" className="rounded-full bg-white/10 p-2 hover:bg-white/20"><Instagram className="h-4 w-4" /></a>
             <a href="https://www.facebook.com/NextGenERPSolutions" target="_blank" rel="noreferrer" aria-label="Facebook" className="rounded-full bg-white/10 p-2 hover:bg-white/20"><Facebook className="h-4 w-4" /></a>
-            <a href="https://share.google/4ozjmIOp74J2H7OSs" target="_blank" rel="noreferrer" aria-label="Google Business" className="rounded-full bg-white/10 p-2 hover:bg-white/20"><MapPin className="h-4 w-4" /></a>
+            <a href={GOOGLE_MAP_URL} target="_blank" rel="noreferrer" aria-label="Google Business" className="rounded-full bg-white/10 p-2 hover:bg-white/20"><MapPin className="h-4 w-4" /></a>
           </div>
         </div>
         <div>

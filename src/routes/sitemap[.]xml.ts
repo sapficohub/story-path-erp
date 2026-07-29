@@ -1,25 +1,25 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
-
-const BASE_URL = "https://www.next-generpsolutions.com";
-const LAST_MODIFIED = "2026-07-29";
+import { SITE_URL } from "@/lib/schema";
+import { SITE_PAGES_LAST_MODIFIED } from "@/lib/site-pages";
+import { COURSES_LAST_MODIFIED } from "@/lib/courses";
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
         const sitemaps = [
-          "/sitemap-pages.xml",
-          "/sitemap-courses.xml",
-          "/sitemap-blog.xml",
-          "/sitemap-images.xml",
+          { path: "/sitemap-pages.xml", lastModified: SITE_PAGES_LAST_MODIFIED },
+          { path: "/sitemap-courses.xml", lastModified: COURSES_LAST_MODIFIED },
+          { path: "/sitemap-blog.xml", lastModified: SITE_PAGES_LAST_MODIFIED },
+          { path: "/sitemap-images.xml", lastModified: SITE_PAGES_LAST_MODIFIED },
         ];
 
         const entries = sitemaps.map(
-          (path) => `  <sitemap>
-    <loc>${BASE_URL}${path}</loc>
-    <lastmod>${LAST_MODIFIED}</lastmod>
-  </sitemap>`
+          (sitemap) => `  <sitemap>
+    <loc>${SITE_URL}${sitemap.path}</loc>
+    <lastmod>${sitemap.lastModified}</lastmod>
+  </sitemap>`,
         );
 
         const xml = `<?xml version="1.0" encoding="UTF-8"?>

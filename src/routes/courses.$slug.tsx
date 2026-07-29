@@ -3,6 +3,7 @@ import { SiteLayout } from "@/components/SiteLayout";
 import { COURSES, getCourse } from "@/lib/courses";
 import { LeadForm } from "@/components/LeadForm";
 import { motion } from "framer-motion";
+import { LEGACY_COURSE_SLUGS } from "@/lib/redirects";
 
 import {
   CheckCircle2,
@@ -24,27 +25,6 @@ import {
   EDUCATIONAL_ORGANIZATION_ID,
   webPageSchema,
 } from "@/lib/schema";
-
-const LEGACY_COURSE_SLUGS: Record<string, string> = {
-  "sap-fico": "sap-fico-training",
-  "sap-fico-trainng": "sap-fico-training",
-  "sap-mm": "sap-mm-training",
-  "sap-sd": "sap-sd-training",
-  "sap-abap": "sap-abap-training",
-  "sap-basis": "sap-basis-training",
-  "sap-hcm": "sap-hcm-training",
-  "sap-successfactors": "sap-successfactors-training",
-  "sap-security-grc": "sap-security-grc-training",
-  "sap-fiori": "sap-fiori-ui5-training",
-  "sap-pp": "sap-pp-training",
-  "sap-pm": "sap-pm-training",
-  "sap-qm": "sap-qm-training",
-  "sap-ewm": "sap-ewm-training",
-  "sap-ariba": "sap-ariba-training",
-  "sap-bw-bi": "sap-bw-bi-training",
-  "sap-sac": "sap-sac-training",
-  "sap-bpc": "sap-bpc-training",
-};
 
 export const Route = createFileRoute("/courses/$slug")({
   loader: ({ params }) => {
@@ -133,7 +113,7 @@ export const Route = createFileRoute("/courses/$slug")({
 
         {
           property: "og:image",
-          content: `${SITE_URL}/logo.webp`,
+          content: `${SITE_URL}/next-gen-erp-solutions-sap-training-hyderabad.jpg`,
         },
 
         {
@@ -153,7 +133,7 @@ export const Route = createFileRoute("/courses/$slug")({
 
         {
           name: "twitter:image",
-          content: `${SITE_URL}/logo.webp`,
+          content: `${SITE_URL}/next-gen-erp-solutions-sap-training-hyderabad.jpg`,
         },
       ],
     };
@@ -198,7 +178,7 @@ function CoursePage() {
         data={breadcrumbSchema([
           {
             name: "Home",
-            url: SITE_URL,
+            url: `${SITE_URL}/`,
           },
           {
             name: "Courses",
