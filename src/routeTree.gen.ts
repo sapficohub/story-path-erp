@@ -12,6 +12,11 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SuccessStoriesRouteImport } from './routes/success-stories'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SitemapPagesDotxmlRouteImport } from './routes/sitemap-pages[.]xml'
+import { Route as SitemapImagesDotxmlRouteImport } from './routes/sitemap-images[.]xml'
+import { Route as SitemapCoursesDotxmlRouteImport } from './routes/sitemap-courses[.]xml'
+import { Route as SitemapBlogDotxmlRouteImport } from './routes/sitemap-blog[.]xml'
+import { Route as SitemapRouteImport } from './routes/sitemap'
 import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as PlacementsRouteImport } from './routes/placements'
 import { Route as FresherJourneyRouteImport } from './routes/fresher-journey'
@@ -42,6 +47,31 @@ const SuccessStoriesRoute = SuccessStoriesRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapPagesDotxmlRoute = SitemapPagesDotxmlRouteImport.update({
+  id: '/sitemap-pages.xml',
+  path: '/sitemap-pages.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapImagesDotxmlRoute = SitemapImagesDotxmlRouteImport.update({
+  id: '/sitemap-images.xml',
+  path: '/sitemap-images.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapCoursesDotxmlRoute = SitemapCoursesDotxmlRouteImport.update({
+  id: '/sitemap-courses.xml',
+  path: '/sitemap-courses.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapBlogDotxmlRoute = SitemapBlogDotxmlRouteImport.update({
+  id: '/sitemap-blog.xml',
+  path: '/sitemap-blog.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapRoute = SitemapRouteImport.update({
+  id: '/sitemap',
+  path: '/sitemap',
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuizRoute = QuizRouteImport.update({
@@ -126,7 +156,6 @@ const CoursesSlugRoute = CoursesSlugRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/terms': typeof TermsRoute
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/blog': typeof BlogRoute
@@ -138,8 +167,14 @@ export interface FileRoutesByFullPath {
   '/fresher-journey': typeof FresherJourneyRoute
   '/placements': typeof PlacementsRoute
   '/quiz': typeof QuizRoute
+  '/sitemap': typeof SitemapRoute
+  '/sitemap-blog.xml': typeof SitemapBlogDotxmlRoute
+  '/sitemap-courses.xml': typeof SitemapCoursesDotxmlRoute
+  '/sitemap-images.xml': typeof SitemapImagesDotxmlRoute
+  '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/success-stories': typeof SuccessStoriesRoute
+  '/terms': typeof TermsRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/journey/career-gap': typeof JourneyCareerGapRoute
   '/journey/experienced': typeof JourneyExperiencedRoute
@@ -147,7 +182,6 @@ export interface FileRoutesByFullPath {
   '/courses/': typeof CoursesIndexRoute
 }
 export interface FileRoutesByTo {
-  '/terms': typeof TermsRoute
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/blog': typeof BlogRoute
@@ -158,8 +192,14 @@ export interface FileRoutesByTo {
   '/fresher-journey': typeof FresherJourneyRoute
   '/placements': typeof PlacementsRoute
   '/quiz': typeof QuizRoute
+  '/sitemap': typeof SitemapRoute
+  '/sitemap-blog.xml': typeof SitemapBlogDotxmlRoute
+  '/sitemap-courses.xml': typeof SitemapCoursesDotxmlRoute
+  '/sitemap-images.xml': typeof SitemapImagesDotxmlRoute
+  '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/success-stories': typeof SuccessStoriesRoute
+  '/terms': typeof TermsRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/journey/career-gap': typeof JourneyCareerGapRoute
   '/journey/experienced': typeof JourneyExperiencedRoute
@@ -168,7 +208,6 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/terms': typeof TermsRoute
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/blog': typeof BlogRoute
@@ -180,8 +219,14 @@ export interface FileRoutesById {
   '/fresher-journey': typeof FresherJourneyRoute
   '/placements': typeof PlacementsRoute
   '/quiz': typeof QuizRoute
+  '/sitemap': typeof SitemapRoute
+  '/sitemap-blog.xml': typeof SitemapBlogDotxmlRoute
+  '/sitemap-courses.xml': typeof SitemapCoursesDotxmlRoute
+  '/sitemap-images.xml': typeof SitemapImagesDotxmlRoute
+  '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/success-stories': typeof SuccessStoriesRoute
+  '/terms': typeof TermsRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/journey/career-gap': typeof JourneyCareerGapRoute
   '/journey/experienced': typeof JourneyExperiencedRoute
@@ -192,7 +237,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/terms'
     | '/about'
     | '/blog'
     | '/career-gap'
@@ -203,8 +247,14 @@ export interface FileRouteTypes {
     | '/fresher-journey'
     | '/placements'
     | '/quiz'
+    | '/sitemap'
+    | '/sitemap-blog.xml'
+    | '/sitemap-courses.xml'
+    | '/sitemap-images.xml'
+    | '/sitemap-pages.xml'
     | '/sitemap.xml'
     | '/success-stories'
+    | '/terms'
     | '/courses/$slug'
     | '/journey/career-gap'
     | '/journey/experienced'
@@ -213,7 +263,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/terms'
     | '/about'
     | '/blog'
     | '/career-gap'
@@ -223,8 +272,14 @@ export interface FileRouteTypes {
     | '/fresher-journey'
     | '/placements'
     | '/quiz'
+    | '/sitemap'
+    | '/sitemap-blog.xml'
+    | '/sitemap-courses.xml'
+    | '/sitemap-images.xml'
+    | '/sitemap-pages.xml'
     | '/sitemap.xml'
     | '/success-stories'
+    | '/terms'
     | '/courses/$slug'
     | '/journey/career-gap'
     | '/journey/experienced'
@@ -233,7 +288,6 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/terms'
     | '/about'
     | '/blog'
     | '/career-gap'
@@ -244,8 +298,14 @@ export interface FileRouteTypes {
     | '/fresher-journey'
     | '/placements'
     | '/quiz'
+    | '/sitemap'
+    | '/sitemap-blog.xml'
+    | '/sitemap-courses.xml'
+    | '/sitemap-images.xml'
+    | '/sitemap-pages.xml'
     | '/sitemap.xml'
     | '/success-stories'
+    | '/terms'
     | '/courses/$slug'
     | '/journey/career-gap'
     | '/journey/experienced'
@@ -254,7 +314,6 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  TermsRoute: typeof TermsRoute
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   BlogRoute: typeof BlogRoute
@@ -266,8 +325,14 @@ export interface RootRouteChildren {
   FresherJourneyRoute: typeof FresherJourneyRoute
   PlacementsRoute: typeof PlacementsRoute
   QuizRoute: typeof QuizRoute
+  SitemapRoute: typeof SitemapRoute
+  SitemapBlogDotxmlRoute: typeof SitemapBlogDotxmlRoute
+  SitemapCoursesDotxmlRoute: typeof SitemapCoursesDotxmlRoute
+  SitemapImagesDotxmlRoute: typeof SitemapImagesDotxmlRoute
+  SitemapPagesDotxmlRoute: typeof SitemapPagesDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SuccessStoriesRoute: typeof SuccessStoriesRoute
+  TermsRoute: typeof TermsRoute
   JourneyCareerGapRoute: typeof JourneyCareerGapRoute
   JourneyExperiencedRoute: typeof JourneyExperiencedRoute
   JourneyFresherRoute: typeof JourneyFresherRoute
@@ -294,6 +359,41 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-pages.xml': {
+      id: '/sitemap-pages.xml'
+      path: '/sitemap-pages.xml'
+      fullPath: '/sitemap-pages.xml'
+      preLoaderRoute: typeof SitemapPagesDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-images.xml': {
+      id: '/sitemap-images.xml'
+      path: '/sitemap-images.xml'
+      fullPath: '/sitemap-images.xml'
+      preLoaderRoute: typeof SitemapImagesDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-courses.xml': {
+      id: '/sitemap-courses.xml'
+      path: '/sitemap-courses.xml'
+      fullPath: '/sitemap-courses.xml'
+      preLoaderRoute: typeof SitemapCoursesDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-blog.xml': {
+      id: '/sitemap-blog.xml'
+      path: '/sitemap-blog.xml'
+      fullPath: '/sitemap-blog.xml'
+      preLoaderRoute: typeof SitemapBlogDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap': {
+      id: '/sitemap'
+      path: '/sitemap'
+      fullPath: '/sitemap'
+      preLoaderRoute: typeof SitemapRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/quiz': {
@@ -425,7 +525,6 @@ const CoursesRouteWithChildren =
   CoursesRoute._addFileChildren(CoursesRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
-  TermsRoute: TermsRoute,
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   BlogRoute: BlogRoute,
@@ -437,8 +536,14 @@ const rootRouteChildren: RootRouteChildren = {
   FresherJourneyRoute: FresherJourneyRoute,
   PlacementsRoute: PlacementsRoute,
   QuizRoute: QuizRoute,
+  SitemapRoute: SitemapRoute,
+  SitemapBlogDotxmlRoute: SitemapBlogDotxmlRoute,
+  SitemapCoursesDotxmlRoute: SitemapCoursesDotxmlRoute,
+  SitemapImagesDotxmlRoute: SitemapImagesDotxmlRoute,
+  SitemapPagesDotxmlRoute: SitemapPagesDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SuccessStoriesRoute: SuccessStoriesRoute,
+  TermsRoute: TermsRoute,
   JourneyCareerGapRoute: JourneyCareerGapRoute,
   JourneyExperiencedRoute: JourneyExperiencedRoute,
   JourneyFresherRoute: JourneyFresherRoute,

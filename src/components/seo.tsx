@@ -2,7 +2,7 @@ import type { AnyRoute } from "@tanstack/react-router";
 
 const SITE_NAME = "Next-Gen ERP Solutions";
 const SITE_URL = "https://www.next-generpsolutions.com";
-const DEFAULT_IMAGE = `${SITE_URL}/og-image.jpg`;
+const DEFAULT_IMAGE = `${SITE_URL}/logo.webp`;
 
 export interface SEOOptions {
   title: string;

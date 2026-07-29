@@ -63,7 +63,7 @@ export function Footer() {
     <footer id="contact" className="bg-[#071126] text-white/80 py-16 px-6">
       <div className="mx-auto max-w-7xl grid md:grid-cols-4 gap-10">
         <div>
-          <Logo className="[&_div]:text-white [&_.text-muted-foreground]:text-white/60" />
+          <Logo className="[&_div]:text-white [&_.text-muted-foreground]:text-white/60" loading="lazy" />
           <p className="mt-4 text-sm text-white/60">Premium SAP training and placement support for ambitious learners.</p>
         </div>
         <div>

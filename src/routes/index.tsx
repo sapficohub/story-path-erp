@@ -10,6 +10,8 @@ import { JsonLd } from "@/components/JsonLd";
 
 import {
   educationalOrganizationSchema,
+  localBusinessSchema,
+  webPageSchema,
   breadcrumbSchema,
   SITE_URL,
 } from "@/lib/schema";
@@ -69,7 +71,7 @@ head: () => ({
     },
     {
       property: "og:image",
-      content: "https://www.next-generpsolutions.com/og-image.jpg",
+      content: "https://www.next-generpsolutions.com/logo.webp",
     },
     {
       property: "og:image:alt",
@@ -98,7 +100,7 @@ head: () => ({
     },
     {
       name: "twitter:image",
-      content: "https://www.next-generpsolutions.com/og-image.jpg",
+      content: "https://www.next-generpsolutions.com/logo.webp",
     },
     {
       name: "twitter:image:alt",
@@ -147,12 +149,21 @@ function HomePage() {
   return (
     <>
       <JsonLd data={educationalOrganizationSchema} />
+      <JsonLd data={localBusinessSchema} />
+      <JsonLd
+        data={webPageSchema({
+          url: `${SITE_URL}/`,
+          name: "Best SAP Training Institute in Hyderabad | Next-Gen ERP Solutions",
+          description:
+            "Industry-focused SAP training with real-time projects, live SAP server access and placement assistance.",
+        })}
+      />
 
       <JsonLd
         data={breadcrumbSchema([
           {
             name: "Home",
-            url: SITE_URL,
+            url: `${SITE_URL}/`,
           },
         ])}
       />
@@ -161,8 +172,8 @@ function HomePage() {
       {/* HERO */}
       <section className="relative overflow-hidden bg-gradient-hero">
         <div className="halftone absolute inset-0" />
-        <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-16 md:grid-cols-2 md:py-24">
-          <div>
+        <div className="relative mx-auto grid w-full max-w-7xl items-center gap-12 px-4 py-16 md:grid-cols-2 md:gap-10 md:py-24">
+          <div className="min-w-0">
             <motion.div
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
               className="inline-flex items-center gap-2 rounded-full border border-brand/20 bg-white/70 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-brand backdrop-blur"
@@ -171,34 +182,34 @@ function HomePage() {
             </motion.div>
             <motion.h1
               initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }}
-              className="mt-5 text-5xl font-black leading-[1.05] text-foreground md:text-7xl"
+              className="mt-6 text-4xl font-black leading-[1.08] text-foreground min-[390px]:text-5xl md:text-7xl"
             >
               Transform Your <br /> Career With <span className="text-gradient-brand">SAP</span>
             </motion.h1>
             <motion.p
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}
-              className="mt-5 max-w-xl text-lg text-muted-foreground"
+              className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg"
             >
               For Freshers, Experienced Professionals, and Career Gap Candidates. Industry-led SAP training, real projects, and 100% placement support.
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }}
-              className="mt-7 flex flex-wrap gap-3"
+              className="mt-8 flex flex-wrap gap-3"
             >
-              <Link to="/contact" className="inline-flex items-center gap-2 rounded-full bg-gradient-brand px-6 py-3.5 font-semibold text-white shadow-glow transition hover:scale-105">
+              <Link to="/contact" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-gradient-brand px-5 py-3 font-semibold text-white shadow-glow transition hover:scale-105 max-[375px]:w-full">
                 Book Free Demo <ArrowRight className="h-4 w-4" />
               </Link>
-              <Link to="/contact" className="inline-flex items-center gap-2 rounded-full border-2 border-brand bg-white px-6 py-3.5 font-semibold text-brand hover:bg-brand hover:text-white transition">
+              <Link to="/contact" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border-2 border-brand bg-white px-5 py-3 font-semibold text-brand transition hover:bg-brand hover:text-white max-[375px]:w-full">
                 <Phone className="h-4 w-4" /> Talk To Career Advisor
               </Link>
-              <Link to="/career-journeys" className="inline-flex items-center gap-2 rounded-full bg-brand-dark px-6 py-3.5 font-semibold text-white hover:opacity-90 transition">
+              <Link to="/career-journeys" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-brand-dark px-5 py-3 font-semibold text-white transition hover:opacity-90 max-[375px]:w-full">
                 Explore Journeys
               </Link>
-              <a href="https://wa.me/919000333859" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-6 py-3.5 font-semibold text-white hover:scale-105 transition">
+              <a href="https://wa.me/919000333859" target="_blank" rel="noreferrer" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#25D366] px-5 py-3 font-semibold text-white transition hover:scale-105 max-[375px]:w-full">
                 <MessageCircle className="h-4 w-4" /> WhatsApp Us
               </a>
             </motion.div>
-            <div className="mt-10 flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
+            <div className="mt-10 grid grid-cols-2 gap-4 text-sm text-muted-foreground min-[360px]:grid-cols-3">
               <Stat n="5,000+" label="Careers Transformed" />
               <Stat n="120+" label="Hiring Partners" />
               <Stat n="92%" label="Placement Rate" />
@@ -208,7 +219,7 @@ function HomePage() {
           {/* Animated brand-logo growth */}
           <motion.div
             initial={{ opacity: 0, scale: 0.85 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }}
-            className="relative mx-auto w-full max-w-md"
+            className="relative mx-auto w-full max-w-md overflow-visible"
           >
             <div className="absolute -inset-6 rounded-[2rem] bg-gradient-brand opacity-20 blur-3xl" />
             <div className="relative rounded-[2rem] border-2 border-white bg-white p-6 shadow-glow">
@@ -310,7 +321,7 @@ function HomePage() {
               className="rounded-2xl border border-border bg-card p-6 shadow-card"
             >
               <CheckCircle2 className="h-7 w-7 text-brand-green" />
-              <h4 className="mt-3 text-lg font-bold">{f.t}</h4>
+              <h3 className="mt-3 text-lg font-bold">{f.t}</h3>
               <p className="mt-2 text-sm text-muted-foreground">{f.d}</p>
             </motion.div>
           ))}
@@ -335,7 +346,7 @@ function HomePage() {
                   <div className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${c.color} text-2xl shadow-glow`}>
                     {c.icon}
                   </div>
-                  <h4 className="text-xl font-extrabold">{c.title}</h4>
+                  <h3 className="text-xl font-extrabold">{c.title}</h3>
                   <p className="mt-1 text-sm text-muted-foreground">{c.tagline}</p>
                   <div className="mt-4 flex items-center justify-between text-xs">
                     <span className="font-semibold text-foreground">{c.duration}</span>
@@ -367,7 +378,7 @@ function HomePage() {
               className="relative rounded-2xl border-2 border-brand-dark bg-card p-5 shadow-[4px_4px_0_#071126]"
             >
               <div className="text-3xl font-black text-gradient-brand">{p.step}</div>
-              <h5 className="mt-2 font-extrabold">{p.title}</h5>
+              <h3 className="mt-2 font-extrabold">{p.title}</h3>
               <p className="mt-1 text-xs text-muted-foreground">{p.desc}</p>
             </motion.div>
           ))}
@@ -395,7 +406,7 @@ function HomePage() {
                 <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-brand text-2xl font-black">
                   {t.n.split(" ").map(x => x[0]).join("")}
                 </div>
-                <h4 className="mt-4 text-xl font-extrabold">{t.n}</h4>
+                <h3 className="mt-4 text-xl font-extrabold">{t.n}</h3>
                 <div className="text-brand-teal text-sm">{t.r}</div>
                 <div className="mt-1 text-xs text-white/60">{t.e}</div>
                 <div className="mt-4 flex gap-1">
@@ -489,7 +500,7 @@ function FloatingChip({ children, className, delay = 0 }: { children: React.Reac
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: [0, -8, 0] }}
       transition={{ opacity: { delay }, y: { duration: 4, repeat: Infinity, delay } }}
-      className={`absolute z-10 rounded-full border-2 border-brand-dark bg-white px-3 py-1.5 text-xs font-bold shadow-[3px_3px_0_#071126] ${className}`}
+      className={`absolute z-10 hidden rounded-full border-2 border-brand-dark bg-white px-3 py-1.5 text-xs font-bold shadow-[3px_3px_0_#071126] sm:block ${className}`}
     >
       {children}
     </motion.div>

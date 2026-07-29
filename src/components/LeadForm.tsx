@@ -223,10 +223,10 @@ export function LeadForm({
           setLoading(false);
         }
       }}
-      className="rounded-2xl border border-border bg-card p-6 shadow-card md:p-8"
+      className="w-full max-w-full rounded-2xl border border-border bg-card p-5 shadow-card sm:p-6 md:p-8"
     >
       <h3 className="text-2xl font-extrabold text-foreground">{title}</h3>
-      <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>
+      <p className="mt-2 text-base leading-relaxed text-muted-foreground">{subtitle}</p>
       <div className="mt-5 grid gap-4 sm:grid-cols-2">
         {defaultFields.map((f) => (
           <label key={f.name} className={f.name === "name" || f.name === "module" ? "sm:col-span-2 block" : "block"}>
@@ -234,7 +234,7 @@ export function LeadForm({
               {f.label}{f.required && <span className="text-destructive"> *</span>}
             </span>
             {f.options ? (
-              <select required={f.required} name={f.name} className="w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+              <select required={f.required} name={f.name} className="min-h-12 w-full rounded-lg border border-input bg-background px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-ring">
                 <option value="">Select…</option>
                 {f.options.map((o) => <option key={o}>{o}</option>)}
               </select>
@@ -244,7 +244,9 @@ export function LeadForm({
                 name={f.name}
                 type={f.type ?? "text"}
                 placeholder={f.placeholder}
-                className="w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                autoComplete={f.name === "name" ? "name" : f.name === "phone" ? "tel" : f.name === "email" ? "email" : undefined}
+                inputMode={f.type === "tel" ? "tel" : f.type === "email" ? "email" : undefined}
+                className="min-h-12 w-full rounded-lg border border-input bg-background px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-ring"
               />
             )}
           </label>
@@ -253,7 +255,7 @@ export function LeadForm({
       <button
         type="submit"
         disabled={loading}
-        className="mt-5 w-full rounded-full bg-gradient-brand px-6 py-3 font-semibold text-white shadow-glow transition hover:scale-[1.02] disabled:opacity-60"
+        className="mt-5 min-h-12 w-full rounded-full bg-gradient-brand px-6 py-3 font-semibold text-white shadow-glow transition hover:scale-[1.02] disabled:opacity-60"
       >
         {loading ? "Sending…" : cta}
       </button>

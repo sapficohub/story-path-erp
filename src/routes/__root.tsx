@@ -14,6 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { JsonLd } from "@/components/JsonLd";
 import { Toaster } from "@/components/ui/sonner";
 import { organizationSchema, websiteSchema } from "@/lib/schema";
+import logoAvif480 from "@/assets/nextgen-logo-480.avif";
 
 function NotFoundComponent() {
   return (
@@ -83,8 +84,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       href: appCss,
     },
     {
+      rel: "preload",
+      as: "image",
+      type: "image/avif",
+      href: logoAvif480,
+      fetchPriority: "high",
+    },
+    {
       rel: "stylesheet",
-      href: "https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&family=Bangers&display=swap",
+      href: "https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800;900&family=Inter:wght@400;500;600;700&family=Bangers&display=swap",
     },
     {
       rel: "canonical",
@@ -192,7 +200,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     {
       property: "og:image",
       content:
-        "https://www.next-generpsolutions.com/og-image.jpg",
+        "https://www.next-generpsolutions.com/logo.webp",
     },
 
     {
@@ -214,7 +222,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     {
       name: "twitter:image",
       content:
-        "https://www.next-generpsolutions.com/og-image.jpg",
+        "https://www.next-generpsolutions.com/logo.webp",
     },
   ],
 }),
@@ -228,11 +236,32 @@ function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
+        {/* Google Tag Manager */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-M8PD2672');`,
+          }}
+        />
+        {/* End Google Tag Manager */}
         <HeadContent />
         <JsonLd data={organizationSchema} />
         <JsonLd data={websiteSchema} />
       </head>
       <body>
+         {/* Google Tag Manager (noscript) */}
+         <noscript>
+           <iframe
+             src="https://www.googletagmanager.com/ns.html?id=GTM-M8PD2672"
+             height="0"
+             width="0"
+             style={{ display: "none", visibility: "hidden" }}
+           />
+         </noscript>
+         {/* End Google Tag Manager (noscript) */}
          {children}
 
          <Scripts />

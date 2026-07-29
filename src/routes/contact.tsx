@@ -9,6 +9,8 @@ import {
   SITE_URL,
   breadcrumbSchema,
   localBusinessSchema,
+  LOCAL_BUSINESS_ID,
+  webPageSchema,
 } from "@/lib/schema";
 
 const HIDDEN_CONTACT_COURSES = new Set([
@@ -78,7 +80,7 @@ head: () => ({
 
     {
       property: "og:image",
-      content: `${SITE_URL}/og-image.jpg`,
+      content: `${SITE_URL}/logo.webp`,
     },
 
     {
@@ -99,7 +101,7 @@ head: () => ({
 
     {
       name: "twitter:image",
-      content: `${SITE_URL}/og-image.jpg`,
+      content: `${SITE_URL}/logo.webp`,
     },
   ],
 }),
@@ -109,7 +111,18 @@ head: () => ({
 function ContactPage() {
 return (
   <>
-    <JsonLd data={localBusinessSchema()} />
+    <JsonLd data={localBusinessSchema} />
+    <JsonLd
+      data={webPageSchema({
+        type: "ContactPage",
+        url: `${SITE_URL}/contact`,
+        name: "Contact Next-Gen ERP Solutions",
+        description:
+          "Contact Next-Gen ERP Solutions for SAP training, free demos, career counselling and placement support.",
+        aboutId: LOCAL_BUSINESS_ID,
+        mainEntityId: LOCAL_BUSINESS_ID,
+      })}
+    />
 
     <JsonLd
       data={breadcrumbSchema([

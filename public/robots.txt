@@ -1,4 +1,12 @@
 User-agent: *
+Disallow: /admin/
+Disallow: /login/
+Disallow: /dashboard/
+Disallow: /search/
+Disallow: /thank-you/
+Disallow: /preview/
+Disallow: /test/
+
 Allow: /
 
 Sitemap: https://www.next-generpsolutions.com/sitemap.xml

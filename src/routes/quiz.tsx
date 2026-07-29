@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import quizPageHtml from "@/general-knowledge-quiz-with-qa.html?raw";
+import nextGenLogoUrl from "@/assets/nextgen-logo-480.webp";
 
 export const Route = createFileRoute("/quiz")({
   head: () => ({
@@ -15,7 +16,6 @@ export const Route = createFileRoute("/quiz")({
 });
 
 function QuizPage() {
-  const nextGenLogoUrl = new URL("../assets/nextgen-logo.png", import.meta.url).href;
   const quizHtml = quizPageHtml.replace('src="next-gen-logo.png"', `src="${nextGenLogoUrl}"`);
 
   return (

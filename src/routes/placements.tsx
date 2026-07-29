@@ -2,9 +2,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { LeadForm } from "@/components/LeadForm";
 import { motion } from "framer-motion";
+import { JsonLd } from "@/components/JsonLd";
+import { SITE_URL, breadcrumbSchema, webPageSchema } from "@/lib/schema";
 
 export const Route = createFileRoute("/placements")({
   head: () => ({
+    links: [{ rel: "canonical", href: `${SITE_URL}/placements` }],
     meta: [
       { title: "Placements — Next-Gen ERP Solutions" },
       { name: "description", content: "92% placement rate. 120+ hiring partners. End-to-end placement support for every SAP student." },
@@ -19,7 +22,22 @@ const COMPANIES = ["TCS", "Infosys", "Wipro", "Accenture", "Capgemini", "Deloitt
 
 function PlacementsPage() {
   return (
-    <SiteLayout>
+    <>
+      <JsonLd
+        data={webPageSchema({
+          url: `${SITE_URL}/placements`,
+          name: "SAP Placement Support",
+          description:
+            "Placement support, resume preparation, mock interviews and hiring assistance for SAP students.",
+        })}
+      />
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Home", url: `${SITE_URL}/` },
+          { name: "Placements", url: `${SITE_URL}/placements` },
+        ])}
+      />
+      <SiteLayout>
       <section className="bg-gradient-hero py-20">
         <div className="mx-auto max-w-5xl px-4 text-center">
           <div className="inline-block rounded-full bg-brand-dark px-4 py-1 text-xs font-bold uppercase tracking-widest text-white">Placements</div>
@@ -78,6 +96,7 @@ function PlacementsPage() {
           <LeadForm title="Talk to Placement Cell" subtitle="Free, no obligations." />
         </div>
       </section>
-    </SiteLayout>
+      </SiteLayout>
+    </>
   );
 }

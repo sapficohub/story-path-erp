@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { COURSES, getCourse } from "@/lib/courses";
 import { LeadForm } from "@/components/LeadForm";
@@ -21,10 +21,43 @@ import {
   breadcrumbSchema,
   courseSchema,
   faqSchema,
+  EDUCATIONAL_ORGANIZATION_ID,
+  webPageSchema,
 } from "@/lib/schema";
+
+const LEGACY_COURSE_SLUGS: Record<string, string> = {
+  "sap-fico": "sap-fico-training",
+  "sap-fico-trainng": "sap-fico-training",
+  "sap-mm": "sap-mm-training",
+  "sap-sd": "sap-sd-training",
+  "sap-abap": "sap-abap-training",
+  "sap-basis": "sap-basis-training",
+  "sap-hcm": "sap-hcm-training",
+  "sap-successfactors": "sap-successfactors-training",
+  "sap-security-grc": "sap-security-grc-training",
+  "sap-fiori": "sap-fiori-ui5-training",
+  "sap-pp": "sap-pp-training",
+  "sap-pm": "sap-pm-training",
+  "sap-qm": "sap-qm-training",
+  "sap-ewm": "sap-ewm-training",
+  "sap-ariba": "sap-ariba-training",
+  "sap-bw-bi": "sap-bw-bi-training",
+  "sap-sac": "sap-sac-training",
+  "sap-bpc": "sap-bpc-training",
+};
 
 export const Route = createFileRoute("/courses/$slug")({
   loader: ({ params }) => {
+    const optimizedSlug = LEGACY_COURSE_SLUGS[params.slug];
+
+    if (optimizedSlug) {
+      throw redirect({
+        to: "/courses/$slug",
+        params: { slug: optimizedSlug },
+        statusCode: 301,
+      });
+    }
+
     const course = getCourse(params.slug);
 
     if (!course) throw notFound();
@@ -100,7 +133,7 @@ export const Route = createFileRoute("/courses/$slug")({
 
         {
           property: "og:image",
-          content: `${SITE_URL}/og-image.jpg`,
+          content: `${SITE_URL}/logo.webp`,
         },
 
         {
@@ -120,7 +153,7 @@ export const Route = createFileRoute("/courses/$slug")({
 
         {
           name: "twitter:image",
-          content: `${SITE_URL}/og-image.jpg`,
+          content: `${SITE_URL}/logo.webp`,
         },
       ],
     };
@@ -183,11 +216,22 @@ function CoursePage() {
           name: course.title,
           description: course.description,
           url: `${SITE_URL}/courses/${course.slug}`,
+          teaches: course.curriculum,
         })}
       />
 
       <JsonLd
-        data={faqSchema(faqs)}
+        data={webPageSchema({
+          url: `${SITE_URL}/courses/${course.slug}`,
+          name: `${course.title} Training`,
+          description: course.description,
+          aboutId: EDUCATIONAL_ORGANIZATION_ID,
+          mainEntityId: `${SITE_URL}/courses/${course.slug}#course`,
+        })}
+      />
+
+      <JsonLd
+        data={faqSchema(faqs, `${SITE_URL}/courses/${course.slug}`)}
       />
 
       <SiteLayout>

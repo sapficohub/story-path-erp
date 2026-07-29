@@ -8,7 +8,8 @@ import { JsonLd } from "@/components/JsonLd";
 import {
   SITE_URL,
   breadcrumbSchema,
-  organizationSchema,
+  EDUCATIONAL_ORGANIZATION_ID,
+  webPageSchema,
 } from "@/lib/schema";
 export const Route = createFileRoute("/about")({
 head: () => ({
@@ -66,7 +67,7 @@ head: () => ({
 
     {
       property: "og:image",
-      content: `${SITE_URL}/og-image.jpg`,
+      content: `${SITE_URL}/logo.webp`,
     },
 
     {
@@ -87,7 +88,7 @@ head: () => ({
 
     {
       name: "twitter:image",
-      content: `${SITE_URL}/og-image.jpg`,
+      content: `${SITE_URL}/logo.webp`,
     },
   ],
 }),
@@ -97,7 +98,16 @@ head: () => ({
 function AboutPage() {
 return (
   <>
-    <JsonLd data={organizationSchema} />
+    <JsonLd
+      data={webPageSchema({
+        type: "AboutPage",
+        url: `${SITE_URL}/about`,
+        name: "About Next-Gen ERP Solutions",
+        description:
+          "Learn about Next-Gen ERP Solutions, our SAP training methodology, placement support and career transformation mission.",
+        aboutId: EDUCATIONAL_ORGANIZATION_ID,
+      })}
+    />
 
     <JsonLd
       data={breadcrumbSchema([

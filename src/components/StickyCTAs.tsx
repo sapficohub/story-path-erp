@@ -1,9 +1,32 @@
 import { Link } from "@tanstack/react-router";
 import { Phone, MessageCircle, Calendar } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export function StickyCTAs() {
+  const [footerVisible, setFooterVisible] = useState(false);
+
+  useEffect(() => {
+    const footer = document.getElementById("site-footer");
+    if (!footer) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setFooterVisible(entry.isIntersecting),
+      { threshold: 0.05 },
+    );
+    observer.observe(footer);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-3">
+    <div
+      className={`fixed z-50 flex flex-col gap-4 transition duration-200 ${
+        footerVisible ? "hidden" : "opacity-100"
+      }`}
+      style={{
+        right: "max(1rem, env(safe-area-inset-right))",
+        bottom: "max(1rem, env(safe-area-inset-bottom))",
+      }}
+    >
       <a
         href="https://wa.me/919000333859"
         target="_blank"

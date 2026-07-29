@@ -8,6 +8,8 @@ import { JsonLd } from "@/components/JsonLd";
 import {
   SITE_URL,
   breadcrumbSchema,
+  EDUCATIONAL_ORGANIZATION_ID,
+  webPageSchema,
 } from "@/lib/schema";
 
 const HIDDEN_COURSES = new Set([
@@ -70,7 +72,7 @@ head: () => ({
     },
     {
       property: "og:image",
-      content: `${SITE_URL}/og-image.jpg`,
+      content: `${SITE_URL}/logo.webp`,
     },
 
     {
@@ -88,7 +90,7 @@ head: () => ({
     },
     {
       name: "twitter:image",
-      content: `${SITE_URL}/og-image.jpg`,
+      content: `${SITE_URL}/logo.webp`,
     },
   ],
 }),
@@ -98,6 +100,16 @@ head: () => ({
 function CoursesPage() {
   return (
     <>
+      <JsonLd
+        data={webPageSchema({
+          type: "CollectionPage",
+          url: `${SITE_URL}/courses`,
+          name: "SAP Training Courses",
+          description:
+            "Explore SAP training courses with live projects, SAP server access and placement support.",
+          aboutId: EDUCATIONAL_ORGANIZATION_ID,
+        })}
+      />
       <JsonLd
         data={breadcrumbSchema([
           {

@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Logo } from "./Logo";
 
@@ -17,10 +17,24 @@ const   NAV = [
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", closeOnEscape);
+
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [open]);
+
   return (
-    <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3">
-        <Link to="/" className="flex shrink-0 items-center gap-2">
+    <header className="sticky top-0 z-40 border-b border-border/60 bg-background/90 backdrop-blur-xl">
+      <div className="mx-auto flex min-h-16 max-w-7xl items-center justify-between gap-4 px-4 py-2 lg:py-3">
+        <Link to="/" className="flex min-h-12 shrink-0 items-center gap-2">
           <Logo className="h-10 w-auto" />
         </Link>
         <nav className="hidden lg:flex items-center gap-1">
@@ -46,21 +60,23 @@ export function SiteHeader() {
         </div>
         <button
           onClick={() => setOpen(!open)}
-          aria-label="Menu"
-          className="lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-full border border-border"
+          aria-label={open ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={open}
+          aria-controls="mobile-navigation"
+          className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-border transition hover:bg-secondary lg:hidden"
         >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
       {open && (
-        <div className="lg:hidden border-t border-border bg-background">
+        <div id="mobile-navigation" className="border-t border-border bg-background shadow-card animate-in fade-in slide-in-from-top-2 duration-200 lg:hidden">
           <nav className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-3">
             {NAV.map((n) => (
               <Link
                 key={n.to}
                 to={n.to}
                 onClick={() => setOpen(false)}
-                className="rounded-lg px-3 py-2.5 text-sm font-medium text-foreground/80 hover:bg-secondary"
+                className="flex min-h-12 items-center rounded-lg px-3 py-2.5 text-base font-medium text-foreground/80 hover:bg-secondary"
               >
                 {n.label}
               </Link>
@@ -68,7 +84,7 @@ export function SiteHeader() {
             <Link
               to="/contact"
               onClick={() => setOpen(false)}
-              className="mt-2 rounded-full bg-gradient-brand px-5 py-3 text-center text-sm font-semibold text-white"
+              className="mt-2 flex min-h-12 items-center justify-center rounded-full bg-gradient-brand px-5 py-3 text-center text-base font-semibold text-white"
             >
               Book Free Demo
             </Link>
