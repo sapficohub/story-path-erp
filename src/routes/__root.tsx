@@ -3,6 +3,7 @@ import {
   Link,
   createRootRoute,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -18,6 +19,13 @@ import {
   websiteSchema,
 } from "@/lib/schema";
 import logoAvif480 from "@/assets/nextgen-logo-480.avif";
+
+const META_PIXEL_ID = "844266785134255";
+
+type MetaPixelWindow = Window & {
+  fbq?: (...args: unknown[]) => void;
+  __metaPixelLastPage?: string;
+};
 
 function NotFoundComponent() {
   return (
@@ -251,6 +259,21 @@ function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
+        {/* Meta Pixel */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window,document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','${META_PIXEL_ID}');`,
+          }}
+        />
+        {/* End Meta Pixel */}
         {/* Google Tag Manager */}
         <script
           dangerouslySetInnerHTML={{
@@ -268,6 +291,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <JsonLd data={websiteSchema} />
       </head>
       <body>
+         {/* Meta Pixel (noscript) */}
+         <noscript>
+           <img
+             height="1"
+             width="1"
+             style={{ display: "none" }}
+             src={`https://www.facebook.com/tr?id=${META_PIXEL_ID}&ev=PageView&noscript=1`}
+             alt=""
+           />
+         </noscript>
+         {/* End Meta Pixel (noscript) */}
          {/* Google Tag Manager (noscript) */}
          <noscript>
            <iframe
@@ -289,8 +323,29 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 function RootComponent() {
   return (
     <>
+      <MetaPixelPageView />
       <Outlet />
       <Toaster position="top-center" richColors />
     </>
   );
+}
+
+function MetaPixelPageView() {
+  const routeHref = useRouterState({
+    select: (state) => state.location.href,
+  });
+
+  useEffect(() => {
+    const pixelWindow = window as MetaPixelWindow;
+    const pageKey = `${window.location.pathname}${window.location.search}`;
+
+    if (!pixelWindow.fbq || pixelWindow.__metaPixelLastPage === pageKey) {
+      return;
+    }
+
+    pixelWindow.__metaPixelLastPage = pageKey;
+    pixelWindow.fbq("track", "PageView");
+  }, [routeHref]);
+
+  return null;
 }
