@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { canonicalUrl } from "@/components/seo";
 import { SiteLayout } from "@/components/SiteLayout";
 import { BLOG_POSTS } from "@/lib/blog-posts";
 import { JsonLd } from "@/components/JsonLd";
@@ -11,10 +12,10 @@ import {
 
 export const Route = createFileRoute("/blog/")({
   head: () => ({
-    links: [{ rel: "canonical", href: `${SITE_URL}/blog` }],
+    links: [{ rel: "canonical", href: canonicalUrl("/blog") }],
     meta: [
-      { title: "Blog — SAP Career Guidance & Insights" },
-      { name: "description", content: "Articles on SAP modules, career growth, interview preparation, certifications, and industry trends." },
+      { title: "SAP Career Guides and Tutorials | Next-Gen ERP" },
+      { name: "description", content: "Read SAP career guides, interview questions, learning roadmaps and practical insights for freshers and experienced professionals." },
       { property: "og:title", content: "Next-Gen ERP Solutions Blog" },
       { property: "og:description", content: "Career guides, interview tips and SAP industry insights." },
     ],

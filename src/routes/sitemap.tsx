@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { canonicalUrl } from "@/components/seo";
 import { ArrowRight, BookOpen, GraduationCap } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { COURSES } from "@/lib/courses";
@@ -9,7 +10,7 @@ import { PageStructuredData } from "@/components/PageStructuredData";
 
 export const Route = createFileRoute("/sitemap")({
   head: () => ({
-    links: [{ rel: "canonical", href: `${SITE_URL}/sitemap` }],
+    links: [{ rel: "canonical", href: canonicalUrl("/sitemap") }],
     meta: [
       { title: "HTML Sitemap | Next-Gen ERP Solutions" },
       {

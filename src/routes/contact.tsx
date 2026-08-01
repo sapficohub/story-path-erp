@@ -4,6 +4,7 @@ import { LeadForm } from "@/components/LeadForm";
 import { Phone, MessageCircle, Mail, MapPin, Youtube, Instagram, Facebook } from "lucide-react";
 import { JsonLd } from "@/components/JsonLd";
 import { COURSES } from "@/lib/courses";
+import { canonicalUrl } from "@/components/seo";
 
 import {
   SITE_URL,
@@ -30,20 +31,19 @@ head: () => ({
   links: [
     {
       rel: "canonical",
-      href: `${SITE_URL}/contact`,
+      href: canonicalUrl("/contact"),
     },
   ],
 
   meta: [
     {
-      title:
-        "Contact Next-Gen ERP Solutions | SAP Training & Placement",
+      title: "Contact SAP Training Institute Hyderabad | Next-Gen ERP",
     },
 
     {
       name: "description",
       content:
-        "Contact Next-Gen ERP Solutions for SAP training, free demo sessions, career counselling, placement support and admission enquiries.",
+        "Contact Next-Gen ERP Solutions in Hyderabad for SAP course details, demo sessions, batch timings, fees and placement assistance.",
     },
 
     {

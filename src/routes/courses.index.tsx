@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { COURSES } from "@/lib/courses";
 import { ArrowRight } from "lucide-react";
 import { JsonLd } from "@/components/JsonLd";
+import { canonicalUrl } from "@/components/seo";
 
 import {
   SITE_URL,
@@ -18,19 +19,18 @@ head: () => ({
   links: [
     {
       rel: "canonical",
-      href: `${SITE_URL}/courses`,
+      href: canonicalUrl("/courses"),
     },
   ],
 
   meta: [
     {
-      title:
-        "SAP Courses in Hyderabad | SAP FICO, MM, SD, ABAP & More | Next-Gen ERP Solutions",
+      title: "SAP Courses in Hyderabad | Next-Gen ERP",
     },
     {
       name: "description",
       content:
-        "Explore SAP FICO, MM, SD, ABAP, BASIS, HCM and SuccessFactors courses with real-time projects, live SAP server access and placement assistance.",
+        "Explore practical SAP FICO, MM, SD, ABAP, BASIS, HCM and SuccessFactors courses in Hyderabad with expert trainers and live server access.",
     },
     {
       name: "keywords",
@@ -189,7 +189,7 @@ function CoursesPage() {
                     </span>
 
                     <span className="font-semibold text-brand inline-flex items-center gap-1 group-hover:gap-2 transition-all">
-                      View Course <ArrowRight className="h-4 w-4" />
+                      Explore {c.title} Training <ArrowRight className="h-4 w-4" />
                     </span>
                   </div>
                 </Link>

@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { canonicalUrl } from "@/components/seo";
 import { JourneyExperience, type JourneyConfig } from "@/components/journey-experience";
 import { ExperiencedVisuals as V } from "@/components/chapter-visuals";
 import { SITE_URL } from "@/lib/schema";
@@ -36,13 +37,13 @@ const config: JourneyConfig = {
 export const Route = createFileRoute("/journey/experienced")({
   head: () => ({
     meta: [
-      { title: "Experienced Professional Journey — Rahul's Story | Next-Gen ERP Solutions" },
-      { name: "description", content: "Follow Rahul's transformation from salary stagnation to a thriving SAP career. An 18-chapter interactive story." },
+      { title: "SAP Career Growth for Professionals | Next-Gen ERP" },
+      { name: "description", content: "Follow Rahul's journey from salary stagnation to SAP career growth through flexible training, practical projects and placement preparation." },
       { property: "og:title", content: "Experienced Professional Journey — Rahul's Story" },
       { property: "og:description", content: "Break through your career plateau with SAP." },
       { property: "og:url", content: "/journey/experienced" },
     ],
-    links: [{ rel: "canonical", href: `${SITE_URL}/journey/experienced` }],
+    links: [{ rel: "canonical", href: canonicalUrl("/journey/experienced") }],
   }),
   component: () => (
     <>

@@ -4,6 +4,16 @@ const SITE_NAME = "Next-Gen ERP Solutions";
 const SITE_URL = "https://www.next-generpsolutions.com";
 const DEFAULT_IMAGE = `${SITE_URL}/next-gen-erp-solutions-sap-training-hyderabad.jpg`;
 
+export function canonicalUrl(canonicalPath = "") {
+  const pathWithoutQuery = canonicalPath.split(/[?#]/, 1)[0] ?? "";
+  const normalizedPath =
+    pathWithoutQuery === "/" || pathWithoutQuery === ""
+      ? ""
+      : `/${pathWithoutQuery.replace(/^\/+|\/+$/g, "")}`;
+
+  return `${SITE_URL}${normalizedPath}/`;
+}
+
 export interface SEOOptions {
   title: string;
   description: string;
@@ -24,7 +34,7 @@ export function seo({
   robots = "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
   type = "website",
 }: SEOOptions): NonNullable<AnyRoute["options"]["head"]> {
-  const canonical = `${SITE_URL}${path}`;
+  const canonical = canonicalUrl(path);
 
   return () => ({
     links: [

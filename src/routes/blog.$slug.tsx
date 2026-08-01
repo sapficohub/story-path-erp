@@ -1,9 +1,12 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { JsonLd } from "@/components/JsonLd";
+import { ShareArticle } from "@/components/ShareArticle";
 import { SiteLayout } from "@/components/SiteLayout";
+import { canonicalUrl } from "@/components/seo";
 import { BLOG_POSTS } from "@/lib/blog-posts";
 import {
   SITE_URL,
+  SOCIAL_IMAGE_URL,
   blogPostingSchema,
   breadcrumbSchema,
   webPageSchema,
@@ -63,6 +66,30 @@ const RELATED_LINKS: Record<
   ],
 };
 
+const BLOG_META_DESCRIPTIONS: Record<string, string> = {
+  "sap-fico-career-2026":
+    "Explore the SAP FICO career roadmap for 2026, including essential skills, practical training, project experience and interview preparation.",
+  "sap-mm-interview-questions":
+    "Prepare for SAP MM interviews with practical questions covering procurement, inventory, master data, configuration and real business scenarios.",
+  "is-sap-good-for-freshers":
+    "Discover whether SAP is a good career for freshers, how to choose the right module and which practical skills improve employment opportunities.",
+  "career-gap-restart-with-sap":
+    "Learn how returning professionals can restart after a career gap with SAP skills, practical projects, resume preparation and interview support.",
+  "successfactors-vs-hcm":
+    "Compare SAP SuccessFactors and SAP HCM, including platform differences, career opportunities and learning paths for HR professionals.",
+  "sap-abap-on-hana":
+    "Learn why modern ABAP developers need HANA, CDS views, code pushdown and practical S/4HANA development skills for current SAP projects.",
+};
+
+const BLOG_PAGE_TITLES: Record<string, string> = {
+  "sap-fico-career-2026": "SAP FICO Career Roadmap 2026 | Next-Gen ERP",
+  "sap-mm-interview-questions": "SAP MM Interview Questions | Next-Gen ERP",
+  "is-sap-good-for-freshers": "SAP Career Guide for Freshers | Next-Gen ERP",
+  "career-gap-restart-with-sap": "Restart Your Career with SAP | Next-Gen ERP",
+  "successfactors-vs-hcm": "SuccessFactors vs SAP HCM | Next-Gen ERP",
+  "sap-abap-on-hana": "ABAP on HANA Career Guide | Next-Gen ERP",
+};
+
 export const Route = createFileRoute("/blog/$slug")({
   loader: ({ params }) => {
     const post = BLOG_POSTS.find(
@@ -73,17 +100,44 @@ export const Route = createFileRoute("/blog/$slug")({
   },
   head: ({ loaderData }) => {
     const post = loaderData?.post;
-    const url = post ? `${SITE_URL}/blog/${post.slug}` : `${SITE_URL}/blog`;
+    const url = canonicalUrl(post ? `/blog/${post.slug}` : "/blog");
+    const description = post
+      ? BLOG_META_DESCRIPTIONS[post.slug]
+      : "Read practical SAP career guidance, interview preparation tips, learning roadmaps and industry insights from Next-Gen ERP Solutions.";
     return {
       links: [{ rel: "canonical", href: url }],
       meta: [
-        { title: post ? `${post.title} | Next-Gen ERP Solutions` : "SAP Insights" },
-        { name: "description", content: post?.desc ?? "SAP career guidance and insights." },
+        {
+          title: post
+            ? BLOG_PAGE_TITLES[post.slug]
+            : "SAP Career Guides | Next-Gen ERP",
+        },
+        { name: "description", content: description },
         { name: "robots", content: "index,follow" },
         { property: "og:type", content: "article" },
-        { property: "og:title", content: post?.title ?? "SAP Insights" },
-        { property: "og:description", content: post?.desc ?? "SAP career guidance and insights." },
+        {
+          property: "og:title",
+          content: post
+            ? BLOG_PAGE_TITLES[post.slug]
+            : "SAP Career Guides | Next-Gen ERP",
+        },
+        { property: "og:description", content: description },
         { property: "og:url", content: url },
+        { property: "og:site_name", content: "Next-Gen ERP Solutions" },
+        { property: "og:image", content: SOCIAL_IMAGE_URL },
+        {
+          property: "og:image:alt",
+          content: "Next-Gen ERP Solutions SAP training and placement support",
+        },
+        { name: "twitter:card", content: "summary_large_image" },
+        {
+          name: "twitter:title",
+          content: post
+            ? BLOG_PAGE_TITLES[post.slug]
+            : "SAP Career Guides | Next-Gen ERP",
+        },
+        { name: "twitter:description", content: description },
+        { name: "twitter:image", content: SOCIAL_IMAGE_URL },
       ],
     };
   },
@@ -136,6 +190,9 @@ function BlogArticle() {
           <div className="mt-6 text-sm text-muted-foreground">
             Published {post.datePublished} · Updated {post.lastModified}
           </div>
+          <p className="mt-2 text-sm font-semibold text-foreground">
+            Published by Next-Gen ERP Solutions
+          </p>
           <div className="mt-10 space-y-6 text-lg leading-8 text-foreground">
             {post.content.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
@@ -163,6 +220,10 @@ function BlogArticle() {
               </ul>
             </nav>
           )}
+          <ShareArticle
+            title={post.title}
+            url={canonicalUrl(`/blog/${post.slug}`)}
+          />
           <div className="mt-12 rounded-2xl bg-muted p-6">
             <h2 className="text-2xl font-black">Build your SAP career plan</h2>
             <p className="mt-2 text-muted-foreground">

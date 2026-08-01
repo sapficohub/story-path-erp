@@ -3,14 +3,15 @@ import { SiteLayout } from "@/components/SiteLayout";
 import { LeadForm } from "@/components/LeadForm";
 import { motion } from "framer-motion";
 import { JsonLd } from "@/components/JsonLd";
+import { canonicalUrl } from "@/components/seo";
 import { SITE_URL, breadcrumbSchema, webPageSchema } from "@/lib/schema";
 
 export const Route = createFileRoute("/placements")({
   head: () => ({
-    links: [{ rel: "canonical", href: `${SITE_URL}/placements` }],
+    links: [{ rel: "canonical", href: canonicalUrl("/placements") }],
     meta: [
-      { title: "Placements — Next-Gen ERP Solutions" },
-      { name: "description", content: "92% placement rate. 120+ hiring partners. End-to-end placement support for every SAP student." },
+      { title: "SAP Placement Assistance Hyderabad | Next-Gen ERP" },
+      { name: "description", content: "Explore SAP placement assistance, interview preparation, student success stories and career support offered by Next-Gen ERP Solutions." },
       { property: "og:title", content: "SAP Placements at Next-Gen" },
       { property: "og:description", content: "Real placements. Real numbers. Real careers." },
     ],

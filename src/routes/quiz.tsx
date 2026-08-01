@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { canonicalUrl } from "@/components/seo";
 import { SiteLayout } from "@/components/SiteLayout";
 import quizPageHtml from "@/general-knowledge-quiz-with-qa.html?raw";
 import nextGenLogoUrl from "@/assets/nextgen-logo-480.webp";
@@ -8,12 +9,12 @@ import { PageStructuredData } from "@/components/PageStructuredData";
 export const Route = createFileRoute("/quiz")({
   head: () => ({
     meta: [
-      { title: "Quiz — Next-Gen ERP Solutions" },
-      { name: "description", content: "Test your knowledge with our interactive quiz!" },
+      { title: "SAP Knowledge Quiz | Next-Gen ERP" },
+      { name: "description", content: "Test your SAP and general knowledge with an interactive quiz designed to make learning engaging, practical and easy to review online." },
       { property: "og:title", content: "SAP Quiz at Next-Gen" },
       { property: "og:description", content: "Test your SAP knowledge with our interactive quiz!" },
     ],
-    links: [{ rel: "canonical", href: `${SITE_URL}/quiz` }],
+    links: [{ rel: "canonical", href: canonicalUrl("/quiz") }],
   }),
   component: QuizPage,
 });

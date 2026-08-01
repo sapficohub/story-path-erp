@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Target, Heart, Trophy, Users, Building2, Sparkles } from "lucide-react";
 import { LeadForm } from "@/components/LeadForm";
 import { JsonLd } from "@/components/JsonLd";
+import { canonicalUrl } from "@/components/seo";
 
 import {
   SITE_URL,
@@ -16,20 +17,19 @@ head: () => ({
   links: [
     {
       rel: "canonical",
-      href: `${SITE_URL}/about`,
+      href: canonicalUrl("/about"),
     },
   ],
 
   meta: [
     {
-      title:
-        "About Next-Gen ERP Solutions | SAP Training & Placement Institute",
+      title: "About Next-Gen ERP Solutions | SAP Training Hyderabad",
     },
 
     {
       name: "description",
       content:
-        "Learn about Next-Gen ERP Solutions, our SAP training methodology, placement support, experienced trainers and our mission to build successful SAP careers.",
+        "Learn about Next-Gen ERP Solutions, its expert SAP trainers, practical learning approach, live server training and career support in Hyderabad.",
     },
 
     {

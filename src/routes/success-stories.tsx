@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { canonicalUrl } from "@/components/seo";
 import { SiteLayout } from "@/components/SiteLayout";
 import { motion } from "framer-motion";
 import { Quote } from "lucide-react";
@@ -8,12 +9,12 @@ import { PageStructuredData } from "@/components/PageStructuredData";
 export const Route = createFileRoute("/success-stories")({
   head: () => ({
     meta: [
-      { title: "Success Stories — Real SAP Career Transformations" },
-      { name: "description", content: "Before & after stories from Next-Gen ERP Solutions graduates. Real names. Real salaries. Real transformation." },
+      { title: "SAP Student Success Stories | Next-Gen ERP" },
+      { name: "description", content: "Read genuine SAP student success stories, career transitions and placement outcomes achieved with practical training and dedicated support." },
       { property: "og:title", content: "Real SAP Career Transformations" },
       { property: "og:description", content: "Read how our students transformed their careers with SAP." },
     ],
-    links: [{ rel: "canonical", href: `${SITE_URL}/success-stories` }],
+    links: [{ rel: "canonical", href: canonicalUrl("/success-stories") }],
   }),
   component: SuccessStories,
 });

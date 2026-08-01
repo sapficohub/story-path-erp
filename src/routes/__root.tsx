@@ -18,6 +18,7 @@ import {
   organizationSchema,
   websiteSchema,
 } from "@/lib/schema";
+import { captureReferralAttribution } from "@/lib/referral";
 import logoAvif480 from "@/assets/nextgen-logo-480.avif";
 
 const META_PIXEL_ID = "844266785134255";
@@ -144,16 +145,6 @@ export const Route = createRootRoute({
     {
       name: "viewport",
       content: "width=device-width, initial-scale=1",
-    },
-
-    {
-      title: "Next-Gen ERP Solutions | SAP Training & Placement",
-    },
-
-    {
-      name: "description",
-      content:
-        "Next-Gen ERP Solutions offers SAP Training, real-time projects, certification guidance and placement assistance for freshers, experienced professionals and career-gap candidates.",
     },
 
     {
@@ -299,6 +290,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
              style={{ display: "none" }}
              src={`https://www.facebook.com/tr?id=${META_PIXEL_ID}&ev=PageView&noscript=1`}
              alt=""
+             aria-hidden="true"
            />
          </noscript>
          {/* End Meta Pixel (noscript) */}
@@ -336,6 +328,8 @@ function MetaPixelPageView() {
   });
 
   useEffect(() => {
+    captureReferralAttribution();
+
     const pixelWindow = window as MetaPixelWindow;
     const pageKey = `${window.location.pathname}${window.location.search}`;
 

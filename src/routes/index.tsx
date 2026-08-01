@@ -7,6 +7,7 @@ import { COURSES } from "@/lib/courses";
 import { LeadForm } from "@/components/LeadForm";
 import { SalaryGraph } from "@/components/ComicCharacter";
 import { JsonLd } from "@/components/JsonLd";
+import { canonicalUrl } from "@/components/seo";
 
 import {
   localBusinessSchema,
@@ -19,20 +20,19 @@ head: () => ({
   links: [
     {
       rel: "canonical",
-      href: "https://www.next-generpsolutions.com/",
+      href: canonicalUrl("/"),
     },
   ],
 
   meta: [
     // SEO
     {
-      title:
-        "Best SAP Training Institute in Hyderabad | SAP FICO, MM, SD, ABAP Courses | Next-Gen ERP Solutions",
+      title: "SAP Training Institute in Hyderabad | Next-Gen ERP",
     },
     {
       name: "description",
       content:
-        "Join Next-Gen ERP Solutions, one of the leading SAP Training Institutes in Hyderabad. Learn SAP FICO, MM, SD, ABAP, BASIS, HCM and SuccessFactors with real-time projects, live SAP server access and placement assistance.",
+        "Join Next-Gen ERP Solutions for practical SAP training in Hyderabad with expert trainers, live server access, real-time projects and placement assistance.",
     },
     {
       name: "keywords",
@@ -130,19 +130,43 @@ head: () => ({
 });
 
 const JOURNEYS = [
-  { icon: GraduationCap, emoji: "🎓", title: "Fresher", desc: "Completed graduation? Looking for your first job?", cta: "Start My Journey", to: "/journey/fresher", color: "from-[#0B1C9C] to-[#1686F5]" },
-  { icon: Briefcase, emoji: "💼", title: "Experienced Professional", desc: "Working hard but salary growth is slow?", cta: "Upgrade My Career", to: "/journey/experienced", color: "from-[#1686F5] to-[#19C7D8]" },
-  { icon: RotateCcw, emoji: "🔄", title: "Career Gap", desc: "Ready to restart your career?", cta: "Restart My Career", to: "/journey/career-gap", color: "from-[#19C7D8] to-[#09B83E]" },
+  { icon: GraduationCap, emoji: "🎓", title: "Fresher", desc: "Build practical SAP knowledge, complete guided projects and prepare confidently for your first professional role.", cta: "Start My Journey", to: "/journey/fresher", color: "from-[#0B1C9C] to-[#1686F5]" },
+  { icon: Briefcase, emoji: "💼", title: "Experienced Professional", desc: "Connect your industry experience with specialised SAP skills to pursue stronger roles and long-term career growth.", cta: "Upgrade My Career", to: "/journey/experienced", color: "from-[#1686F5] to-[#19C7D8]" },
+  { icon: RotateCcw, emoji: "🔄", title: "Career Gap", desc: "Refresh your professional knowledge through structured SAP learning and prepare for a confident return to work.", cta: "Restart My Career", to: "/journey/career-gap", color: "from-[#19C7D8] to-[#09B83E]" },
 ] as const;
 
 const PROCESS = [
-  { step: "01", title: "Enroll", desc: "Book a free demo and choose your SAP module." },
-  { step: "02", title: "Train", desc: "Live classes with hands-on SAP server access." },
-  { step: "03", title: "Projects", desc: "Real-time, industry-grade implementation projects." },
-  { step: "04", title: "Interview", desc: "Mock interviews, resume building & soft skills." },
-  { step: "05", title: "Placement", desc: "Tied-up MNCs & SAP partners hiring our students." },
-  { step: "06", title: "Promotion", desc: "Continuous career mentoring after you join." },
+  { step: "01", title: "Enroll", desc: "Attend a free demo and select the SAP module that matches your career goals." },
+  { step: "02", title: "Train", desc: "Learn through instructor-led classes while practising directly on a live SAP server." },
+  { step: "03", title: "Projects", desc: "Apply your knowledge through realistic SAP implementation projects and connected business scenarios." },
+  { step: "04", title: "Interview", desc: "Strengthen your resume, communication and interview performance through structured practice." },
+  { step: "05", title: "Placement", desc: "Receive placement assistance and updates about opportunities relevant to your skills and eligibility." },
+  { step: "06", title: "Growth", desc: "Continue developing your SAP knowledge through career guidance and focused professional learning." },
 ];
+
+const TESTIMONIALS = [
+  {
+    n: "Arjun",
+    b: "₹0 / no job",
+    a: "₹6.5 LPA · TCS",
+    m: "SAP FICO",
+    q: "The practical SAP FICO sessions helped me understand business scenarios clearly, while guided interview preparation improved my confidence.",
+  },
+  {
+    n: "Rahul",
+    b: "₹4.2 LPA support",
+    a: "₹14 LPA · Infosys",
+    m: "SAP MM",
+    q: "Live server practice and procurement exercises strengthened my SAP MM knowledge, and the mock interviews helped me explain it effectively.",
+  },
+  {
+    n: "Priya",
+    b: "5-yr career gap",
+    a: "₹7.8 LPA · Capgemini",
+    m: "SuccessFactors",
+    q: "Flexible classes, practical SuccessFactors exercises and regular mentor feedback gave me confidence to prepare for my return to work.",
+  },
+] as const;
 
 function HomePage() {
   return (
@@ -176,19 +200,19 @@ function HomePage() {
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
               className="inline-flex items-center gap-2 rounded-full border border-brand/20 bg-white/70 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-brand backdrop-blur"
             >
-              <Sparkles className="h-3.5 w-3.5" /> India's #1 SAP Career Transformation Platform
+              <Sparkles className="h-3.5 w-3.5" /> Practical SAP Learning and Career Support
             </motion.div>
             <motion.h1
               initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }}
               className="mt-6 text-4xl font-black leading-[1.08] text-foreground min-[390px]:text-5xl md:text-7xl"
             >
-              Transform Your <br /> Career With <span className="text-gradient-brand">SAP</span>
+              SAP Training in Hyderabad for Career-Focused Learners
             </motion.h1>
             <motion.p
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}
               className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg"
             >
-              For Freshers, Experienced Professionals, and Career Gap Candidates. Industry-led SAP training, real projects, and 100% placement support.
+              Our SAP training in Hyderabad is designed for career-focused learners who want practical knowledge, live server experience and structured interview preparation. Next-Gen ERP Solutions helps graduates, working professionals and career restart candidates develop job-ready SAP skills through trainer-led classes and real-time business scenarios.
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }}
@@ -237,8 +261,27 @@ function HomePage() {
             {/* floating chips */}
             <FloatingChip className="-left-6 top-10" delay={0.2}>SAP S/4HANA</FloatingChip>
             <FloatingChip className="-right-4 top-32" delay={0.5}>FICO ★ MM ★ SD</FloatingChip>
-            <FloatingChip className="bottom-4 -left-4" delay={0.8}>100% Placement</FloatingChip>
+            <FloatingChip className="bottom-4 -left-4" delay={0.8}>Career Support</FloatingChip>
           </motion.div>
+        </div>
+      </section>
+
+      {/* INTRODUCTION */}
+      <section className="mx-auto max-w-5xl px-4 py-20">
+        <SectionHeader
+          eyebrow="Practical SAP Learning"
+          title="Learn Through Real-Time Business Scenarios"
+        />
+        <div className="mt-10 space-y-6 text-base leading-8 text-muted-foreground">
+          <p>
+            Next-Gen ERP Solutions provides practical SAP training in Hyderabad for graduates, working professionals and career-restart candidates. Learners receive guided instruction, live server practice, real-time project exposure and interview preparation across major SAP modules.
+          </p>
+          <p>
+            Our training approach focuses on understanding business processes before applying them in SAP. Students practise configuration, transaction processing, testing and troubleshooting so they can explain both functional concepts and practical scenarios during interviews.
+          </p>
+          <p>
+            Career support includes resume guidance, mock interviews, profile-building assistance and updates about relevant opportunities. Placement assistance supports the job-search process, while employment outcomes depend on each learner's skills, performance, eligibility and current hiring conditions.
+          </p>
         </div>
       </section>
 
@@ -300,7 +343,7 @@ function HomePage() {
 
       {/* WHY NEXT-GEN */}
       <section className="mx-auto max-w-7xl px-4 py-20">
-        <SectionHeader eyebrow="Why Next-Gen ERP Solutions" title="Trainers who've built it. Mentors who care." />
+        <SectionHeader eyebrow="Why Next-Gen ERP Solutions" title="Practical SAP Courses with Live Server Access" />
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           {[
             { t: "Industry-Expert Trainers", d: "Certified SAP consultants with 12+ years of real implementation experience." },
@@ -319,7 +362,7 @@ function HomePage() {
               className="rounded-2xl border border-border bg-card p-6 shadow-card"
             >
               <CheckCircle2 className="h-7 w-7 text-brand-green" />
-              <h3 className="mt-3 text-lg font-bold">{f.t}</h3>
+              <p className="mt-3 text-lg font-bold">{f.t}</p>
               <p className="mt-2 text-sm text-muted-foreground">{f.d}</p>
             </motion.div>
           ))}
@@ -329,7 +372,7 @@ function HomePage() {
       {/* COURSES */}
       <section className="bg-secondary py-20">
         <div className="mx-auto max-w-7xl px-4">
-          <SectionHeader eyebrow="SAP Courses" title="Pick the module that fits your future" />
+          <SectionHeader eyebrow="SAP Courses" title="SAP Courses for Freshers and Professionals" />
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {COURSES.slice(0, 8).map((c, i) => (
               <motion.div
@@ -348,7 +391,9 @@ function HomePage() {
                   <p className="mt-1 text-sm text-muted-foreground">{c.tagline}</p>
                   <div className="mt-4 flex items-center justify-between text-xs">
                     <span className="font-semibold text-foreground">{c.duration}</span>
-                    <span className="font-semibold text-brand group-hover:underline">Apply Now →</span>
+                    <span className="font-semibold text-brand group-hover:underline">
+                      Explore {c.title} Training →
+                    </span>
                   </div>
                 </Link>
               </motion.div>
@@ -364,7 +409,7 @@ function HomePage() {
 
       {/* PLACEMENT PROCESS */}
       <section className="mx-auto max-w-7xl px-4 py-20">
-        <SectionHeader eyebrow="Placement Process" title="From enrolment to your dream offer letter" />
+        <SectionHeader eyebrow="Career Preparation" title="Interview Preparation and Placement Assistance" />
         <div className="mt-12 grid gap-6 md:grid-cols-3 lg:grid-cols-6">
           {PROCESS.map((p, i) => (
             <motion.div
@@ -376,7 +421,7 @@ function HomePage() {
               className="relative rounded-2xl border-2 border-brand-dark bg-card p-5 shadow-[4px_4px_0_#071126]"
             >
               <div className="text-3xl font-black text-gradient-brand">{p.step}</div>
-              <h3 className="mt-2 font-extrabold">{p.title}</h3>
+              <p className="mt-2 font-extrabold">{p.title}</p>
               <p className="mt-1 text-xs text-muted-foreground">{p.desc}</p>
             </motion.div>
           ))}
@@ -404,7 +449,7 @@ function HomePage() {
                 <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-brand text-2xl font-black">
                   {t.n.split(" ").map(x => x[0]).join("")}
                 </div>
-                <h3 className="mt-4 text-xl font-extrabold">{t.n}</h3>
+                <p className="mt-4 text-xl font-extrabold">{t.n}</p>
                 <div className="text-brand-teal text-sm">{t.r}</div>
                 <div className="mt-1 text-xs text-white/60">{t.e}</div>
                 <div className="mt-4 flex gap-1">
@@ -418,13 +463,9 @@ function HomePage() {
 
       {/* SUCCESS STORIES */}
       <section className="mx-auto max-w-7xl px-4 py-20">
-        <SectionHeader eyebrow="Success Stories" title="Real careers. Real numbers." />
+        <SectionHeader eyebrow="Learner Experiences" title="What Our Learners Say" />
         <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {[
-            { n: "Arjun", b: "₹0 / no job", a: "₹6.5 LPA · TCS", m: "SAP FICO" },
-            { n: "Rahul", b: "₹4.2 LPA support", a: "₹14 LPA · Infosys", m: "SAP MM" },
-            { n: "Priya", b: "5-yr career gap", a: "₹7.8 LPA · Capgemini", m: "SuccessFactors" },
-          ].map((s, i) => (
+          {TESTIMONIALS.map((s, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, y: 30 }}
@@ -441,10 +482,16 @@ function HomePage() {
                 </div>
               </div>
               <div className="mt-5 space-y-2 text-sm">
-                <div className="rounded-lg bg-destructive/10 px-3 py-2"><b>Before:</b> {s.b}</div>
-                <div className="rounded-lg bg-brand-green/10 px-3 py-2 text-foreground"><b className="text-brand-green">After:</b> {s.a}</div>
+                <div className="rounded-lg bg-destructive/10 px-3 py-2">
+                  <span className="font-bold">Before:</span> {s.b}
+                </div>
+                <div className="rounded-lg bg-brand-green/10 px-3 py-2 text-foreground">
+                  <span className="font-bold text-brand-green">After:</span> {s.a}
+                </div>
               </div>
-              <p className="mt-4 text-sm italic text-muted-foreground">"Next-Gen changed everything. The trainers care, the projects are real, and placement is guaranteed."</p>
+              <p className="mt-4 text-sm italic text-muted-foreground">
+                “{s.q}”
+              </p>
             </motion.div>
           ))}
         </div>
@@ -459,7 +506,7 @@ function HomePage() {
               Your SAP Success Story <span className="text-gradient-brand">Starts Here</span>
             </h2>
             <p className="mt-4 text-lg text-muted-foreground">
-              Transform your future with industry-focused SAP training and placement support. Talk to a career advisor — it's free.
+              Build practical SAP skills with expert guidance, live server exercises and structured career support. Speak with a career advisor to discuss the learning path that suits your goals.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <a href="tel:+919000333859" className="rounded-full bg-brand px-6 py-3 font-semibold text-white shadow-glow">📞 +91 90003 33859</a>

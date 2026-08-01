@@ -34,8 +34,13 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/90 backdrop-blur-xl">
       <div className="mx-auto flex min-h-16 max-w-7xl items-center justify-between gap-4 px-4 py-2 lg:py-3">
-        <Link to="/" className="flex min-h-12 shrink-0 items-center gap-2">
-          <Logo className="h-10 w-auto" />
+        <Link
+          to="/"
+          aria-label="Next-Gen ERP Solutions homepage"
+          className="flex min-h-12 shrink-0 items-center gap-2"
+        >
+          <Logo className="h-10 w-auto" alt="Next-Gen ERP Solutions" />
+          <span className="sr-only">Next-Gen ERP Solutions homepage</span>
         </Link>
         <nav className="hidden lg:flex items-center gap-1">
           {NAV.map((n) => (

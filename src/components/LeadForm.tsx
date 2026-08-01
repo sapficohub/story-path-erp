@@ -3,6 +3,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { Resend } from "resend";
 import { toast } from "sonner";
 import { z } from "zod";
+import { getReferralAttribution } from "@/lib/referral";
 
 type Field = { name: string; label: string; type?: string; required?: boolean; options?: string[]; placeholder?: string };
 
@@ -14,6 +15,11 @@ const leadSchema = z.object({
   qualification: z.string().trim().max(100).optional(),
   status: z.string().trim().max(100).optional(),
   module: z.string().trim().max(100).optional(),
+  utm_source: z.string().trim().max(200).optional(),
+  utm_medium: z.string().trim().max(200).optional(),
+  utm_campaign: z.string().trim().max(200).optional(),
+  ref: z.string().trim().max(200).optional(),
+  landing_page: z.string().trim().max(500).optional(),
 });
 
 function escapeHtml(value: string) {
@@ -51,6 +57,11 @@ async function sendLeadEmail(data: z.infer<typeof leadSchema>) {
     ["Current status", data.status],
     ["SAP module", data.module],
     ["Message", data.message],
+    ["UTM source", data.utm_source],
+    ["UTM medium", data.utm_medium],
+    ["UTM campaign", data.utm_campaign],
+    ["Referral code", data.ref],
+    ["Landing page", data.landing_page],
   ].filter((entry): entry is [string, string] => Boolean(entry[1]));
 
   const resend = new Resend(apiKey);
@@ -212,7 +223,10 @@ export function LeadForm({
         setLoading(true);
 
         try {
-          const values = Object.fromEntries(new FormData(form).entries());
+          const values = {
+            ...Object.fromEntries(new FormData(form).entries()),
+            ...getReferralAttribution(),
+          };
           await submitLead({ data: leadSchema.parse(values) });
           toast.success("Thank you! A career advisor will call you shortly.");
           form.reset();

@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { SITE_URL, breadcrumbSchema, webPageSchema } from "@/lib/schema";
 import { JsonLd } from "@/components/JsonLd";
+import { canonicalUrl } from "@/components/seo";
 
 type Section = {
   title: string;
@@ -294,13 +295,13 @@ const sections: Section[] = [
 
 export const Route = createFileRoute("/terms")({
   head: () => ({
-    links: [{ rel: "canonical", href: `${SITE_URL}/terms` }],
+    links: [{ rel: "canonical", href: canonicalUrl("/terms") }],
     meta: [
       { title: "Terms and Conditions | Next-Gen ERP Solutions" },
       {
         name: "description",
         content:
-          "Read the terms governing the website, SAP training, demo sessions, payments, refunds, server access and placement support offered by Next-Gen ERP Solutions.",
+          "Read the terms for our website, SAP training, demo sessions, payments, refunds, server access and placement support at Next-Gen ERP Solutions.",
       },
       { name: "robots", content: "index,follow" },
       { property: "og:title", content: "Terms and Conditions | Next-Gen ERP Solutions" },

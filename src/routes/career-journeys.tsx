@@ -4,16 +4,17 @@ import { motion } from "framer-motion";
 import { GraduationCap, Briefcase, RotateCcw, ArrowRight } from "lucide-react";
 import { SITE_URL } from "@/lib/schema";
 import { PageStructuredData } from "@/components/PageStructuredData";
+import { canonicalUrl } from "@/components/seo";
 
 export const Route = createFileRoute("/career-journeys")({
   head: () => ({
     meta: [
-      { title: "Career Journeys — Next-Gen ERP Solutions" },
-      { name: "description", content: "Three transformation stories: Fresher, Experienced Professional, and Career Gap restart — told through animated comic chapters." },
+      { title: "SAP Career Journeys | Next-Gen ERP" },
+      { name: "description", content: "Explore practical SAP career journeys for freshers, experienced professionals and career-gap candidates through interactive success stories." },
       { property: "og:title", content: "Career Journeys" },
       { property: "og:description", content: "Interactive comic-style career transformation stories." },
     ],
-    links: [{ rel: "canonical", href: `${SITE_URL}/career-journeys` }],
+    links: [{ rel: "canonical", href: canonicalUrl("/career-journeys") }],
   }),
   component: JourneysPage,
 });

@@ -34,21 +34,22 @@ export function StickyCTAs() {
         aria-label="WhatsApp"
         className="flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-glow transition hover:scale-110"
       >
-        <MessageCircle className="h-7 w-7" />
+        <MessageCircle className="h-7 w-7" aria-hidden="true" />
       </a>
       <a
         href="tel:+919000333859"
         aria-label="Call now"
         className="flex h-14 w-14 items-center justify-center rounded-full bg-brand text-white shadow-glow transition hover:scale-110"
       >
-        <Phone className="h-7 w-7" />
+        <Phone className="h-7 w-7" aria-hidden="true" />
       </a>
       <Link
         to="/contact"
         aria-label="Book demo"
         className="hidden sm:flex h-14 w-14 items-center justify-center rounded-full bg-brand-green text-white shadow-glow transition hover:scale-110"
       >
-        <Calendar className="h-7 w-7" />
+        <Calendar className="h-7 w-7" aria-hidden="true" />
+        <span className="sr-only">Book a free SAP demo</span>
       </Link>
     </div>
   );

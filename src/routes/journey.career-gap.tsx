@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { canonicalUrl } from "@/components/seo";
 import { JourneyExperience, type JourneyConfig } from "@/components/journey-experience";
 import { CareerGapVisuals as V } from "@/components/chapter-visuals";
 import { SITE_URL } from "@/lib/schema";
@@ -33,13 +34,13 @@ const config: JourneyConfig = {
 export const Route = createFileRoute("/journey/career-gap")({
   head: () => ({
     meta: [
-      { title: "Career Gap Journey — Priya's Story | Next-Gen ERP Solutions" },
-      { name: "description", content: "Follow Priya's powerful comeback after a career break, building a thriving SAP career. A 15-chapter interactive story." },
+      { title: "SAP Career Gap Journey | Next-Gen ERP" },
+      { name: "description", content: "Follow Priya's return to work after a career gap through flexible SAP training, practical projects, confidence building and placement support." },
       { property: "og:title", content: "Career Gap Journey — Priya's Story" },
       { property: "og:description", content: "Restart your career with SAP and Next-Gen ERP Solutions." },
       { property: "og:url", content: "/journey/career-gap" },
     ],
-    links: [{ rel: "canonical", href: `${SITE_URL}/journey/career-gap` }],
+    links: [{ rel: "canonical", href: canonicalUrl("/journey/career-gap") }],
   }),
   component: () => (
     <>

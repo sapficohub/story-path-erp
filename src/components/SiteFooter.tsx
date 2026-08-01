@@ -23,7 +23,7 @@ export function SiteFooter() {
           </div>
         </div>
         <div>
-          <h2 className="mb-3 text-sm font-bold uppercase tracking-wider text-white">Explore</h2>
+          <p className="mb-3 text-sm font-bold uppercase tracking-wider text-white">Explore</p>
           <ul className="space-y-2 text-sm">
             <li><Link to="/" className="hover:text-white">Home</Link></li>
             <li><Link to="/about" className="hover:text-white">About</Link></li>
@@ -36,7 +36,7 @@ export function SiteFooter() {
           </ul>
         </div>
         <div>
-          <h2 className="mb-3 text-sm font-bold uppercase tracking-wider text-white">Top Courses</h2>
+          <p className="mb-3 text-sm font-bold uppercase tracking-wider text-white">Top Courses</p>
           <ul className="space-y-2 text-sm">
             {COURSES.slice(0, 6).map((course) => (
               <li key={course.slug}>
@@ -48,7 +48,7 @@ export function SiteFooter() {
           </ul>
         </div>
         <div>
-          <h2 className="mb-3 text-sm font-bold uppercase tracking-wider text-white">Get in Touch</h2>
+          <p className="mb-3 text-sm font-bold uppercase tracking-wider text-white">Get in Touch</p>
           <ul className="space-y-3 text-sm">
             <li className="flex items-center gap-2"><Phone className="h-4 w-4 text-brand-teal" /> <a href="tel:+919000333859">+91 90003 33859</a></li>
             <li className="flex items-center gap-2"><MessageCircle className="h-4 w-4 text-brand-green" /> <a href="https://wa.me/919000333859" target="_blank" rel="noreferrer">WhatsApp Chat</a></li>

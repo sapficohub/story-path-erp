@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 
 import { JsonLd } from "@/components/JsonLd";
+import { canonicalUrl } from "@/components/seo";
 
 import {
   SITE_URL,
@@ -25,6 +26,42 @@ import {
   EDUCATIONAL_ORGANIZATION_ID,
   webPageSchema,
 } from "@/lib/schema";
+
+const COURSE_META_DESCRIPTIONS: Partial<Record<string, string>> = {
+  "sap-fico-training":
+    "Learn SAP FICO in Hyderabad through practical projects, live server access, expert-led sessions, interview preparation and placement assistance.",
+  "sap-mm-training":
+    "Build practical SAP MM skills with live server training, real-time procurement scenarios, interview preparation and placement assistance in Hyderabad.",
+  "sap-sd-training":
+    "Learn SAP SD with practical sales and distribution scenarios, live SAP server access, expert trainers and placement assistance in Hyderabad.",
+  "sap-abap-training":
+    "Learn SAP ABAP through practical coding exercises, real-time projects, live server access, interview preparation and placement assistance.",
+};
+
+const COURSE_PAGE_TITLES: Partial<Record<string, string>> = {
+  "sap-fico-training": "SAP FICO Training in Hyderabad | Next-Gen ERP",
+  "sap-mm-training": "SAP MM Training in Hyderabad | Next-Gen ERP",
+  "sap-sd-training": "SAP SD Training in Hyderabad | Next-Gen ERP",
+  "sap-abap-training": "SAP ABAP Training in Hyderabad | Next-Gen ERP",
+  "sap-basis-training": "SAP BASIS Training in Hyderabad | Next-Gen ERP",
+  "sap-hcm-training": "SAP HCM Training in Hyderabad | Next-Gen ERP",
+  "sap-successfactors-training":
+    "SAP SuccessFactors Training Hyderabad | Next-Gen ERP",
+};
+
+function getCourseMetaDescription(title: string, slug: string) {
+  return (
+    COURSE_META_DESCRIPTIONS[slug] ??
+    `Learn ${title} in Hyderabad with expert trainers, live SAP server practice, real-time projects, interview preparation and career support.`
+  );
+}
+
+function getCoursePageTitle(title: string, slug: string) {
+  return (
+    COURSE_PAGE_TITLES[slug] ??
+    `${title} Training in Hyderabad | Next-Gen ERP`
+  );
+}
 
 export const Route = createFileRoute("/courses/$slug")({
   loader: ({ params }) => {
@@ -51,16 +88,14 @@ export const Route = createFileRoute("/courses/$slug")({
     const c = loaderData?.course;
 
     const title = c
-      ? `${c.title} Training in Hyderabad | SAP Certification & Placement | Next-Gen ERP Solutions`
-      : "SAP Course";
+      ? getCoursePageTitle(c.title, c.slug)
+      : "SAP Training in Hyderabad | Next-Gen ERP";
 
     const description = c
-      ? `${c.description} Learn ${c.title} with live SAP servers, real-time projects, certification guidance and placement support from Next-Gen ERP Solutions.`
-      : "SAP Training";
+      ? getCourseMetaDescription(c.title, c.slug)
+      : "Explore practical SAP training in Hyderabad with expert trainers, live server access, real-time projects, interview preparation and career support.";
 
-    const url = c
-      ? `${SITE_URL}/courses/${c.slug}`
-      : `${SITE_URL}/courses`;
+    const url = canonicalUrl(c ? `/courses/${c.slug}` : "/courses");
 
     return {
       links: [
