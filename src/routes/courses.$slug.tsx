@@ -288,6 +288,7 @@ function CoursePage() {
                 title={`Apply for ${course.title}`}
                 subtitle="Get curriculum, fees & batch dates instantly."
                 cta="Apply Now"
+                defaultModule={course.title}
               />
             </motion.div>
           </div>

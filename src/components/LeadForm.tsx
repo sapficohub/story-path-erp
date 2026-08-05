@@ -1,8 +1,15 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createServerFn } from "@tanstack/react-start";
+import {
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
+  signOut,
+  type ConfirmationResult,
+} from "firebase/auth";
 import { Resend } from "resend";
 import { toast } from "sonner";
 import { z } from "zod";
+import { firebaseAuth } from "@/lib/firebase-client";
 import { getReferralAttribution } from "@/lib/referral";
 
 type Field = {
@@ -14,9 +21,9 @@ type Field = {
   placeholder?: string;
 };
 
-const leadSchema = z.object({
+const leadDetailsSchema = z.object({
   name: z.string().trim().min(1).max(100),
-  phone: z.string().trim().min(7).max(20),
+  phone: z.string().regex(/^\d{10}$/, "Enter a valid 10-digit phone number."),
   email: z.string().trim().email().max(254),
   message: z.string().trim().max(2000).optional(),
   qualification: z.string().trim().max(100).optional(),
@@ -28,6 +35,65 @@ const leadSchema = z.object({
   ref: z.string().trim().max(200).optional(),
   landing_page: z.string().trim().max(500).optional(),
 });
+
+const leadSchema = leadDetailsSchema.extend({
+  verification_token: z.string().min(1),
+});
+
+type LeadDetails = z.infer<typeof leadDetailsSchema>;
+
+function firebasePhoneError(error: unknown, fallback: string) {
+  const code = error && typeof error === "object" && "code" in error ? String(error.code) : "";
+
+  switch (code) {
+    case "auth/operation-not-allowed":
+      return "Phone verification is temporarily unavailable. Please contact us directly.";
+    case "auth/billing-not-enabled":
+      return "Phone verification billing is not enabled. Please contact us directly.";
+    case "auth/unauthorized-domain":
+    case "auth/app-not-authorized":
+      return "Phone verification is not authorized on this website.";
+    case "auth/invalid-app-credential":
+    case "auth/missing-app-credential":
+      return "Security verification could not start. Refresh the page and try again.";
+    case "auth/invalid-phone-number":
+      return "Enter a valid 10-digit phone number.";
+    case "auth/too-many-requests":
+      return "Too many OTP requests. Please wait and try again later.";
+    case "auth/quota-exceeded":
+      return "OTP service limit reached. Please contact us directly.";
+    case "auth/invalid-verification-code":
+      return "The OTP is incorrect. Check the code and try again.";
+    case "auth/code-expired":
+      return "The OTP has expired. Request a new code.";
+    case "auth/captcha-check-failed":
+      return "Security verification failed. Refresh the page and try again.";
+    default:
+      return code ? `${fallback} (${code})` : fallback;
+  }
+}
+
+async function validatePhoneVerification(phone: string, token: string) {
+  try {
+    const response = await fetch(
+      "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyBK8bhhFdu84XuumbHkrvpZOa_bNn-Ttes",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ idToken: token }),
+      },
+    );
+    if (!response.ok) return false;
+
+    const result = (await response.json()) as {
+      users?: Array<{ disabled?: boolean; phoneNumber?: string }>;
+    };
+    const user = result.users?.[0];
+    return user?.disabled !== true && user?.phoneNumber === `+91${phone}`;
+  } catch {
+    return false;
+  }
+}
 
 function escapeHtml(value: string) {
   return value.replace(
@@ -43,7 +109,7 @@ function escapeHtml(value: string) {
   );
 }
 
-async function sendLeadEmail(data: z.infer<typeof leadSchema>) {
+async function sendLeadEmail(data: LeadDetails) {
   const apiKey = process.env.RESEND_API_KEY;
   const recipient = process.env.LEAD_NOTIFICATION_EMAIL;
   const from = process.env.RESEND_FROM_EMAIL;
@@ -162,6 +228,12 @@ ${phoneNumber}`,
 const submitLead = createServerFn({ method: "POST" })
   .validator(leadSchema)
   .handler(async ({ data }) => {
+    if (!(await validatePhoneVerification(data.phone, data.verification_token))) {
+      throw new Error("Verify your phone number before submitting.");
+    }
+
+    const { verification_token: _verificationToken, ...submittedData } = data;
+    const leadData: LeadDetails = { ...submittedData, phone: `+91${submittedData.phone}` };
     const webhookUrl = process.env.TELECRM_WEBHOOK_URL;
     const webhookSecret = process.env.TELECRM_WEBHOOK_SECRET;
 
@@ -175,8 +247,8 @@ const submitLead = createServerFn({ method: "POST" })
           ...(webhookSecret ? { Authorization: `Bearer ${webhookSecret}` } : {}),
         },
         body: JSON.stringify({
-          ...data,
-          phone: data.phone.replace(/[^\d+]/g, ""),
+          ...leadData,
+          phone: leadData.phone.replace(/[^\d+]/g, ""),
           source: "Website",
           submitted_at: new Date().toISOString(),
         }),
@@ -191,7 +263,7 @@ const submitLead = createServerFn({ method: "POST" })
       console.warn("TELECRM_WEBHOOK_URL is not configured.");
     }
 
-    const sentByEmail = await sendLeadEmail(data);
+    const sentByEmail = await sendLeadEmail(leadData);
 
     if (!sentToCrm && !sentByEmail) {
       throw new Error("No lead delivery channel is configured.");
@@ -205,12 +277,28 @@ export function LeadForm({
   subtitle = "A career advisor will call you within 1 working hour.",
   fields,
   cta = "Book Free Demo",
+  defaultModule,
 }: {
   title?: string;
   subtitle?: string;
   fields?: Field[];
   cta?: string;
+  defaultModule?: string;
 }) {
+  const standardModules = [
+    "SAP FICO",
+    "SAP MM",
+    "SAP SD",
+    "SAP ABAP",
+    "SAP HCM",
+    "SuccessFactors",
+    "Not sure yet",
+  ];
+  const moduleOptions =
+    defaultModule && !standardModules.includes(defaultModule)
+      ? [defaultModule, ...standardModules]
+      : standardModules;
+
   const defaultFields: Field[] = fields ?? [
     { name: "name", label: "Full Name", required: true, placeholder: "Your name" },
     { name: "phone", label: "Phone", type: "tel", required: true, placeholder: "+91" },
@@ -220,25 +308,116 @@ export function LeadForm({
     {
       name: "module",
       label: "Preferred SAP Module",
-      options: [
-        "SAP FICO",
-        "SAP MM",
-        "SAP SD",
-        "SAP ABAP",
-        "SAP HCM",
-        "SuccessFactors",
-        "Not sure yet",
-      ],
+      options: moduleOptions,
     },
   ];
 
   const [loading, setLoading] = useState(false);
+  const [phone, setPhone] = useState("");
+  const [otp, setOtp] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpSending, setOtpSending] = useState(false);
+  const [otpVerifying, setOtpVerifying] = useState(false);
+  const [verificationToken, setVerificationToken] = useState("");
+  const [resendSeconds, setResendSeconds] = useState(0);
+  const recaptchaHostRef = useRef<HTMLDivElement | null>(null);
+  const recaptchaVerifierRef = useRef<RecaptchaVerifier | null>(null);
+  const confirmationResultRef = useRef<ConfirmationResult | null>(null);
+
+  const resetRecaptcha = () => {
+    recaptchaVerifierRef.current?.clear();
+    recaptchaVerifierRef.current = null;
+    recaptchaHostRef.current?.replaceChildren();
+  };
+
+  useEffect(() => {
+    if (resendSeconds <= 0) return;
+    const timer = window.setInterval(() => {
+      setResendSeconds((seconds) => Math.max(0, seconds - 1));
+    }, 1000);
+    return () => window.clearInterval(timer);
+  }, [resendSeconds]);
+
+  useEffect(
+    () => () => {
+      recaptchaVerifierRef.current?.clear();
+      recaptchaVerifierRef.current = null;
+    },
+    [],
+  );
+
+  const handleSendOtp = async () => {
+    if (!/^\d{10}$/.test(phone)) {
+      toast.error("Enter a valid 10-digit phone number.");
+      return;
+    }
+
+    setOtpSending(true);
+    try {
+      resetRecaptcha();
+      const recaptchaHost = recaptchaHostRef.current;
+      if (!recaptchaHost) throw new Error("Phone verification is not ready. Please try again.");
+      const recaptchaElement = document.createElement("div");
+      recaptchaHost.appendChild(recaptchaElement);
+      const verifier = new RecaptchaVerifier(firebaseAuth, recaptchaElement, {
+        size: "invisible",
+      });
+      recaptchaVerifierRef.current = verifier;
+      confirmationResultRef.current = await signInWithPhoneNumber(
+        firebaseAuth,
+        `+91${phone}`,
+        verifier,
+      );
+      setOtpSent(true);
+      setOtp("");
+      setVerificationToken("");
+      setResendSeconds(30);
+      toast.success("OTP sent to your phone.");
+    } catch (error) {
+      console.error(error);
+      resetRecaptcha();
+      toast.error(firebasePhoneError(error, "Unable to send OTP. Please try again."));
+    } finally {
+      setOtpSending(false);
+    }
+  };
+
+  const handleVerifyOtp = async () => {
+    if (!/^\d{6}$/.test(otp)) {
+      toast.error("Enter the 6-digit OTP.");
+      return;
+    }
+
+    setOtpVerifying(true);
+    try {
+      const confirmationResult = confirmationResultRef.current;
+      if (!confirmationResult) throw new Error("Send a new OTP and try again.");
+      const credential = await confirmationResult.confirm(otp);
+      const idToken = await credential.user.getIdToken(true);
+      setVerificationToken(idToken);
+      await signOut(firebaseAuth);
+      resetRecaptcha();
+      toast.success("Phone number verified.");
+    } catch (error) {
+      console.error(error);
+      setVerificationToken("");
+      toast.error(firebasePhoneError(error, "Invalid or expired OTP."));
+    } finally {
+      setOtpVerifying(false);
+    }
+  };
 
   return (
     <form
       onSubmit={async (e) => {
         e.preventDefault();
         const form = e.currentTarget;
+
+        if (!verificationToken) {
+          toast.error("Verify your phone number before submitting.");
+          return;
+        }
+
         setLoading(true);
 
         try {
@@ -249,6 +428,12 @@ export function LeadForm({
           await submitLead({ data: leadSchema.parse(values) });
           toast.success("Thank you! A career advisor will call you shortly.");
           form.reset();
+          setPhone("");
+          setOtp("");
+          setOtpSent(false);
+          setVerificationToken("");
+          setResendSeconds(0);
+          confirmationResultRef.current = null;
         } catch (error) {
           console.error(error);
           toast.error("We couldn't send your details. Please try again or call us.");
@@ -256,7 +441,7 @@ export function LeadForm({
           setLoading(false);
         }
       }}
-      className="w-full max-w-full rounded-2xl border border-border bg-card p-5 shadow-card sm:p-6 md:p-8"
+      className="w-full max-w-full rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-card sm:p-6 md:p-8"
     >
       <h3 className="text-2xl font-extrabold text-foreground">{title}</h3>
       <p className="mt-2 text-base leading-relaxed text-muted-foreground">{subtitle}</p>
@@ -270,15 +455,102 @@ export function LeadForm({
               {f.label}
               {f.required && <span className="text-destructive"> *</span>}
             </span>
-            {f.options ? (
+            {f.name === "phone" ? (
+              <>
+                <div className="grid min-h-12 grid-cols-[auto_minmax(0,1fr)_auto] overflow-hidden rounded-lg border border-input bg-background focus-within:ring-2 focus-within:ring-ring">
+                  <span className="flex items-center border-r border-input px-3 text-base text-foreground">
+                    +91
+                  </span>
+                  <input
+                    required={f.required}
+                    name={f.name}
+                    type="tel"
+                    value={phone}
+                    onChange={(event) => {
+                      setPhone(event.target.value.replace(/\D/g, "").slice(0, 10));
+                      setOtp("");
+                      setOtpSent(false);
+                      setVerificationToken("");
+                      setResendSeconds(0);
+                      confirmationResultRef.current = null;
+                      resetRecaptcha();
+                    }}
+                    placeholder="Enter 10-digit number"
+                    autoComplete="tel-national"
+                    inputMode="numeric"
+                    pattern="[0-9]{10}"
+                    className="min-w-0 bg-transparent px-3 py-2.5 text-base text-foreground placeholder:text-muted-foreground focus:outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleSendOtp}
+                    disabled={otpSending || resendSeconds > 0 || verificationToken.length > 0}
+                    className="border-l border-input bg-primary px-3 text-sm font-semibold text-primary-foreground disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {otpSending
+                      ? "Sending..."
+                      : resendSeconds > 0
+                        ? `Resend ${resendSeconds}s`
+                        : otpSent
+                          ? "Resend OTP"
+                          : "Send OTP"}
+                  </button>
+                </div>
+
+                {otpSent && !verificationToken && (
+                  <div className="mt-2 grid min-h-12 grid-cols-[minmax(0,1fr)_auto] overflow-hidden rounded-lg border border-input bg-background focus-within:ring-2 focus-within:ring-ring">
+                    <input
+                      type="text"
+                      value={otp}
+                      onChange={(event) =>
+                        setOtp(event.target.value.replace(/\D/g, "").slice(0, 6))
+                      }
+                      placeholder="Enter 6-digit OTP"
+                      autoComplete="one-time-code"
+                      inputMode="numeric"
+                      maxLength={6}
+                      className="min-w-0 bg-transparent px-3 py-2.5 text-base tracking-widest text-foreground placeholder:tracking-normal placeholder:text-muted-foreground focus:outline-none"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleVerifyOtp}
+                      disabled={otpVerifying || otp.length !== 6}
+                      className="border-l border-input bg-primary px-3 text-sm font-semibold text-primary-foreground disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      {otpVerifying ? "Verifying..." : "Verify OTP"}
+                    </button>
+                  </div>
+                )}
+
+                {verificationToken && (
+                  <p className="mt-2 text-sm font-semibold text-brand-green" role="status">
+                    ✓ Phone number verified
+                  </p>
+                )}
+                <div ref={recaptchaHostRef} />
+              </>
+            ) : f.name === "module" && defaultModule ? (
+              <input
+                name={f.name}
+                value={defaultModule}
+                readOnly
+                aria-readonly="true"
+                className="min-h-12 w-full cursor-default rounded-lg border border-input bg-muted px-3 py-2.5 text-base font-semibold text-foreground focus:outline-none"
+              />
+            ) : f.options ? (
               <select
                 required={f.required}
                 name={f.name}
-                className="min-h-12 w-full rounded-lg border border-input bg-background px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-ring"
+                style={{ color: "#071126", colorScheme: "light" }}
+                className="min-h-12 w-full rounded-lg border border-input bg-background px-3 py-2.5 text-base text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
               >
-                <option value="">Select…</option>
+                <option value="" style={{ backgroundColor: "#ffffff", color: "#071126" }}>
+                  Select…
+                </option>
                 {f.options.map((o) => (
-                  <option key={o}>{o}</option>
+                  <option key={o} style={{ backgroundColor: "#ffffff", color: "#071126" }}>
+                    {o}
+                  </option>
                 ))}
               </select>
             ) : (
@@ -297,15 +569,16 @@ export function LeadForm({
                         : undefined
                 }
                 inputMode={f.type === "tel" ? "tel" : f.type === "email" ? "email" : undefined}
-                className="min-h-12 w-full rounded-lg border border-input bg-background px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-ring"
+                className="min-h-12 w-full rounded-lg border border-input bg-background px-3 py-2.5 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
               />
             )}
           </label>
         ))}
       </div>
+      <input type="hidden" name="verification_token" value={verificationToken} />
       <button
         type="submit"
-        disabled={loading}
+        disabled={loading || !verificationToken}
         className="mt-5 min-h-12 w-full rounded-full bg-gradient-brand px-6 py-3 font-semibold text-white shadow-glow transition hover:scale-[1.02] disabled:opacity-60"
       >
         {loading ? "Sending…" : cta}
