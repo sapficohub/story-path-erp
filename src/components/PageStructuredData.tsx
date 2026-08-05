@@ -1,9 +1,5 @@
 import { JsonLd } from "@/components/JsonLd";
-import {
-  ORGANIZATION_ID,
-  breadcrumbSchema,
-  webPageSchema,
-} from "@/lib/schema";
+import { ORGANIZATION_ID, breadcrumbSchema, webPageSchema } from "@/lib/schema";
 
 type PageType = "WebPage" | "AboutPage" | "ContactPage" | "CollectionPage";
 

@@ -19,11 +19,9 @@ function getCanonicalRedirect(request: Request) {
 
   const canonicalPathname = normalizePagePathname(url.pathname);
   const isProductionHostname =
-    url.hostname === "next-generpsolutions.com" ||
-    url.hostname === "www.next-generpsolutions.com";
+    url.hostname === "next-generpsolutions.com" || url.hostname === "www.next-generpsolutions.com";
 
-  let shouldRedirect =
-    canonicalPathname !== url.pathname || url.search.length > 0;
+  let shouldRedirect = canonicalPathname !== url.pathname || url.search.length > 0;
 
   if (isProductionHostname) {
     shouldRedirect ||= url.protocol !== "https:";

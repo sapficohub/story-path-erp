@@ -164,9 +164,7 @@ export function webPageSchema(page: {
     description: page.description,
     isPartOf: { "@id": WEBSITE_ID },
     about: { "@id": page.aboutId ?? ORGANIZATION_ID },
-    ...(page.mainEntityId
-      ? { mainEntity: { "@id": page.mainEntityId } }
-      : {}),
+    ...(page.mainEntityId ? { mainEntity: { "@id": page.mainEntityId } } : {}),
     primaryImageOfPage: {
       "@type": "ImageObject",
       url: SOCIAL_IMAGE_URL,
@@ -244,10 +242,7 @@ export function courseSchema(course: {
   };
 }
 
-export function faqSchema(
-  faqs: { question: string; answer: string }[],
-  pageUrl?: string,
-) {
+export function faqSchema(faqs: { question: string; answer: string }[], pageUrl?: string) {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",

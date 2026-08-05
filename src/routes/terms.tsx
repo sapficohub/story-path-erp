@@ -342,38 +342,62 @@ function TermsPage() {
           <div className="rounded-2xl border border-border bg-card p-6 shadow-card md:p-10">
             <div className="space-y-4 text-[15px] leading-7 text-muted-foreground">
               <p>
-                Welcome to Next-Gen ERP Solutions. These Terms and Conditions govern your access to and use of our website,
-                enquiry forms, demo sessions, training programs, learning resources, SAP server access, placement-support
-                services and related services.
+                Welcome to Next-Gen ERP Solutions. These Terms and Conditions govern your access to
+                and use of our website, enquiry forms, demo sessions, training programs, learning
+                resources, SAP server access, placement-support services and related services.
               </p>
               <p>
-                By accessing our website, submitting an enquiry, booking a demo, enrolling in a course or using our services,
-                you acknowledge that you have read, understood and agreed to these Terms and Conditions.
+                By accessing our website, submitting an enquiry, booking a demo, enrolling in a
+                course or using our services, you acknowledge that you have read, understood and
+                agreed to these Terms and Conditions.
               </p>
             </div>
 
             <div className="mt-10 space-y-10">
               {sections.map((section) => (
                 <section key={section.title}>
-                  <h2 className="text-xl font-extrabold text-foreground md:text-2xl">{section.title}</h2>
+                  <h2 className="text-xl font-extrabold text-foreground md:text-2xl">
+                    {section.title}
+                  </h2>
                   <div className="mt-3 space-y-3 text-[15px] leading-7 text-muted-foreground">
-                    {section.paragraphs?.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+                    {section.paragraphs?.map((paragraph) => (
+                      <p key={paragraph}>{paragraph}</p>
+                    ))}
                     {section.numbered && (
                       <ol className="list-decimal space-y-1 pl-6">
-                        {section.numbered.map((item) => <li key={item}>{item}</li>)}
+                        {section.numbered.map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
                       </ol>
                     )}
                     {section.bullets && (
                       <ul className="list-disc space-y-1 pl-6">
-                        {section.bullets.map((item) => <li key={item}>{item}</li>)}
+                        {section.bullets.map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
                       </ul>
                     )}
                     {section.title === "27. Contact Information" && (
                       <address className="not-italic">
-                        <strong className="text-foreground">Next-Gen ERP Solutions</strong><br />
-                        Email: <a className="text-brand hover:underline" href="mailto:hello@nextgenerpsolutions.com">hello@nextgenerpsolutions.com</a><br />
-                        Phone/WhatsApp: <a className="text-brand hover:underline" href="tel:+919000333859">+91 90003 33859</a><br />
-                        Website: <a className="text-brand hover:underline" href={SITE_URL}>{SITE_URL}</a>
+                        <strong className="text-foreground">Next-Gen ERP Solutions</strong>
+                        <br />
+                        Email:{" "}
+                        <a
+                          className="text-brand hover:underline"
+                          href="mailto:hello@nextgenerpsolutions.com"
+                        >
+                          hello@nextgenerpsolutions.com
+                        </a>
+                        <br />
+                        Phone/WhatsApp:{" "}
+                        <a className="text-brand hover:underline" href="tel:+919000333859">
+                          +91 90003 33859
+                        </a>
+                        <br />
+                        Website:{" "}
+                        <a className="text-brand hover:underline" href={SITE_URL}>
+                          {SITE_URL}
+                        </a>
                       </address>
                     )}
                   </div>

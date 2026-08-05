@@ -12,10 +12,7 @@ import {
   webPageSchema,
 } from "@/lib/schema";
 
-const RELATED_LINKS: Record<
-  string,
-  { href: string; label: string }[]
-> = {
+const RELATED_LINKS: Record<string, { href: string; label: string }[]> = {
   "sap-fico-career-2026": [
     {
       href: "/courses/sap-fico-training",
@@ -108,18 +105,14 @@ export const Route = createFileRoute("/blog/$slug")({
       links: [{ rel: "canonical", href: url }],
       meta: [
         {
-          title: post
-            ? BLOG_PAGE_TITLES[post.slug]
-            : "SAP Career Guides | Next-Gen ERP",
+          title: post ? BLOG_PAGE_TITLES[post.slug] : "SAP Career Guides | Next-Gen ERP",
         },
         { name: "description", content: description },
         { name: "robots", content: "index,follow" },
         { property: "og:type", content: "article" },
         {
           property: "og:title",
-          content: post
-            ? BLOG_PAGE_TITLES[post.slug]
-            : "SAP Career Guides | Next-Gen ERP",
+          content: post ? BLOG_PAGE_TITLES[post.slug] : "SAP Career Guides | Next-Gen ERP",
         },
         { property: "og:description", content: description },
         { property: "og:url", content: url },
@@ -132,9 +125,7 @@ export const Route = createFileRoute("/blog/$slug")({
         { name: "twitter:card", content: "summary_large_image" },
         {
           name: "twitter:title",
-          content: post
-            ? BLOG_PAGE_TITLES[post.slug]
-            : "SAP Career Guides | Next-Gen ERP",
+          content: post ? BLOG_PAGE_TITLES[post.slug] : "SAP Career Guides | Next-Gen ERP",
         },
         { name: "twitter:description", content: description },
         { name: "twitter:image", content: SOCIAL_IMAGE_URL },
@@ -183,9 +174,7 @@ function BlogArticle() {
           <div className="mt-8 text-xs font-bold uppercase tracking-wider text-brand">
             {post.cat}
           </div>
-          <h1 className="mt-3 text-4xl font-black leading-tight md:text-5xl">
-            {post.title}
-          </h1>
+          <h1 className="mt-3 text-4xl font-black leading-tight md:text-5xl">{post.title}</h1>
           <p className="mt-5 text-xl text-muted-foreground">{post.desc}</p>
           <div className="mt-6 text-sm text-muted-foreground">
             Published {post.datePublished} · Updated {post.lastModified}
@@ -203,16 +192,11 @@ function BlogArticle() {
               aria-label="Related SAP training and career guidance"
               className="mt-10 rounded-2xl border border-border bg-card p-6"
             >
-              <h2 className="text-xl font-black">
-                Related SAP training and career guidance
-              </h2>
+              <h2 className="text-xl font-black">Related SAP training and career guidance</h2>
               <ul className="mt-4 space-y-3">
                 {relatedLinks.map((link) => (
                   <li key={link.href}>
-                    <a
-                      href={link.href}
-                      className="font-semibold text-brand hover:underline"
-                    >
+                    <a href={link.href} className="font-semibold text-brand hover:underline">
                       {link.label}
                     </a>
                   </li>
@@ -220,15 +204,12 @@ function BlogArticle() {
               </ul>
             </nav>
           )}
-          <ShareArticle
-            title={post.title}
-            url={canonicalUrl(`/blog/${post.slug}`)}
-          />
+          <ShareArticle title={post.title} url={canonicalUrl(`/blog/${post.slug}`)} />
           <div className="mt-12 rounded-2xl bg-muted p-6">
             <h2 className="text-2xl font-black">Build your SAP career plan</h2>
             <p className="mt-2 text-muted-foreground">
-              Talk to a Next-Gen ERP Solutions career advisor about the module,
-              project experience and interview preparation that fit your background.
+              Talk to a Next-Gen ERP Solutions career advisor about the module, project experience
+              and interview preparation that fit your background.
             </p>
             <Link
               to="/contact"

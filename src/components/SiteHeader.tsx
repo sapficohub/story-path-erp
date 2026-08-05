@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Logo } from "./Logo";
 
-const   NAV = [
+const NAV = [
   { to: "/", label: "Home" },
   // { to: "/about", label: "About" },
   { to: "/courses", label: "SAP Courses" },
@@ -48,14 +48,18 @@ export function SiteHeader() {
               key={n.to}
               to={n.to}
               className="rounded-full px-3 py-2 text-sm font-medium text-foreground/80 transition hover:bg-secondary hover:text-foreground"
-              activeProps={{ className: "rounded-full px-3 py-2 text-sm font-semibold text-brand bg-secondary" }}
+              activeProps={{
+                className: "rounded-full px-3 py-2 text-sm font-semibold text-brand bg-secondary",
+              }}
             >
               {n.label}
             </Link>
           ))}
         </nav>
         <div className="hidden lg:flex items-center gap-2">
-          <a href="tel:+919000333859" className="text-sm font-semibold text-brand">+91 90003 33859</a>
+          <a href="tel:+919000333859" className="text-sm font-semibold text-brand">
+            +91 90003 33859
+          </a>
           <Link
             to="/contact"
             className="rounded-full bg-gradient-brand px-5 py-2.5 text-sm font-semibold text-white shadow-glow transition hover:scale-105"
@@ -74,7 +78,10 @@ export function SiteHeader() {
         </button>
       </div>
       {open && (
-        <div id="mobile-navigation" className="border-t border-border bg-background shadow-card animate-in fade-in slide-in-from-top-2 duration-200 lg:hidden">
+        <div
+          id="mobile-navigation"
+          className="border-t border-border bg-background shadow-card animate-in fade-in slide-in-from-top-2 duration-200 lg:hidden"
+        >
           <nav className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-3">
             {NAV.map((n) => (
               <Link

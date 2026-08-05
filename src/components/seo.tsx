@@ -29,8 +29,7 @@ export function seo({
   description,
   path = "",
   image = DEFAULT_IMAGE,
-  keywords =
-    "SAP Training, SAP FICO, SAP MM, SAP SD, SAP ABAP, SAP BASIS, SAP HCM, SAP SuccessFactors, SAP Courses, SAP Certification, SAP Placement, ERP Training, Next-Gen ERP Solutions",
+  keywords = "SAP Training, SAP FICO, SAP MM, SAP SD, SAP ABAP, SAP BASIS, SAP HCM, SAP SuccessFactors, SAP Courses, SAP Certification, SAP Placement, ERP Training, Next-Gen ERP Solutions",
   robots = "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
   type = "website",
 }: SEOOptions): NonNullable<AnyRoute["options"]["head"]> {

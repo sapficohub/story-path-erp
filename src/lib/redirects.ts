@@ -27,8 +27,7 @@ const LEGACY_PAGE_PATHS: Record<string, string> = {
 
 export function normalizePagePathname(pathname: string) {
   const lowercasePath = pathname.toLowerCase();
-  const cleanPath =
-    lowercasePath.length > 1 ? lowercasePath.replace(/\/+$/, "") : lowercasePath;
+  const cleanPath = lowercasePath.length > 1 ? lowercasePath.replace(/\/+$/, "") : lowercasePath;
   const legacyPage = LEGACY_PAGE_PATHS[cleanPath];
 
   if (legacyPage) return legacyPage;

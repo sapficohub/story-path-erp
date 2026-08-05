@@ -53,11 +53,7 @@ export const INDEXABLE_PAGE_PATHS = [
   "/courses",
   "/career-journeys",
   "/sitemap",
-  ...new Set(
-    HTML_SITEMAP_SECTIONS.flatMap((section) =>
-      section.links.map((link) => link.path),
-    ),
-  ),
+  ...new Set(HTML_SITEMAP_SECTIONS.flatMap((section) => section.links.map((link) => link.path))),
 ];
 
 export const INDEXABLE_PAGES = INDEXABLE_PAGE_PATHS.map((path) => ({

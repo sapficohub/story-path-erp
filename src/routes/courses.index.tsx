@@ -15,75 +15,72 @@ import {
 } from "@/lib/schema";
 
 export const Route = createFileRoute("/courses/")({
-head: () => ({
-  links: [
-    {
-      rel: "canonical",
-      href: canonicalUrl("/courses"),
-    },
-  ],
+  head: () => ({
+    links: [
+      {
+        rel: "canonical",
+        href: canonicalUrl("/courses"),
+      },
+    ],
 
-  meta: [
-    {
-      title: "SAP Courses in Hyderabad | Next-Gen ERP",
-    },
-    {
-      name: "description",
-      content:
-        "Explore practical SAP FICO, MM, SD, ABAP, BASIS, HCM and SuccessFactors courses in Hyderabad with expert trainers and live server access.",
-    },
-    {
-      name: "keywords",
-      content:
-        "SAP Courses Hyderabad, SAP FICO Course, SAP MM Course, SAP SD Course, SAP ABAP Course, SAP BASIS Course, SAP HCM Course, SAP SuccessFactors Course",
-    },
-    {
-      name: "robots",
-      content:
-        "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
-    },
+    meta: [
+      {
+        title: "SAP Courses in Hyderabad | Next-Gen ERP",
+      },
+      {
+        name: "description",
+        content:
+          "Explore practical SAP FICO, MM, SD, ABAP, BASIS, HCM and SuccessFactors courses in Hyderabad with expert trainers and live server access.",
+      },
+      {
+        name: "keywords",
+        content:
+          "SAP Courses Hyderabad, SAP FICO Course, SAP MM Course, SAP SD Course, SAP ABAP Course, SAP BASIS Course, SAP HCM Course, SAP SuccessFactors Course",
+      },
+      {
+        name: "robots",
+        content: "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+      },
 
-    {
-      property: "og:type",
-      content: "website",
-    },
-    {
-      property: "og:title",
-      content: "SAP Courses | Next-Gen ERP Solutions",
-    },
-    {
-      property: "og:description",
-      content:
-        "Choose from industry-leading SAP courses with placement assistance.",
-    },
-    {
-      property: "og:url",
-      content: `${SITE_URL}/courses`,
-    },
-    {
-      property: "og:image",
-      content: `${SITE_URL}/next-gen-erp-solutions-sap-training-hyderabad.jpg`,
-    },
+      {
+        property: "og:type",
+        content: "website",
+      },
+      {
+        property: "og:title",
+        content: "SAP Courses | Next-Gen ERP Solutions",
+      },
+      {
+        property: "og:description",
+        content: "Choose from industry-leading SAP courses with placement assistance.",
+      },
+      {
+        property: "og:url",
+        content: `${SITE_URL}/courses`,
+      },
+      {
+        property: "og:image",
+        content: `${SITE_URL}/next-gen-erp-solutions-sap-training-hyderabad.jpg`,
+      },
 
-    {
-      name: "twitter:card",
-      content: "summary_large_image",
-    },
-    {
-      name: "twitter:title",
-      content: "SAP Courses | Next-Gen ERP Solutions",
-    },
-    {
-      name: "twitter:description",
-      content:
-        "Explore SAP training programs with live projects and placement support.",
-    },
-    {
-      name: "twitter:image",
-      content: `${SITE_URL}/next-gen-erp-solutions-sap-training-hyderabad.jpg`,
-    },
-  ],
-}),
+      {
+        name: "twitter:card",
+        content: "summary_large_image",
+      },
+      {
+        name: "twitter:title",
+        content: "SAP Courses | Next-Gen ERP Solutions",
+      },
+      {
+        name: "twitter:description",
+        content: "Explore SAP training programs with live projects and placement support.",
+      },
+      {
+        name: "twitter:image",
+        content: `${SITE_URL}/next-gen-erp-solutions-sap-training-hyderabad.jpg`,
+      },
+    ],
+  }),
   component: CoursesPage,
 });
 
@@ -131,13 +128,12 @@ function CoursesPage() {
             </div>
 
             <h1 className="mt-4 text-4xl font-black md:text-6xl">
-              Explore every{" "}
-              <span className="text-gradient-brand">SAP module</span>
+              Explore every <span className="text-gradient-brand">SAP module</span>
             </h1>
 
             <p className="mt-5 mx-auto max-w-3xl text-lg text-muted-foreground">
-              From core finance to cloud HCM — click any module to see
-              curriculum, careers, salaries and a complete placement roadmap.
+              From core finance to cloud HCM — click any module to see curriculum, careers, salaries
+              and a complete placement roadmap.
             </p>
           </div>
         </section>
@@ -166,9 +162,7 @@ function CoursesPage() {
 
                   <h3 className="text-2xl font-extrabold">{c.title}</h3>
 
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    {c.tagline}
-                  </p>
+                  <p className="mt-1 text-sm text-muted-foreground">{c.tagline}</p>
 
                   <div className="mt-5 flex flex-wrap gap-2">
                     <span className="rounded-full bg-secondary px-3 py-1 text-xs font-semibold">
@@ -182,10 +176,7 @@ function CoursesPage() {
 
                   <div className="mt-5 flex items-center justify-between text-sm">
                     <span className="text-muted-foreground">
-                      Avg CTC:{" "}
-                      <b className="text-brand-green">
-                        {c.salaryFresher}
-                      </b>
+                      Avg CTC: <b className="text-brand-green">{c.salaryFresher}</b>
                     </span>
 
                     <span className="font-semibold text-brand inline-flex items-center gap-1 group-hover:gap-2 transition-all">

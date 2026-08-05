@@ -9,10 +9,9 @@ export function StickyCTAs() {
     const footer = document.getElementById("site-footer");
     if (!footer) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => setFooterVisible(entry.isIntersecting),
-      { threshold: 0.05 },
-    );
+    const observer = new IntersectionObserver(([entry]) => setFooterVisible(entry.isIntersecting), {
+      threshold: 0.05,
+    });
     observer.observe(footer);
     return () => observer.disconnect();
   }, []);

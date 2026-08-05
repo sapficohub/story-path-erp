@@ -5,7 +5,14 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { getReferralAttribution } from "@/lib/referral";
 
-type Field = { name: string; label: string; type?: string; required?: boolean; options?: string[]; placeholder?: string };
+type Field = {
+  name: string;
+  label: string;
+  type?: string;
+  required?: boolean;
+  options?: string[];
+  placeholder?: string;
+};
 
 const leadSchema = z.object({
   name: z.string().trim().min(1).max(100),
@@ -210,7 +217,19 @@ export function LeadForm({
     { name: "email", label: "Email", type: "email", required: true, placeholder: "you@email.com" },
     { name: "qualification", label: "Qualification", placeholder: "B.Tech, MBA, B.Com…" },
     { name: "status", label: "Current Status", options: ["Fresher", "Experienced", "Career Gap"] },
-    { name: "module", label: "Preferred SAP Module", options: ["SAP FICO", "SAP MM", "SAP SD", "SAP ABAP", "SAP HCM", "SuccessFactors", "Not sure yet"] },
+    {
+      name: "module",
+      label: "Preferred SAP Module",
+      options: [
+        "SAP FICO",
+        "SAP MM",
+        "SAP SD",
+        "SAP ABAP",
+        "SAP HCM",
+        "SuccessFactors",
+        "Not sure yet",
+      ],
+    },
   ];
 
   const [loading, setLoading] = useState(false);
@@ -243,14 +262,24 @@ export function LeadForm({
       <p className="mt-2 text-base leading-relaxed text-muted-foreground">{subtitle}</p>
       <div className="mt-5 grid gap-4 sm:grid-cols-2">
         {defaultFields.map((f) => (
-          <label key={f.name} className={f.name === "name" || f.name === "module" ? "sm:col-span-2 block" : "block"}>
+          <label
+            key={f.name}
+            className={f.name === "name" || f.name === "module" ? "sm:col-span-2 block" : "block"}
+          >
             <span className="mb-1 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              {f.label}{f.required && <span className="text-destructive"> *</span>}
+              {f.label}
+              {f.required && <span className="text-destructive"> *</span>}
             </span>
             {f.options ? (
-              <select required={f.required} name={f.name} className="min-h-12 w-full rounded-lg border border-input bg-background px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-ring">
+              <select
+                required={f.required}
+                name={f.name}
+                className="min-h-12 w-full rounded-lg border border-input bg-background px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-ring"
+              >
                 <option value="">Select…</option>
-                {f.options.map((o) => <option key={o}>{o}</option>)}
+                {f.options.map((o) => (
+                  <option key={o}>{o}</option>
+                ))}
               </select>
             ) : (
               <input
@@ -258,7 +287,15 @@ export function LeadForm({
                 name={f.name}
                 type={f.type ?? "text"}
                 placeholder={f.placeholder}
-                autoComplete={f.name === "name" ? "name" : f.name === "phone" ? "tel" : f.name === "email" ? "email" : undefined}
+                autoComplete={
+                  f.name === "name"
+                    ? "name"
+                    : f.name === "phone"
+                      ? "tel"
+                      : f.name === "email"
+                        ? "email"
+                        : undefined
+                }
                 inputMode={f.type === "tel" ? "tel" : f.type === "email" ? "email" : undefined}
                 className="min-h-12 w-full rounded-lg border border-input bg-background px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-ring"
               />

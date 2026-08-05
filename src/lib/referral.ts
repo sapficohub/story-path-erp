@@ -1,15 +1,7 @@
 const STORAGE_KEY = "nextgen-referral-attribution";
-const TRACKING_KEYS = [
-  "utm_source",
-  "utm_medium",
-  "utm_campaign",
-  "utm_content",
-  "ref",
-] as const;
+const TRACKING_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "ref"] as const;
 
-export type ReferralAttribution = Partial<
-  Record<(typeof TRACKING_KEYS)[number], string>
-> & {
+export type ReferralAttribution = Partial<Record<(typeof TRACKING_KEYS)[number], string>> & {
   landing_page?: string;
 };
 
