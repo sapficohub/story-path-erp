@@ -282,3 +282,24 @@
   animation: blink 4s infinite;
   transform-origin: center;
 }
+
+.lead-phone-input .PhoneInputCountry {
+  margin-right: 0.75rem;
+}
+
+.lead-phone-input .PhoneInputCountrySelect {
+  cursor: pointer;
+}
+
+.lead-phone-input .PhoneInputInput {
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--foreground);
+  font-size: 1rem;
+  outline: none;
+}
+
+.lead-phone-input .PhoneInputInput::placeholder {
+  color: var(--muted-foreground);
+}

@@ -140,7 +140,11 @@ function PlacementsPage() {
                 Submit your details and our placement team will call you within 24 hours.
               </p>
             </div>
-            <LeadForm title="Talk to Placement Cell" subtitle="Free, no obligations." />
+            <LeadForm
+              title="Talk to Placement Cell"
+              subtitle="Free, no obligations."
+              sourceForm="Placement Enquiry"
+            />
           </div>
         </section>
       </SiteLayout>

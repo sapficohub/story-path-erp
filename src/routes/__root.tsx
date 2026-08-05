@@ -17,12 +17,8 @@ import { educationalOrganizationSchema, organizationSchema, websiteSchema } from
 import { captureReferralAttribution } from "@/lib/referral";
 import logoAvif480 from "@/assets/nextgen-logo-480.avif";
 
-const META_PIXEL_ID = "844266785134255";
-
-type MetaPixelWindow = Window & {
-  fbq?: (...args: unknown[]) => void;
-  __metaPixelLastPage?: string;
-};
+const GOOGLE_ANALYTICS_ID = "G-B0ZDQ27P0P";
+const GOOGLE_TAG_MANAGER_ID = "GTM-M8PD2672";
 
 function NotFoundComponent() {
   return (
@@ -243,21 +239,6 @@ function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
-        {/* Meta Pixel */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window,document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init','${META_PIXEL_ID}');`,
-          }}
-        />
-        {/* End Meta Pixel */}
         {/* Google Tag Manager */}
         <script
           dangerouslySetInnerHTML={{
@@ -265,35 +246,35 @@ fbq('init','${META_PIXEL_ID}');`,
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-M8PD2672');`,
+})(window,document,'script','dataLayer','${GOOGLE_TAG_MANAGER_ID}');`,
           }}
         />
         {/* End Google Tag Manager */}
+        {/* Google tag */}
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS_ID}`} />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${GOOGLE_ANALYTICS_ID}');`,
+          }}
+        />
+        {/* End Google tag */}
         <HeadContent />
         <JsonLd data={organizationSchema} />
         <JsonLd data={educationalOrganizationSchema} />
         <JsonLd data={websiteSchema} />
       </head>
       <body>
-        {/* Meta Pixel (noscript) */}
-        <noscript>
-          <img
-            height="1"
-            width="1"
-            style={{ display: "none" }}
-            src={`https://www.facebook.com/tr?id=${META_PIXEL_ID}&ev=PageView&noscript=1`}
-            alt=""
-            aria-hidden="true"
-          />
-        </noscript>
-        {/* End Meta Pixel (noscript) */}
         {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-M8PD2672"
+            src={`https://www.googletagmanager.com/ns.html?id=${GOOGLE_TAG_MANAGER_ID}`}
             height="0"
             width="0"
             style={{ display: "none", visibility: "hidden" }}
+            title="Google Tag Manager"
           />
         </noscript>
         {/* End Google Tag Manager (noscript) */}
@@ -308,30 +289,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 function RootComponent() {
   return (
     <>
-      <MetaPixelPageView />
+      <ReferralAttributionCapture />
       <Outlet />
       <Toaster position="top-center" richColors />
     </>
   );
 }
 
-function MetaPixelPageView() {
+function ReferralAttributionCapture() {
   const routeHref = useRouterState({
     select: (state) => state.location.href,
   });
 
   useEffect(() => {
     captureReferralAttribution();
-
-    const pixelWindow = window as MetaPixelWindow;
-    const pageKey = `${window.location.pathname}${window.location.search}`;
-
-    if (!pixelWindow.fbq || pixelWindow.__metaPixelLastPage === pageKey) {
-      return;
-    }
-
-    pixelWindow.__metaPixelLastPage = pageKey;
-    pixelWindow.fbq("track", "PageView");
   }, [routeHref]);
 
   return null;
