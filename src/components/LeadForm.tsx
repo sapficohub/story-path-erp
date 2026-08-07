@@ -1,16 +1,39 @@
-import { useEffect, useRef, useState } from "react";
-import { createServerFn } from "@tanstack/react-start";
-import {
-  RecaptchaVerifier,
-  signInWithPhoneNumber,
-  signOut,
-  type ConfirmationResult,
-} from "firebase/auth";
-import { Resend } from "resend";
+import { useState } from "react";
+import PhoneInput, { isValidPhoneNumber, type Value } from "react-phone-number-input";
+import flags from "react-phone-number-input/flags";
+import "react-phone-number-input/style.css";
+import { CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
-import { firebaseAuth } from "@/lib/firebase-client";
-import { getReferralAttribution } from "@/lib/referral";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { getReferralAttribution, resolveLeadSource } from "@/lib/referral";
+
+function getBrowserName(userAgent: string) {
+  const lower = userAgent.toLowerCase();
+  if (lower.includes("edg/")) return "Edge";
+  if (lower.includes("opr/") || lower.includes("opera")) return "Opera";
+  if (lower.includes("chrome/") && !lower.includes("edg/") && !lower.includes("opr/")) return "Chrome";
+  if (lower.includes("firefox/")) return "Firefox";
+  if (lower.includes("safari/") && !lower.includes("chrome/")) return "Safari";
+  if (lower.includes("trident/") || lower.includes("msie")) return "Internet Explorer";
+  return "Unknown";
+}
+
+function getDeviceType(userAgent: string) {
+  const lower = userAgent.toLowerCase();
+  if (/mobile|iphone|ipod|android|blackberry|phone/.test(lower)) return "Mobile";
+  if (/tablet|ipad|playbook/.test(lower)) return "Tablet";
+  return "Desktop";
+}
+
 
 type Field = {
   name: string;
@@ -21,9 +44,32 @@ type Field = {
   placeholder?: string;
 };
 
-const leadDetailsSchema = z.object({
+type LeadSourceForm = "Free Demo" | "Course Application" | "Contact Message" | "Placement Enquiry";
+
+const analyticsFormNames: Record<LeadSourceForm, string> = {
+  "Free Demo": "Book Free Demo",
+  "Course Application": "Course Application",
+  "Contact Message": "Contact Form",
+  "Placement Enquiry": "Placement Enquiry",
+};
+
+function trackLeadSubmission(formName: LeadSourceForm, course: string) {
+  const analyticsWindow = window as Window & {
+    dataLayer?: Array<Record<string, unknown>>;
+  };
+
+  analyticsWindow.dataLayer = analyticsWindow.dataLayer || [];
+  analyticsWindow.dataLayer.push({
+    event: "lead_submit",
+    form_name: analyticsFormNames[formName],
+    course,
+    page_path: window.location.pathname,
+  });
+}
+
+const leadSchema = z.object({
   name: z.string().trim().min(1).max(100),
-  phone: z.string().regex(/^\d{10}$/, "Enter a valid 10-digit phone number."),
+  phone: z.string().refine((value) => isValidPhoneNumber(value), "Enter a valid phone number."),
   email: z.string().trim().email().max(254),
   message: z.string().trim().max(2000).optional(),
   qualification: z.string().trim().max(100).optional(),
@@ -32,245 +78,73 @@ const leadDetailsSchema = z.object({
   utm_source: z.string().trim().max(200).optional(),
   utm_medium: z.string().trim().max(200).optional(),
   utm_campaign: z.string().trim().max(200).optional(),
+  utm_content: z.string().trim().max(200).optional(),
+  utm_term: z.string().trim().max(200).optional(),
+  fbclid: z.string().trim().max(200).optional(),
+  gclid: z.string().trim().max(200).optional(),
   ref: z.string().trim().max(200).optional(),
-  landing_page: z.string().trim().max(500).optional(),
+  referrer: z.string().trim().max(1000).optional(),
+  landing_page: z.string().trim().max(1000).optional(),
+  lead_source: z.string().trim().max(200).optional(),
+  browser: z.string().trim().max(200).optional(),
+  device: z.string().trim().max(200).optional(),
+  ip: z.string().trim().max(100).optional(),
+  country: z.string().trim().max(100).optional(),
+  source_form: z.enum(["Free Demo", "Course Application", "Contact Message", "Placement Enquiry"]),
 });
 
-const leadSchema = leadDetailsSchema.extend({
-  verification_token: z.string().min(1),
+// `resolveLeadSource` is imported from `src/lib/referral.ts` and derives a
+// human-readable `lead_source` without modifying existing attribution fields.
+
+const leadTrackerWebhookPayloadSchema = leadSchema.extend({
+  submitted_at: z.string().trim().min(1),
 });
 
-type LeadDetails = z.infer<typeof leadDetailsSchema>;
+async function sendLeadToTracker(data: z.infer<typeof leadSchema>) {
+  const lead_source = resolveLeadSource(data);
+  const userAgent = typeof navigator !== "undefined" ? navigator.userAgent : "";
 
-function firebasePhoneError(error: unknown, fallback: string) {
-  const code = error && typeof error === "object" && "code" in error ? String(error.code) : "";
+  const payload = {
+    name: data.name,
+    phone: data.phone,
+    email: data.email,
+    message: data.message ?? "",
+    qualification: data.qualification ?? "",
+    status: data.status ?? "",
+    module: data.module ?? "",
+    utm_source: data.utm_source ?? "",
+    utm_medium: data.utm_medium ?? "",
+    utm_campaign: data.utm_campaign ?? "",
+    utm_content: data.utm_content ?? "",
+    utm_term: data.utm_term ?? "",
+    fbclid: data.fbclid ?? "",
+    gclid: data.gclid ?? "",
+    ref: data.ref ?? "",
+    referrer: data.referrer ?? "",
+    landing_page: data.landing_page ?? "",
+    browser: getBrowserName(userAgent),
+    device: getDeviceType(userAgent),
+    source_form: data.source_form,
+    lead_source,
+    submitted_at: new Date().toISOString(),
+  };
 
-  switch (code) {
-    case "auth/operation-not-allowed":
-      return "Phone verification is temporarily unavailable. Please contact us directly.";
-    case "auth/billing-not-enabled":
-      return "Phone verification billing is not enabled. Please contact us directly.";
-    case "auth/unauthorized-domain":
-    case "auth/app-not-authorized":
-      return "Phone verification is not authorized on this website.";
-    case "auth/invalid-app-credential":
-    case "auth/missing-app-credential":
-      return "Security verification could not start. Refresh the page and try again.";
-    case "auth/invalid-phone-number":
-      return "Enter a valid 10-digit phone number.";
-    case "auth/too-many-requests":
-      return "Too many OTP requests. Please wait and try again later.";
-    case "auth/quota-exceeded":
-      return "OTP service limit reached. Please contact us directly.";
-    case "auth/invalid-verification-code":
-      return "The OTP is incorrect. Check the code and try again.";
-    case "auth/code-expired":
-      return "The OTP has expired. Request a new code.";
-    case "auth/captcha-check-failed":
-      return "Security verification failed. Refresh the page and try again.";
-    default:
-      return code ? `${fallback} (${code})` : fallback;
-  }
-}
+  leadTrackerWebhookPayloadSchema.parse(payload);
 
-async function validatePhoneVerification(phone: string, token: string) {
-  try {
-    const response = await fetch(
-      "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyBK8bhhFdu84XuumbHkrvpZOa_bNn-Ttes",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ idToken: token }),
-      },
-    );
-    if (!response.ok) return false;
+  const response = await fetch("/api/lead", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
 
-    const result = (await response.json()) as {
-      users?: Array<{ disabled?: boolean; phoneNumber?: string }>;
-    };
-    const user = result.users?.[0];
-    return user?.disabled !== true && user?.phoneNumber === `+91${phone}`;
-  } catch {
-    return false;
-  }
-}
-
-function escapeHtml(value: string) {
-  return value.replace(
-    /[&<>"']/g,
-    (character) =>
-      ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#039;",
-      })[character]!,
-  );
-}
-
-async function sendLeadEmail(data: LeadDetails) {
-  const apiKey = process.env.RESEND_API_KEY;
-  const recipient = process.env.LEAD_NOTIFICATION_EMAIL;
-  const from = process.env.RESEND_FROM_EMAIL;
-  const phoneNumber = process.env.COMPANY_PHONE_NUMBER || "+91 90003 33859";
-
-  if (!apiKey || !recipient || !from) {
-    console.warn(
-      "Email notification skipped: RESEND_API_KEY, LEAD_NOTIFICATION_EMAIL, or RESEND_FROM_EMAIL is not configured.",
-    );
+  if (!response.ok) {
+    console.error(`Lead tracker rejected a submission with status ${response.status}.`);
     return false;
   }
 
-  const rows = [
-    ["Name", data.name],
-    ["Phone", data.phone],
-    ["Email", data.email],
-    ["Qualification", data.qualification],
-    ["Current status", data.status],
-    ["SAP module", data.module],
-    ["Message", data.message],
-    ["UTM source", data.utm_source],
-    ["UTM medium", data.utm_medium],
-    ["UTM campaign", data.utm_campaign],
-    ["Referral code", data.ref],
-    ["Landing page", data.landing_page],
-  ].filter((entry): entry is [string, string] => Boolean(entry[1]));
-
-  const resend = new Resend(apiKey);
-  const { error: notificationError } = await resend.emails.send({
-    from,
-    to: [recipient],
-    replyTo: data.email,
-    subject: `New website enquiry from ${data.name}`,
-    html: `
-      <div style="font-family:Arial,sans-serif;max-width:640px;margin:auto;color:#172033">
-        <h2 style="margin-bottom:8px">New website enquiry</h2>
-        <p style="margin-top:0;color:#667085">A new lead was submitted on Next-Gen ERP Solutions.</p>
-        <table style="width:100%;border-collapse:collapse">
-          ${rows
-            .map(
-              ([label, value]) => `
-                <tr>
-                  <th style="padding:10px;text-align:left;vertical-align:top;border-bottom:1px solid #e5e7eb;width:160px">${escapeHtml(label)}</th>
-                  <td style="padding:10px;border-bottom:1px solid #e5e7eb;white-space:pre-wrap">${escapeHtml(value)}</td>
-                </tr>`,
-            )
-            .join("")}
-        </table>
-      </div>
-    `,
-  });
-
-  if (notificationError) {
-    console.error("Resend rejected a lead notification:", notificationError);
-    throw new Error("Email notification failed.");
-  }
-
-  const { error: confirmationError } = await resend.emails.send({
-    from,
-    to: [data.email],
-    replyTo: recipient,
-    subject: "Thank You for Your Interest",
-    text: `Thank You for Your Interest
-
-Dear ${data.name},
-
-Greetings from Next-Gen ERP Solutions!
-
-Thank you for showing interest in our training programs and demo sessions. We are happy to assist you with course details, demo schedules, fees, training methods, placement support and any other relevant details you may need
-
-Our team will contact you shortly to understand your requirements and help you choose the right course.
-
-For any immediate assistance, please contact us at ${phoneNumber} or reply to this email.
-
-Best regards,
-Next Gen ERP Solutions
-Training & Placement Services
-${phoneNumber}`,
-    html: `
-      <div style="font-family:Arial,sans-serif;max-width:640px;margin:auto;color:#172033;line-height:1.65">
-        <h2 style="margin-bottom:20px">Thank You for Your Interest</h2>
-        <p>Dear ${escapeHtml(data.name)},</p>
-        <p>Greetings from Next-Gen ERP Solutions!</p>
-        <p>
-          Thank you for showing interest in our training programs and demo sessions.
-          We are happy to assist you with course details, demo schedules, fees,
-          training methods, placement support and any other relevant details you may need
-        </p>
-        <p>
-          Our team will contact you shortly to understand your requirements and help
-          you choose the right course.
-        </p>
-        <p>
-          For any immediate assistance, please contact us at
-          <a href="tel:${escapeHtml(phoneNumber.replace(/[^\d+]/g, ""))}">${escapeHtml(phoneNumber)}</a>
-          or reply to this email.
-        </p>
-        <p style="margin-top:28px">
-          Best regards,<br>
-          <strong>Next Gen ERP Solutions</strong><br>
-          Training &amp; Placement Services<br>
-          ${escapeHtml(phoneNumber)}
-        </p>
-      </div>
-    `,
-  });
-
-  if (confirmationError) {
-    console.error("Resend rejected the customer confirmation:", confirmationError);
-    throw new Error("Customer confirmation email failed.");
-  }
-
-  return true;
+  const result = (await response.json().catch(() => null)) as { success?: boolean } | null;
+  return result?.success === true;
 }
-
-const submitLead = createServerFn({ method: "POST" })
-  .validator(leadSchema)
-  .handler(async ({ data }) => {
-    if (!(await validatePhoneVerification(data.phone, data.verification_token))) {
-      throw new Error("Verify your phone number before submitting.");
-    }
-
-    const { verification_token: _verificationToken, ...submittedData } = data;
-    const leadData: LeadDetails = { ...submittedData, phone: `+91${submittedData.phone}` };
-    const webhookUrl = process.env.TELECRM_WEBHOOK_URL;
-    const webhookSecret = process.env.TELECRM_WEBHOOK_SECRET;
-
-    let sentToCrm = false;
-
-    if (webhookUrl) {
-      const response = await fetch(webhookUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(webhookSecret ? { Authorization: `Bearer ${webhookSecret}` } : {}),
-        },
-        body: JSON.stringify({
-          ...leadData,
-          phone: leadData.phone.replace(/[^\d+]/g, ""),
-          source: "Website",
-          submitted_at: new Date().toISOString(),
-        }),
-      });
-
-      if (!response.ok) {
-        console.error(`TeleCRM rejected a lead submission with status ${response.status}`);
-      } else {
-        sentToCrm = true;
-      }
-    } else {
-      console.warn("TELECRM_WEBHOOK_URL is not configured.");
-    }
-
-    const sentByEmail = await sendLeadEmail(leadData);
-
-    if (!sentToCrm && !sentByEmail) {
-      throw new Error("No lead delivery channel is configured.");
-    }
-
-    return { success: true };
-  });
 
 export function LeadForm({
   title = "Book a Free Demo",
@@ -278,12 +152,14 @@ export function LeadForm({
   fields,
   cta = "Book Free Demo",
   defaultModule,
+  sourceForm = "Free Demo",
 }: {
   title?: string;
   subtitle?: string;
   fields?: Field[];
   cta?: string;
   defaultModule?: string;
+  sourceForm?: LeadSourceForm;
 }) {
   const standardModules = [
     "SAP FICO",
@@ -313,279 +189,151 @@ export function LeadForm({
   ];
 
   const [loading, setLoading] = useState(false);
-  const [phone, setPhone] = useState("");
-  const [otp, setOtp] = useState("");
-  const [otpSent, setOtpSent] = useState(false);
-  const [otpSending, setOtpSending] = useState(false);
-  const [otpVerifying, setOtpVerifying] = useState(false);
-  const [verificationToken, setVerificationToken] = useState("");
-  const [resendSeconds, setResendSeconds] = useState(0);
-  const recaptchaHostRef = useRef<HTMLDivElement | null>(null);
-  const recaptchaVerifierRef = useRef<RecaptchaVerifier | null>(null);
-  const confirmationResultRef = useRef<ConfirmationResult | null>(null);
-
-  const resetRecaptcha = () => {
-    recaptchaVerifierRef.current?.clear();
-    recaptchaVerifierRef.current = null;
-    recaptchaHostRef.current?.replaceChildren();
-  };
-
-  useEffect(() => {
-    if (resendSeconds <= 0) return;
-    const timer = window.setInterval(() => {
-      setResendSeconds((seconds) => Math.max(0, seconds - 1));
-    }, 1000);
-    return () => window.clearInterval(timer);
-  }, [resendSeconds]);
-
-  useEffect(
-    () => () => {
-      recaptchaVerifierRef.current?.clear();
-      recaptchaVerifierRef.current = null;
-    },
-    [],
-  );
-
-  const handleSendOtp = async () => {
-    if (!/^\d{10}$/.test(phone)) {
-      toast.error("Enter a valid 10-digit phone number.");
-      return;
-    }
-
-    setOtpSending(true);
-    try {
-      resetRecaptcha();
-      const recaptchaHost = recaptchaHostRef.current;
-      if (!recaptchaHost) throw new Error("Phone verification is not ready. Please try again.");
-      const recaptchaElement = document.createElement("div");
-      recaptchaHost.appendChild(recaptchaElement);
-      const verifier = new RecaptchaVerifier(firebaseAuth, recaptchaElement, {
-        size: "invisible",
-      });
-      recaptchaVerifierRef.current = verifier;
-      confirmationResultRef.current = await signInWithPhoneNumber(
-        firebaseAuth,
-        `+91${phone}`,
-        verifier,
-      );
-      setOtpSent(true);
-      setOtp("");
-      setVerificationToken("");
-      setResendSeconds(30);
-      toast.success("OTP sent to your phone.");
-    } catch (error) {
-      console.error(error);
-      resetRecaptcha();
-      toast.error(firebasePhoneError(error, "Unable to send OTP. Please try again."));
-    } finally {
-      setOtpSending(false);
-    }
-  };
-
-  const handleVerifyOtp = async () => {
-    if (!/^\d{6}$/.test(otp)) {
-      toast.error("Enter the 6-digit OTP.");
-      return;
-    }
-
-    setOtpVerifying(true);
-    try {
-      const confirmationResult = confirmationResultRef.current;
-      if (!confirmationResult) throw new Error("Send a new OTP and try again.");
-      const credential = await confirmationResult.confirm(otp);
-      const idToken = await credential.user.getIdToken(true);
-      setVerificationToken(idToken);
-      await signOut(firebaseAuth);
-      resetRecaptcha();
-      toast.success("Phone number verified.");
-    } catch (error) {
-      console.error(error);
-      setVerificationToken("");
-      toast.error(firebasePhoneError(error, "Invalid or expired OTP."));
-    } finally {
-      setOtpVerifying(false);
-    }
-  };
+  const [phone, setPhone] = useState<Value>();
+  const [submitted, setSubmitted] = useState(false);
 
   return (
-    <form
-      onSubmit={async (e) => {
-        e.preventDefault();
-        const form = e.currentTarget;
+    <>
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const form = e.currentTarget;
 
-        if (!verificationToken) {
-          toast.error("Verify your phone number before submitting.");
-          return;
-        }
+          setLoading(true);
 
-        setLoading(true);
+          try {
+            const values = {
+              ...Object.fromEntries(new FormData(form).entries()),
+              ...getReferralAttribution(),
+            };
+            const validatedLead = leadSchema.parse(values);
+            const success = await sendLeadToTracker(validatedLead);
+            if (!success) {
+              throw new Error("Lead tracker delivery failed.");
+            }
 
-        try {
-          const values = {
-            ...Object.fromEntries(new FormData(form).entries()),
-            ...getReferralAttribution(),
-          };
-          await submitLead({ data: leadSchema.parse(values) });
-          toast.success("Thank you! A career advisor will call you shortly.");
-          form.reset();
-          setPhone("");
-          setOtp("");
-          setOtpSent(false);
-          setVerificationToken("");
-          setResendSeconds(0);
-          confirmationResultRef.current = null;
-        } catch (error) {
-          console.error(error);
-          toast.error("We couldn't send your details. Please try again or call us.");
-        } finally {
-          setLoading(false);
-        }
-      }}
-      className="w-full max-w-full rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-card sm:p-6 md:p-8"
-    >
-      <h3 className="text-2xl font-extrabold text-foreground">{title}</h3>
-      <p className="mt-2 text-base leading-relaxed text-muted-foreground">{subtitle}</p>
-      <div className="mt-5 grid gap-4 sm:grid-cols-2">
-        {defaultFields.map((f) => (
-          <label
-            key={f.name}
-            className={f.name === "name" || f.name === "module" ? "sm:col-span-2 block" : "block"}
-          >
-            <span className="mb-1 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              {f.label}
-              {f.required && <span className="text-destructive"> *</span>}
-            </span>
-            {f.name === "phone" ? (
-              <>
-                <div className="grid min-h-12 grid-cols-[auto_minmax(0,1fr)_auto] overflow-hidden rounded-lg border border-input bg-background focus-within:ring-2 focus-within:ring-ring">
-                  <span className="flex items-center border-r border-input px-3 text-base text-foreground">
-                    +91
-                  </span>
-                  <input
-                    required={f.required}
-                    name={f.name}
-                    type="tel"
-                    value={phone}
-                    onChange={(event) => {
-                      setPhone(event.target.value.replace(/\D/g, "").slice(0, 10));
-                      setOtp("");
-                      setOtpSent(false);
-                      setVerificationToken("");
-                      setResendSeconds(0);
-                      confirmationResultRef.current = null;
-                      resetRecaptcha();
-                    }}
-                    placeholder="Enter 10-digit number"
-                    autoComplete="tel-national"
-                    inputMode="numeric"
-                    pattern="[0-9]{10}"
-                    className="min-w-0 bg-transparent px-3 py-2.5 text-base text-foreground placeholder:text-muted-foreground focus:outline-none"
-                  />
-                  <button
-                    type="button"
-                    onClick={handleSendOtp}
-                    disabled={otpSending || resendSeconds > 0 || verificationToken.length > 0}
-                    className="border-l border-input bg-primary px-3 text-sm font-semibold text-primary-foreground disabled:cursor-not-allowed disabled:opacity-60"
-                  >
-                    {otpSending
-                      ? "Sending..."
-                      : resendSeconds > 0
-                        ? `Resend ${resendSeconds}s`
-                        : otpSent
-                          ? "Resend OTP"
-                          : "Send OTP"}
-                  </button>
-                </div>
-
-                {otpSent && !verificationToken && (
-                  <div className="mt-2 grid min-h-12 grid-cols-[minmax(0,1fr)_auto] overflow-hidden rounded-lg border border-input bg-background focus-within:ring-2 focus-within:ring-ring">
-                    <input
-                      type="text"
-                      value={otp}
-                      onChange={(event) =>
-                        setOtp(event.target.value.replace(/\D/g, "").slice(0, 6))
-                      }
-                      placeholder="Enter 6-digit OTP"
-                      autoComplete="one-time-code"
-                      inputMode="numeric"
-                      maxLength={6}
-                      className="min-w-0 bg-transparent px-3 py-2.5 text-base tracking-widest text-foreground placeholder:tracking-normal placeholder:text-muted-foreground focus:outline-none"
-                    />
-                    <button
-                      type="button"
-                      onClick={handleVerifyOtp}
-                      disabled={otpVerifying || otp.length !== 6}
-                      className="border-l border-input bg-primary px-3 text-sm font-semibold text-primary-foreground disabled:cursor-not-allowed disabled:opacity-60"
-                    >
-                      {otpVerifying ? "Verifying..." : "Verify OTP"}
-                    </button>
-                  </div>
-                )}
-
-                {verificationToken && (
-                  <p className="mt-2 text-sm font-semibold text-brand-green" role="status">
-                    ✓ Phone number verified
-                  </p>
-                )}
-                <div ref={recaptchaHostRef} />
-              </>
-            ) : f.name === "module" && defaultModule ? (
-              <input
-                name={f.name}
-                value={defaultModule}
-                readOnly
-                aria-readonly="true"
-                className="min-h-12 w-full cursor-default rounded-lg border border-input bg-muted px-3 py-2.5 text-base font-semibold text-foreground focus:outline-none"
-              />
-            ) : f.options ? (
-              <select
-                required={f.required}
-                name={f.name}
-                style={{ color: "#071126", colorScheme: "light" }}
-                className="min-h-12 w-full rounded-lg border border-input bg-background px-3 py-2.5 text-base text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-              >
-                <option value="" style={{ backgroundColor: "#ffffff", color: "#071126" }}>
-                  Select…
-                </option>
-                {f.options.map((o) => (
-                  <option key={o} style={{ backgroundColor: "#ffffff", color: "#071126" }}>
-                    {o}
-                  </option>
-                ))}
-              </select>
-            ) : (
-              <input
-                required={f.required}
-                name={f.name}
-                type={f.type ?? "text"}
-                placeholder={f.placeholder}
-                autoComplete={
-                  f.name === "name"
-                    ? "name"
-                    : f.name === "phone"
-                      ? "tel"
-                      : f.name === "email"
-                        ? "email"
-                        : undefined
-                }
-                inputMode={f.type === "tel" ? "tel" : f.type === "email" ? "email" : undefined}
-                className="min-h-12 w-full rounded-lg border border-input bg-background px-3 py-2.5 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-              />
-            )}
-          </label>
-        ))}
-      </div>
-      <input type="hidden" name="verification_token" value={verificationToken} />
-      <button
-        type="submit"
-        disabled={loading || !verificationToken}
-        className="mt-5 min-h-12 w-full rounded-full bg-gradient-brand px-6 py-3 font-semibold text-white shadow-glow transition hover:scale-[1.02] disabled:opacity-60"
+            trackLeadSubmission(sourceForm, validatedLead.module ?? "");
+            form.reset();
+            setPhone(undefined);
+            setSubmitted(true);
+          } catch (error) {
+            console.error(error);
+            toast.error("We couldn't send your details. Please try again or call us.");
+          } finally {
+            setLoading(false);
+          }
+        }}
+        className="w-full max-w-full rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-card sm:p-6 md:p-8"
       >
-        {loading ? "Sending…" : cta}
-      </button>
-      <p className="mt-3 text-center text-xs text-muted-foreground">
-        By submitting you agree to be contacted by Next-Gen ERP Solutions.
-      </p>
-    </form>
+        <h3 className="text-2xl font-extrabold text-foreground">{title}</h3>
+        <p className="mt-2 text-base leading-relaxed text-muted-foreground">{subtitle}</p>
+        <div className="mt-5 grid gap-4 sm:grid-cols-2">
+          {defaultFields.map((f) => (
+            <label
+              key={f.name}
+              className={f.name === "name" || f.name === "module" ? "sm:col-span-2 block" : "block"}
+            >
+              <span className="mb-1 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                {f.label}
+                {f.required && <span className="text-destructive"> *</span>}
+              </span>
+              {f.name === "phone" ? (
+                <PhoneInput
+                  name={f.name}
+                  required={f.required}
+                  defaultCountry="IN"
+                  international
+                  countryCallingCodeEditable={false}
+                  flags={flags}
+                  value={phone}
+                  onChange={setPhone}
+                  placeholder={f.placeholder ?? "Enter phone number"}
+                  className="lead-phone-input min-h-12 w-full rounded-lg border border-input bg-background px-3 py-2.5 focus-within:ring-2 focus-within:ring-ring"
+                />
+              ) : f.name === "module" && defaultModule ? (
+                <input
+                  name={f.name}
+                  value={defaultModule}
+                  readOnly
+                  aria-readonly="true"
+                  className="min-h-12 w-full cursor-default rounded-lg border border-input bg-muted px-3 py-2.5 text-base font-semibold text-foreground focus:outline-none"
+                />
+              ) : f.options ? (
+                <select
+                  required={f.required}
+                  name={f.name}
+                  style={{ color: "#071126", colorScheme: "light" }}
+                  className="min-h-12 w-full rounded-lg border border-input bg-background px-3 py-2.5 text-base text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                >
+                  <option value="" style={{ backgroundColor: "#ffffff", color: "#071126" }}>
+                    Select…
+                  </option>
+                  {f.options.map((o) => (
+                    <option key={o} style={{ backgroundColor: "#ffffff", color: "#071126" }}>
+                      {o}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  required={f.required}
+                  name={f.name}
+                  type={f.type ?? "text"}
+                  placeholder={f.placeholder}
+                  autoComplete={
+                    f.name === "name"
+                      ? "name"
+                      : f.name === "phone"
+                        ? "tel"
+                        : f.name === "email"
+                          ? "email"
+                          : undefined
+                  }
+                  inputMode={f.type === "email" ? "email" : undefined}
+                  className="min-h-12 w-full rounded-lg border border-input bg-background px-3 py-2.5 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                />
+              )}
+            </label>
+          ))}
+        </div>
+        <button
+          type="submit"
+          disabled={loading}
+          className="mt-5 min-h-12 w-full rounded-full bg-gradient-brand px-6 py-3 font-semibold text-white shadow-glow transition hover:scale-[1.02] disabled:opacity-60"
+        >
+          {loading ? "Sending…" : cta}
+        </button>
+        <input type="hidden" name="source_form" value={sourceForm} />
+        <p className="mt-3 text-center text-xs text-muted-foreground">
+          By submitting you agree to be contacted by Next-Gen ERP Solutions.
+        </p>
+      </form>
+
+      <Dialog open={submitted} onOpenChange={setSubmitted}>
+        <DialogContent className="max-w-md rounded-lg text-center">
+          <CheckCircle2 className="mx-auto size-14 text-brand-green" aria-hidden="true" />
+          <DialogHeader className="text-center sm:text-center">
+            <DialogTitle className="text-2xl font-extrabold">Thank you!</DialogTitle>
+            <DialogDescription className="text-base leading-relaxed">
+              Your details have been received. A career advisor will contact you within 1 working
+              hour.
+            </DialogDescription>
+          </DialogHeader>
+          {defaultModule && (
+            <p className="text-sm font-semibold text-foreground">Course: {defaultModule}</p>
+          )}
+          <DialogFooter className="mt-2 sm:justify-center">
+            <DialogClose asChild>
+              <button
+                type="button"
+                className="min-h-11 rounded-lg bg-primary px-5 py-2.5 font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+              >
+                Done
+              </button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
