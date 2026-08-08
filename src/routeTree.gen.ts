@@ -9,6 +9,8 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as YoutubeRouteImport } from './routes/youtube'
+import { Route as WhatsappRouteImport } from './routes/whatsapp'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SuccessStoriesRouteImport } from './routes/success-stories'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
@@ -19,7 +21,11 @@ import { Route as SitemapBlogDotxmlRouteImport } from './routes/sitemap-blog[.]x
 import { Route as SitemapRouteImport } from './routes/sitemap'
 import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as PlacementsRouteImport } from './routes/placements'
+import { Route as LinkedinRouteImport } from './routes/linkedin'
+import { Route as InstagramRouteImport } from './routes/instagram'
+import { Route as GoogleBusinessRouteImport } from './routes/google-business'
 import { Route as FresherJourneyRouteImport } from './routes/fresher-journey'
+import { Route as FacebookRouteImport } from './routes/facebook'
 import { Route as ExperiencedProfessionalRouteImport } from './routes/experienced-professional'
 import { Route as CoursesRouteImport } from './routes/courses'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -36,6 +42,16 @@ import { Route as JourneyCareerGapRouteImport } from './routes/journey.career-ga
 import { Route as CoursesSlugRouteImport } from './routes/courses.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 
+const YoutubeRoute = YoutubeRouteImport.update({
+  id: '/youtube',
+  path: '/youtube',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WhatsappRoute = WhatsappRouteImport.update({
+  id: '/whatsapp',
+  path: '/whatsapp',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
@@ -86,9 +102,29 @@ const PlacementsRoute = PlacementsRouteImport.update({
   path: '/placements',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LinkedinRoute = LinkedinRouteImport.update({
+  id: '/linkedin',
+  path: '/linkedin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InstagramRoute = InstagramRouteImport.update({
+  id: '/instagram',
+  path: '/instagram',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GoogleBusinessRoute = GoogleBusinessRouteImport.update({
+  id: '/google-business',
+  path: '/google-business',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FresherJourneyRoute = FresherJourneyRouteImport.update({
   id: '/fresher-journey',
   path: '/fresher-journey',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FacebookRoute = FacebookRouteImport.update({
+  id: '/facebook',
+  path: '/facebook',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExperiencedProfessionalRoute = ExperiencedProfessionalRouteImport.update({
@@ -176,7 +212,11 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/courses': typeof CoursesRouteWithChildren
   '/experienced-professional': typeof ExperiencedProfessionalRoute
+  '/facebook': typeof FacebookRoute
   '/fresher-journey': typeof FresherJourneyRoute
+  '/google-business': typeof GoogleBusinessRoute
+  '/instagram': typeof InstagramRoute
+  '/linkedin': typeof LinkedinRoute
   '/placements': typeof PlacementsRoute
   '/quiz': typeof QuizRoute
   '/sitemap': typeof SitemapRoute
@@ -187,6 +227,8 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/success-stories': typeof SuccessStoriesRoute
   '/terms': typeof TermsRoute
+  '/whatsapp': typeof WhatsappRoute
+  '/youtube': typeof YoutubeRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/journey/career-gap': typeof JourneyCareerGapRoute
@@ -202,7 +244,11 @@ export interface FileRoutesByTo {
   '/career-journeys': typeof CareerJourneysRoute
   '/contact': typeof ContactRoute
   '/experienced-professional': typeof ExperiencedProfessionalRoute
+  '/facebook': typeof FacebookRoute
   '/fresher-journey': typeof FresherJourneyRoute
+  '/google-business': typeof GoogleBusinessRoute
+  '/instagram': typeof InstagramRoute
+  '/linkedin': typeof LinkedinRoute
   '/placements': typeof PlacementsRoute
   '/quiz': typeof QuizRoute
   '/sitemap': typeof SitemapRoute
@@ -213,6 +259,8 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/success-stories': typeof SuccessStoriesRoute
   '/terms': typeof TermsRoute
+  '/whatsapp': typeof WhatsappRoute
+  '/youtube': typeof YoutubeRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/journey/career-gap': typeof JourneyCareerGapRoute
@@ -231,7 +279,11 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/courses': typeof CoursesRouteWithChildren
   '/experienced-professional': typeof ExperiencedProfessionalRoute
+  '/facebook': typeof FacebookRoute
   '/fresher-journey': typeof FresherJourneyRoute
+  '/google-business': typeof GoogleBusinessRoute
+  '/instagram': typeof InstagramRoute
+  '/linkedin': typeof LinkedinRoute
   '/placements': typeof PlacementsRoute
   '/quiz': typeof QuizRoute
   '/sitemap': typeof SitemapRoute
@@ -242,6 +294,8 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/success-stories': typeof SuccessStoriesRoute
   '/terms': typeof TermsRoute
+  '/whatsapp': typeof WhatsappRoute
+  '/youtube': typeof YoutubeRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/journey/career-gap': typeof JourneyCareerGapRoute
@@ -261,7 +315,11 @@ export interface FileRouteTypes {
     | '/contact'
     | '/courses'
     | '/experienced-professional'
+    | '/facebook'
     | '/fresher-journey'
+    | '/google-business'
+    | '/instagram'
+    | '/linkedin'
     | '/placements'
     | '/quiz'
     | '/sitemap'
@@ -272,6 +330,8 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/success-stories'
     | '/terms'
+    | '/whatsapp'
+    | '/youtube'
     | '/blog/$slug'
     | '/courses/$slug'
     | '/journey/career-gap'
@@ -287,7 +347,11 @@ export interface FileRouteTypes {
     | '/career-journeys'
     | '/contact'
     | '/experienced-professional'
+    | '/facebook'
     | '/fresher-journey'
+    | '/google-business'
+    | '/instagram'
+    | '/linkedin'
     | '/placements'
     | '/quiz'
     | '/sitemap'
@@ -298,6 +362,8 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/success-stories'
     | '/terms'
+    | '/whatsapp'
+    | '/youtube'
     | '/blog/$slug'
     | '/courses/$slug'
     | '/journey/career-gap'
@@ -315,7 +381,11 @@ export interface FileRouteTypes {
     | '/contact'
     | '/courses'
     | '/experienced-professional'
+    | '/facebook'
     | '/fresher-journey'
+    | '/google-business'
+    | '/instagram'
+    | '/linkedin'
     | '/placements'
     | '/quiz'
     | '/sitemap'
@@ -326,6 +396,8 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/success-stories'
     | '/terms'
+    | '/whatsapp'
+    | '/youtube'
     | '/blog/$slug'
     | '/courses/$slug'
     | '/journey/career-gap'
@@ -344,7 +416,11 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   CoursesRoute: typeof CoursesRouteWithChildren
   ExperiencedProfessionalRoute: typeof ExperiencedProfessionalRoute
+  FacebookRoute: typeof FacebookRoute
   FresherJourneyRoute: typeof FresherJourneyRoute
+  GoogleBusinessRoute: typeof GoogleBusinessRoute
+  InstagramRoute: typeof InstagramRoute
+  LinkedinRoute: typeof LinkedinRoute
   PlacementsRoute: typeof PlacementsRoute
   QuizRoute: typeof QuizRoute
   SitemapRoute: typeof SitemapRoute
@@ -355,6 +431,8 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SuccessStoriesRoute: typeof SuccessStoriesRoute
   TermsRoute: typeof TermsRoute
+  WhatsappRoute: typeof WhatsappRoute
+  YoutubeRoute: typeof YoutubeRoute
   JourneyCareerGapRoute: typeof JourneyCareerGapRoute
   JourneyExperiencedRoute: typeof JourneyExperiencedRoute
   JourneyFresherRoute: typeof JourneyFresherRoute
@@ -362,6 +440,20 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/youtube': {
+      id: '/youtube'
+      path: '/youtube'
+      fullPath: '/youtube'
+      preLoaderRoute: typeof YoutubeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/whatsapp': {
+      id: '/whatsapp'
+      path: '/whatsapp'
+      fullPath: '/whatsapp'
+      preLoaderRoute: typeof WhatsappRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/terms': {
       id: '/terms'
       path: '/terms'
@@ -432,11 +524,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlacementsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/linkedin': {
+      id: '/linkedin'
+      path: '/linkedin'
+      fullPath: '/linkedin'
+      preLoaderRoute: typeof LinkedinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/instagram': {
+      id: '/instagram'
+      path: '/instagram'
+      fullPath: '/instagram'
+      preLoaderRoute: typeof InstagramRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/google-business': {
+      id: '/google-business'
+      path: '/google-business'
+      fullPath: '/google-business'
+      preLoaderRoute: typeof GoogleBusinessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/fresher-journey': {
       id: '/fresher-journey'
       path: '/fresher-journey'
       fullPath: '/fresher-journey'
       preLoaderRoute: typeof FresherJourneyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/facebook': {
+      id: '/facebook'
+      path: '/facebook'
+      fullPath: '/facebook'
+      preLoaderRoute: typeof FacebookRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/experienced-professional': {
@@ -581,7 +701,11 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   CoursesRoute: CoursesRouteWithChildren,
   ExperiencedProfessionalRoute: ExperiencedProfessionalRoute,
+  FacebookRoute: FacebookRoute,
   FresherJourneyRoute: FresherJourneyRoute,
+  GoogleBusinessRoute: GoogleBusinessRoute,
+  InstagramRoute: InstagramRoute,
+  LinkedinRoute: LinkedinRoute,
   PlacementsRoute: PlacementsRoute,
   QuizRoute: QuizRoute,
   SitemapRoute: SitemapRoute,
@@ -592,6 +716,8 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SuccessStoriesRoute: SuccessStoriesRoute,
   TermsRoute: TermsRoute,
+  WhatsappRoute: WhatsappRoute,
+  YoutubeRoute: YoutubeRoute,
   JourneyCareerGapRoute: JourneyCareerGapRoute,
   JourneyExperiencedRoute: JourneyExperiencedRoute,
   JourneyFresherRoute: JourneyFresherRoute,

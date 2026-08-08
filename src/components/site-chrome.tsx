@@ -111,6 +111,11 @@ export function Footer() {
               </a>
             </li>
             <li>
+              <a href="mailto:hello@nextgenerpsolutions.com" className="hover:text-white">
+                hello@nextgenerpsolutions.com
+              </a>
+            </li>
+            <li>
               <a href="tel:+919000333859" className="hover:text-white">
                 +91 90003 33859
               </a>

@@ -389,6 +389,14 @@ function TermsPage() {
                           hello@nextgenerpsolutions.com
                         </a>
                         <br />
+                        HR Email: {" "}
+                        <a
+                          className="text-brand hover:underline"
+                          href="mailto:hello@nextgenerpsolutions.com"
+                        >
+                          hello@nextgenerpsolutions.com
+                        </a>
+                        <br />
                         Phone/WhatsApp:{" "}
                         <a className="text-brand hover:underline" href="tel:+919000333859">
                           +91 90003 33859

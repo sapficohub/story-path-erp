@@ -1027,7 +1027,7 @@
         <span class="oops-emoji">😬</span>
         <div class="oops-title">Oops!</div>
         <div class="oops-sub">That's not the right answer.<br />Give it another try!</div>
-        <button class="oops-try-btn" onclick="closeOops()">Try Again →</button>
+        <button class="oops-try-btn" id="oops-try-btn" type="button">Try Again →</button>
       </div>
     </div>
 
@@ -4908,19 +4908,19 @@
       <div class="topic-picker">
         <div class="topic-field">
           <label for="section-select">Section</label>
-          <select class="topic-select" id="section-select" onchange="changeSection(this.value)">
+          <select class="topic-select" id="section-select">
             ${renderSelectOptions(sectionOptions(), selectedSection, "All Sections")}
           </select>
         </div>
         <div class="topic-field">
           <label for="subclass-select">Subclass</label>
-          <select class="topic-select" id="subclass-select" onchange="changeSubclass(this.value)">
+          <select class="topic-select" id="subclass-select">
             ${renderSelectOptions(subclassOptions(), selectedSubclass, "All Subclasses")}
           </select>
         </div>
       </div>
       <div class="topic-count">${available} questions selected</div>
-      <button class="start-btn" onclick="startChallenge()">Start the Challenge <span>→</span></button>
+      <button class="start-btn" data-action="start" type="button">Start the Challenge <span>→</span></button>
     </div>
   `;
       }
@@ -4987,7 +4987,7 @@
       <div class="explanation" id="expl"></div>
     </div>
     <div class="next-wrap">
-      <button class="next-btn" id="next-btn" onclick="advance()">
+      <button class="next-btn" id="next-btn" data-action="advance" type="button">
         ${current + 1 === pool.length ? "See results \u2192" : "Next question \u2192"}
       </button>
     </div>
@@ -4999,7 +4999,7 @@
     ${q.opts
       .map(
         (opt, i) => `
-      <button class="mc-btn" id="mc-${i}" onclick="pickMC(${i})">
+      <button class="mc-btn" id="mc-${i}" data-mc-index="${i}" type="button">
         <span class="mc-letter">${LABELS[i]}</span>${opt}
       </button>`,
       )
@@ -5009,10 +5009,10 @@
 
       function buildYN() {
         return `<div class="yn-options">
-    <button class="yn-btn yes-btn" id="btn-yes" onclick="pickYN(true)">
+    <button class="yn-btn yes-btn" id="btn-yes" data-answer="true" type="button">
       <span class="yn-icon">\u2705</span>Yes
     </button>
-    <button class="yn-btn no-btn" id="btn-no" onclick="pickYN(false)">
+    <button class="yn-btn no-btn" id="btn-no" data-answer="false" type="button">
       <span class="yn-icon">\u274c</span>No
     </button>
   </div>`;
@@ -5137,7 +5137,7 @@
         <div class="stat-box"><div class="stat-val red">${pool.length - score}</div><div class="stat-lbl">Wrong</div></div>
         <div class="stat-box"><div class="stat-val">${pct}%</div><div class="stat-lbl">Accuracy</div></div>
       </div>
-      <button class="restart-btn" onclick="restart()">Play again</button>
+      <button class="restart-btn" data-action="restart" type="button">Play again</button>
     </div>
   `;
       }
@@ -5146,6 +5146,24 @@
       function restart() {
         renderStart();
       }
+
+      document.getElementById("oops-try-btn").addEventListener("click", closeOops);
+
+      root.addEventListener("change", (event) => {
+        if (event.target.id === "section-select") changeSection(event.target.value);
+        if (event.target.id === "subclass-select") changeSubclass(event.target.value);
+      });
+
+      root.addEventListener("click", (event) => {
+        const button = event.target.closest("button");
+        if (!button) return;
+
+        if (button.dataset.action === "start") startChallenge();
+        if (button.dataset.action === "advance") advance();
+        if (button.dataset.action === "restart") restart();
+        if (button.dataset.mcIndex !== undefined) pickMC(Number(button.dataset.mcIndex));
+        if (button.dataset.answer !== undefined) pickYN(button.dataset.answer === "true");
+      });
 
       renderStart();
     </script>

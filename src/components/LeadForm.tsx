@@ -1,10 +1,39 @@
 import { useState } from "react";
-import { createServerFn } from "@tanstack/react-start";
 import PhoneInput, { isValidPhoneNumber, type Value } from "react-phone-number-input";
+import flags from "react-phone-number-input/flags";
 import "react-phone-number-input/style.css";
+import { CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
-import { getReferralAttribution } from "@/lib/referral";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { getReferralAttribution, resolveLeadSource } from "@/lib/referral";
+
+function getBrowserName(userAgent: string) {
+  const lower = userAgent.toLowerCase();
+  if (lower.includes("edg/")) return "Edge";
+  if (lower.includes("opr/") || lower.includes("opera")) return "Opera";
+  if (lower.includes("chrome/") && !lower.includes("edg/") && !lower.includes("opr/")) return "Chrome";
+  if (lower.includes("firefox/")) return "Firefox";
+  if (lower.includes("safari/") && !lower.includes("chrome/")) return "Safari";
+  if (lower.includes("trident/") || lower.includes("msie")) return "Internet Explorer";
+  return "Unknown";
+}
+
+function getDeviceType(userAgent: string) {
+  const lower = userAgent.toLowerCase();
+  if (/mobile|iphone|ipod|android|blackberry|phone/.test(lower)) return "Mobile";
+  if (/tablet|ipad|playbook/.test(lower)) return "Tablet";
+  return "Desktop";
+}
+
 
 type Field = {
   name: string;
@@ -14,6 +43,29 @@ type Field = {
   options?: string[];
   placeholder?: string;
 };
+
+type LeadSourceForm = "Free Demo" | "Course Application" | "Contact Message" | "Placement Enquiry";
+
+const analyticsFormNames: Record<LeadSourceForm, string> = {
+  "Free Demo": "Book Free Demo",
+  "Course Application": "Course Application",
+  "Contact Message": "Contact Form",
+  "Placement Enquiry": "Placement Enquiry",
+};
+
+function trackLeadSubmission(formName: LeadSourceForm, course: string) {
+  const analyticsWindow = window as Window & {
+    dataLayer?: Array<Record<string, unknown>>;
+  };
+
+  analyticsWindow.dataLayer = analyticsWindow.dataLayer || [];
+  analyticsWindow.dataLayer.push({
+    event: "lead_submit",
+    form_name: analyticsFormNames[formName],
+    course,
+    page_path: window.location.pathname,
+  });
+}
 
 const leadSchema = z.object({
   name: z.string().trim().min(1).max(100),
@@ -26,26 +78,63 @@ const leadSchema = z.object({
   utm_source: z.string().trim().max(200).optional(),
   utm_medium: z.string().trim().max(200).optional(),
   utm_campaign: z.string().trim().max(200).optional(),
+  utm_content: z.string().trim().max(200).optional(),
+  utm_term: z.string().trim().max(200).optional(),
+  fbclid: z.string().trim().max(200).optional(),
+  gclid: z.string().trim().max(200).optional(),
   ref: z.string().trim().max(200).optional(),
-  landing_page: z.string().trim().max(500).optional(),
+  referrer: z.string().trim().max(1000).optional(),
+  landing_page: z.string().trim().max(1000).optional(),
+  lead_source: z.string().trim().max(200).optional(),
+  browser: z.string().trim().max(200).optional(),
+  device: z.string().trim().max(200).optional(),
+  ip: z.string().trim().max(100).optional(),
+  country: z.string().trim().max(100).optional(),
   source_form: z.enum(["Free Demo", "Course Application", "Contact Message", "Placement Enquiry"]),
 });
 
-async function sendLeadToTracker(data: z.infer<typeof leadSchema>) {
-  const webhookUrl = process.env.LEAD_TRACKER_WEBHOOK_URL;
-  if (!webhookUrl) {
-    console.warn("Lead tracker skipped: LEAD_TRACKER_WEBHOOK_URL is not configured.");
-    return false;
-  }
+// `resolveLeadSource` is imported from `src/lib/referral.ts` and derives a
+// human-readable `lead_source` without modifying existing attribution fields.
 
-  const response = await fetch(webhookUrl, {
+const leadTrackerWebhookPayloadSchema = leadSchema.extend({
+  submitted_at: z.string().trim().min(1),
+});
+
+async function sendLeadToTracker(data: z.infer<typeof leadSchema>) {
+  const lead_source = resolveLeadSource(data);
+  const userAgent = typeof navigator !== "undefined" ? navigator.userAgent : "";
+
+  const payload = {
+    name: data.name,
+    phone: data.phone,
+    email: data.email,
+    message: data.message ?? "",
+    qualification: data.qualification ?? "",
+    status: data.status ?? "",
+    module: data.module ?? "",
+    utm_source: data.utm_source ?? "",
+    utm_medium: data.utm_medium ?? "",
+    utm_campaign: data.utm_campaign ?? "",
+    utm_content: data.utm_content ?? "",
+    utm_term: data.utm_term ?? "",
+    fbclid: data.fbclid ?? "",
+    gclid: data.gclid ?? "",
+    ref: data.ref ?? "",
+    referrer: data.referrer ?? "",
+    landing_page: data.landing_page ?? "",
+    browser: getBrowserName(userAgent),
+    device: getDeviceType(userAgent),
+    source_form: data.source_form,
+    lead_source,
+    submitted_at: new Date().toISOString(),
+  };
+
+  leadTrackerWebhookPayloadSchema.parse(payload);
+
+  const response = await fetch("/api/lead", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      ...data,
-      tracker_secret: process.env.LEAD_TRACKER_WEBHOOK_SECRET,
-      submitted_at: new Date().toISOString(),
-    }),
+    body: JSON.stringify(payload),
   });
 
   if (!response.ok) {
@@ -56,16 +145,6 @@ async function sendLeadToTracker(data: z.infer<typeof leadSchema>) {
   const result = (await response.json().catch(() => null)) as { success?: boolean } | null;
   return result?.success === true;
 }
-
-const submitLead = createServerFn({ method: "POST" })
-  .validator(leadSchema)
-  .handler(async ({ data }) => {
-    if (!(await sendLeadToTracker(data))) {
-      throw new Error("Lead tracker delivery failed.");
-    }
-
-    return { success: true };
-  });
 
 export function LeadForm({
   title = "Book a Free Demo",
@@ -80,7 +159,7 @@ export function LeadForm({
   fields?: Field[];
   cta?: string;
   defaultModule?: string;
-  sourceForm?: "Free Demo" | "Course Application" | "Contact Message" | "Placement Enquiry";
+  sourceForm?: LeadSourceForm;
 }) {
   const standardModules = [
     "SAP FICO",
@@ -111,114 +190,150 @@ export function LeadForm({
 
   const [loading, setLoading] = useState(false);
   const [phone, setPhone] = useState<Value>();
+  const [submitted, setSubmitted] = useState(false);
 
   return (
-    <form
-      onSubmit={async (e) => {
-        e.preventDefault();
-        const form = e.currentTarget;
+    <>
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const form = e.currentTarget;
 
-        setLoading(true);
+          setLoading(true);
 
-        try {
-          const values = {
-            ...Object.fromEntries(new FormData(form).entries()),
-            ...getReferralAttribution(),
-          };
-          await submitLead({ data: leadSchema.parse(values) });
-          toast.success("Thank you! A career advisor will call you shortly.");
-          form.reset();
-          setPhone(undefined);
-        } catch (error) {
-          console.error(error);
-          toast.error("We couldn't send your details. Please try again or call us.");
-        } finally {
-          setLoading(false);
-        }
-      }}
-      className="w-full max-w-full rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-card sm:p-6 md:p-8"
-    >
-      <h3 className="text-2xl font-extrabold text-foreground">{title}</h3>
-      <p className="mt-2 text-base leading-relaxed text-muted-foreground">{subtitle}</p>
-      <div className="mt-5 grid gap-4 sm:grid-cols-2">
-        {defaultFields.map((f) => (
-          <label
-            key={f.name}
-            className={f.name === "name" || f.name === "module" ? "sm:col-span-2 block" : "block"}
-          >
-            <span className="mb-1 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              {f.label}
-              {f.required && <span className="text-destructive"> *</span>}
-            </span>
-            {f.name === "phone" ? (
-              <PhoneInput
-                name={f.name}
-                required={f.required}
-                defaultCountry="IN"
-                international
-                countryCallingCodeEditable={false}
-                value={phone}
-                onChange={setPhone}
-                placeholder={f.placeholder ?? "Enter phone number"}
-                className="lead-phone-input min-h-12 w-full rounded-lg border border-input bg-background px-3 py-2.5 focus-within:ring-2 focus-within:ring-ring"
-              />
-            ) : f.name === "module" && defaultModule ? (
-              <input
-                name={f.name}
-                value={defaultModule}
-                readOnly
-                aria-readonly="true"
-                className="min-h-12 w-full cursor-default rounded-lg border border-input bg-muted px-3 py-2.5 text-base font-semibold text-foreground focus:outline-none"
-              />
-            ) : f.options ? (
-              <select
-                required={f.required}
-                name={f.name}
-                style={{ color: "#071126", colorScheme: "light" }}
-                className="min-h-12 w-full rounded-lg border border-input bg-background px-3 py-2.5 text-base text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-              >
-                <option value="" style={{ backgroundColor: "#ffffff", color: "#071126" }}>
-                  Select…
-                </option>
-                {f.options.map((o) => (
-                  <option key={o} style={{ backgroundColor: "#ffffff", color: "#071126" }}>
-                    {o}
-                  </option>
-                ))}
-              </select>
-            ) : (
-              <input
-                required={f.required}
-                name={f.name}
-                type={f.type ?? "text"}
-                placeholder={f.placeholder}
-                autoComplete={
-                  f.name === "name"
-                    ? "name"
-                    : f.name === "phone"
-                      ? "tel"
-                      : f.name === "email"
-                        ? "email"
-                        : undefined
-                }
-                inputMode={f.type === "email" ? "email" : undefined}
-                className="min-h-12 w-full rounded-lg border border-input bg-background px-3 py-2.5 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-              />
-            )}
-          </label>
-        ))}
-      </div>
-      <button
-        type="submit"
-        disabled={loading}
-        className="mt-5 min-h-12 w-full rounded-full bg-gradient-brand px-6 py-3 font-semibold text-white shadow-glow transition hover:scale-[1.02] disabled:opacity-60"
+          try {
+            const values = {
+              ...Object.fromEntries(new FormData(form).entries()),
+              ...getReferralAttribution(),
+            };
+            const validatedLead = leadSchema.parse(values);
+            const success = await sendLeadToTracker(validatedLead);
+            if (!success) {
+              throw new Error("Lead tracker delivery failed.");
+            }
+
+            trackLeadSubmission(sourceForm, validatedLead.module ?? "");
+            form.reset();
+            setPhone(undefined);
+            setSubmitted(true);
+          } catch (error) {
+            console.error(error);
+            toast.error("We couldn't send your details. Please try again or call us.");
+          } finally {
+            setLoading(false);
+          }
+        }}
+        className="w-full max-w-full rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-card sm:p-6 md:p-8"
       >
-        {loading ? "Sending…" : cta}
-      </button>
-      <input type="hidden" name="source_form" value={sourceForm} />
-      <p className="mt-3 text-center text-xs text-muted-foreground">
-        By submitting you agree to be contacted by Next-Gen ERP Solutions.
-      </p>
-    </form>
+        <h3 className="text-2xl font-extrabold text-foreground">{title}</h3>
+        <p className="mt-2 text-base leading-relaxed text-muted-foreground">{subtitle}</p>
+        <div className="mt-5 grid gap-4 sm:grid-cols-2">
+          {defaultFields.map((f) => (
+            <label
+              key={f.name}
+              className={f.name === "name" || f.name === "module" ? "sm:col-span-2 block" : "block"}
+            >
+              <span className="mb-1 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                {f.label}
+                {f.required && <span className="text-destructive"> *</span>}
+              </span>
+              {f.name === "phone" ? (
+                <PhoneInput
+                  name={f.name}
+                  required={f.required}
+                  defaultCountry="IN"
+                  international
+                  countryCallingCodeEditable={false}
+                  flags={flags}
+                  value={phone}
+                  onChange={setPhone}
+                  placeholder={f.placeholder ?? "Enter phone number"}
+                  className="lead-phone-input min-h-12 w-full rounded-lg border border-input bg-background px-3 py-2.5 focus-within:ring-2 focus-within:ring-ring"
+                />
+              ) : f.name === "module" && defaultModule ? (
+                <input
+                  name={f.name}
+                  value={defaultModule}
+                  readOnly
+                  aria-readonly="true"
+                  className="min-h-12 w-full cursor-default rounded-lg border border-input bg-muted px-3 py-2.5 text-base font-semibold text-foreground focus:outline-none"
+                />
+              ) : f.options ? (
+                <select
+                  required={f.required}
+                  name={f.name}
+                  style={{ color: "#071126", colorScheme: "light" }}
+                  className="min-h-12 w-full rounded-lg border border-input bg-background px-3 py-2.5 text-base text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                >
+                  <option value="" style={{ backgroundColor: "#ffffff", color: "#071126" }}>
+                    Select…
+                  </option>
+                  {f.options.map((o) => (
+                    <option key={o} style={{ backgroundColor: "#ffffff", color: "#071126" }}>
+                      {o}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  required={f.required}
+                  name={f.name}
+                  type={f.type ?? "text"}
+                  placeholder={f.placeholder}
+                  autoComplete={
+                    f.name === "name"
+                      ? "name"
+                      : f.name === "phone"
+                        ? "tel"
+                        : f.name === "email"
+                          ? "email"
+                          : undefined
+                  }
+                  inputMode={f.type === "email" ? "email" : undefined}
+                  className="min-h-12 w-full rounded-lg border border-input bg-background px-3 py-2.5 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                />
+              )}
+            </label>
+          ))}
+        </div>
+        <button
+          type="submit"
+          disabled={loading}
+          className="mt-5 min-h-12 w-full rounded-full bg-gradient-brand px-6 py-3 font-semibold text-white shadow-glow transition hover:scale-[1.02] disabled:opacity-60"
+        >
+          {loading ? "Sending…" : cta}
+        </button>
+        <input type="hidden" name="source_form" value={sourceForm} />
+        <p className="mt-3 text-center text-xs text-muted-foreground">
+          By submitting you agree to be contacted by Next-Gen ERP Solutions.
+        </p>
+      </form>
+
+      <Dialog open={submitted} onOpenChange={setSubmitted}>
+        <DialogContent className="max-w-md rounded-lg text-center">
+          <CheckCircle2 className="mx-auto size-14 text-brand-green" aria-hidden="true" />
+          <DialogHeader className="text-center sm:text-center">
+            <DialogTitle className="text-2xl font-extrabold">Thank you!</DialogTitle>
+            <DialogDescription className="text-base leading-relaxed">
+              Your details have been received. A career advisor will contact you within 1 working
+              hour.
+            </DialogDescription>
+          </DialogHeader>
+          {defaultModule && (
+            <p className="text-sm font-semibold text-foreground">Course: {defaultModule}</p>
+          )}
+          <DialogFooter className="mt-2 sm:justify-center">
+            <DialogClose asChild>
+              <button
+                type="button"
+                className="min-h-11 rounded-lg bg-primary px-5 py-2.5 font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+              >
+                Done
+              </button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

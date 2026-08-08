@@ -1,4 +1,5 @@
 import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-router";
+import { useEffect, useRef } from "react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { COURSES, getCourse } from "@/lib/courses";
 import { LeadForm } from "@/components/LeadForm";
@@ -67,6 +68,7 @@ export const Route = createFileRoute("/courses/$slug")({
       throw redirect({
         to: "/courses/$slug",
         params: { slug: optimizedSlug },
+        search: true,
         statusCode: 301,
       });
     }
@@ -176,6 +178,24 @@ function CoursePage() {
   const { course } = Route.useLoaderData() as {
     course: import("@/lib/courses").Course;
   };
+  const trackedCourse = useRef<string | null>(null);
+
+  useEffect(() => {
+    const trackingKey = `${course.slug}:${window.location.pathname}`;
+    if (trackedCourse.current === trackingKey) return;
+
+    const analyticsWindow = window as Window & {
+      dataLayer?: Array<Record<string, unknown>>;
+    };
+
+    analyticsWindow.dataLayer = analyticsWindow.dataLayer || [];
+    analyticsWindow.dataLayer.push({
+      event: "view_content",
+      course: course.title,
+      page_path: window.location.pathname,
+    });
+    trackedCourse.current = trackingKey;
+  }, [course.slug, course.title]);
 
   const related = COURSES.filter((c) => c.slug !== course.slug).slice(0, 3);
 

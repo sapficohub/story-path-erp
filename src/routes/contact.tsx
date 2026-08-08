@@ -170,8 +170,8 @@ function ContactPage() {
             <Card
               icon={Mail}
               title="Email"
-              value="hello@nextgenerpsolutions.com"
-              href="mailto:hello@nextgenerpsolutions.com"
+              value="hr@next-generpsolutions.com"
+              href="mailto:hr@next-generpsolutions.com"
               color="bg-brand-dark text-white"
             />
             <Card

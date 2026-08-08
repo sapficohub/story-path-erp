@@ -1,197 +1,64 @@
-const SOURCE_SHEETS = Object.freeze({
-  "Free Demo": "Free Demo Form",
-  "Course Application": "Course Applications",
-  "Contact Message": "Contact Messages",
-  "Placement Enquiry": "Placement Enquiries",
-});
+const SOURCE_SHEETS = LEAD_TRACKER_SHEETS.SOURCE_SHEETS;
 
 function doPost(event) {
   try {
-    const lead = JSON.parse(event.postData.contents || "{}");
-    const expectedSecret = PropertiesService.getScriptProperties().getProperty(
-      "LEAD_TRACKER_WEBHOOK_SECRET",
-    );
+    const lead = parseIncomingLead_(event);
+    const expectedSecret = getScriptSecret_();
 
-    if (!expectedSecret || lead.tracker_secret !== expectedSecret) {
+    if (!expectedSecret || normalizeString_(lead.tracker_secret, 200) !== expectedSecret) {
       return jsonResponse_({ success: false, error: "Unauthorized" });
     }
 
-    const targetSheetName = SOURCE_SHEETS[lead.source_form];
-    if (!targetSheetName) {
-      return jsonResponse_({ success: false, error: "Invalid source form" });
-    }
+    const submittedAt = normalizeTimestamp_(lead.submitted_at);
+    const leadSource = normalizeString_(lead.lead_source, 200) || detectLeadSource_(lead);
+    const sourceForm = normalizeFormSource_(lead.source_form);
+    const targetSheetName = SOURCE_SHEETS[sourceForm] || LEAD_TRACKER_SHEETS.RAW_LEADS;
 
-    const submittedAt = lead.submitted_at ? new Date(lead.submitted_at) : new Date();
-    if (Number.isNaN(submittedAt.getTime())) {
-      return jsonResponse_({ success: false, error: "Invalid submission time" });
-    }
-
-    const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+    const spreadsheet = getSpreadsheet_();
     const lock = LockService.getScriptLock();
     lock.waitLock(10000);
+
     try {
-      const leadId = appendToMaster_(spreadsheet, submittedAt, lead);
-      appendToSource_(spreadsheet, targetSheetName, submittedAt, lead);
-      SpreadsheetApp.flush();
-      return jsonResponse_({ success: true, lead_id: leadId });
+      const rawLeadId = buildLeadId_(ensureSheet_(spreadsheet, LEAD_TRACKER_SHEETS.RAW_LEADS, RAW_LEADS_HEADERS), submittedAt);
+      appendRawLead_(submittedAt, lead, rawLeadId);
+      appendSourceLead_(spreadsheet, targetSheetName, submittedAt, lead, rawLeadId, leadSource);
+      refreshDashboard_(spreadsheet);
+      return jsonResponse_({ success: true, lead_id: rawLeadId });
     } finally {
       lock.releaseLock();
     }
   } catch (error) {
     console.error(error);
-    return jsonResponse_({ success: false, error: "Unable to save lead" });
+    return jsonResponse_({ success: false, error: error.message || "Unable to process lead." });
   }
 }
 
-function appendToMaster_(spreadsheet, submittedAt, lead) {
-  const sheet = requiredSheet_(spreadsheet, "Master Leads");
-  const rowNumber = firstEmptyRow_(sheet, 6);
+function appendSourceLead_(spreadsheet, sheetName, submittedAt, lead, leadId, leadSource) {
+  const sheet = ensureSheet_(spreadsheet, sheetName, RAW_LEADS_HEADERS);
+  const row = [
+    formatDateTime_(submittedAt),
+    leadId,
+    normalizeString_(lead.name, 200),
+    normalizeString_(lead.phone, 100),
+    normalizeString_(lead.email, 200),
+    normalizeString_(lead.module, 200),
+    normalizeString_(lead.message, 2000),
+    normalizeFormSource_(lead.source_form),
+    leadSource,
+    normalizeString_(lead.utm_source, 200),
+    normalizeString_(lead.utm_medium, 200),
+    normalizeString_(lead.utm_campaign, 200),
+    normalizeString_(lead.utm_content, 200),
+    normalizeString_(lead.utm_term, 200),
+    normalizeString_(lead.fbclid, 200),
+    normalizeString_(lead.gclid, 200),
+    normalizeString_(lead.referrer, 1000),
+    normalizeString_(lead.device, 200),
+    normalizeString_(lead.browser, 200),
+    normalizeString_(lead.ip, 100),
+    normalizeString_(lead.country, 100),
+  ];
 
-  // Columns A and S contain the workbook's Lead ID and Days Open formulas.
-  sheet
-    .getRange(rowNumber, 2, 1, 17)
-    .setValues([
-      [
-        dateOnly_(submittedAt),
-        timeOnly_(submittedAt),
-        lead.source_form,
-        lead.landing_page || "",
-        lead.name || "",
-        lead.phone || "",
-        lead.email || "",
-        lead.qualification || "",
-        normalizeStatus_(lead.status),
-        normalizeModule_(lead.module),
-        lead.message || "",
-        "New",
-        "Medium",
-        "Unassigned",
-        "",
-        "",
-        attributionNotes_(lead),
-      ],
-    ]);
-
-  SpreadsheetApp.flush();
-  return (
-    sheet.getRange(rowNumber, 1).getDisplayValue() ||
-    `NGE-${Utilities.formatString("%04d", rowNumber - 4)}`
-  );
-}
-
-function appendToSource_(spreadsheet, sheetName, submittedAt, lead) {
-  const commonStart = [dateOnly_(submittedAt), timeOnly_(submittedAt)];
-  const commonEnd = ["New", "Medium", "Unassigned", "", attributionNotes_(lead)];
-  let row;
-
-  if (sheetName === "Free Demo Form") {
-    row = [
-      ...commonStart,
-      lead.name,
-      lead.phone,
-      lead.email,
-      lead.qualification || "",
-      normalizeStatus_(lead.status),
-      normalizeModule_(lead.module),
-      ...commonEnd,
-    ];
-  } else if (sheetName === "Course Applications") {
-    row = [
-      ...commonStart,
-      lead.landing_page || "",
-      lead.name,
-      lead.phone,
-      lead.email,
-      lead.qualification || "",
-      normalizeStatus_(lead.status),
-      normalizeModule_(lead.module),
-      ...commonEnd,
-    ];
-  } else if (sheetName === "Contact Messages") {
-    row = [
-      ...commonStart,
-      lead.name,
-      lead.phone,
-      lead.email,
-      normalizeModule_(lead.module),
-      lead.message || "",
-      ...commonEnd,
-    ];
-  } else {
-    row = [
-      ...commonStart,
-      lead.name,
-      lead.phone,
-      lead.email,
-      lead.qualification || "",
-      normalizeStatus_(lead.status),
-      normalizeModule_(lead.module),
-      lead.message || "",
-      ...commonEnd,
-    ];
-  }
-
-  const sheet = requiredSheet_(spreadsheet, sheetName);
-  const nameColumn = sheetName === "Course Applications" ? 4 : 3;
-  const rowNumber = firstEmptyRow_(sheet, nameColumn);
+  const rowNumber = firstEmptyRow_(sheet, 1, 2);
   sheet.getRange(rowNumber, 1, 1, row.length).setValues([row]);
-}
-
-function firstEmptyRow_(sheet, keyColumn) {
-  const firstDataRow = 5;
-  const availableRows = sheet.getMaxRows() - firstDataRow + 1;
-  const values = sheet.getRange(firstDataRow, keyColumn, availableRows, 1).getDisplayValues();
-  const emptyOffset = values.findIndex(([value]) => !value.trim());
-
-  if (emptyOffset === -1) {
-    throw new Error(`No empty rows remain in ${sheet.getName()}`);
-  }
-
-  return firstDataRow + emptyOffset;
-}
-
-function requiredSheet_(spreadsheet, name) {
-  const sheet = spreadsheet.getSheetByName(name);
-  if (!sheet) throw new Error(`Missing sheet: ${name}`);
-  return sheet;
-}
-
-function normalizeStatus_(value) {
-  const statuses = {
-    Fresher: "Student / Fresher",
-    Experienced: "Working Professional",
-    "Career Gap": "Career Gap",
-  };
-  return statuses[value] || value || "Other";
-}
-
-function normalizeModule_(value) {
-  if (value === "Not sure yet") return "Not Sure";
-  if (value === "SuccessFactors") return "SAP SuccessFactors";
-  return value || "Not Sure";
-}
-
-function attributionNotes_(lead) {
-  return [
-    lead.utm_source && `UTM source: ${lead.utm_source}`,
-    lead.utm_medium && `UTM medium: ${lead.utm_medium}`,
-    lead.utm_campaign && `UTM campaign: ${lead.utm_campaign}`,
-    lead.ref && `Referral: ${lead.ref}`,
-  ]
-    .filter(Boolean)
-    .join(" | ");
-}
-
-function dateOnly_(date) {
-  return Utilities.formatDate(date, Session.getScriptTimeZone(), "yyyy-MM-dd");
-}
-
-function timeOnly_(date) {
-  return Utilities.formatDate(date, Session.getScriptTimeZone(), "HH:mm:ss");
-}
-
-function jsonResponse_(body) {
-  return ContentService.createTextOutput(JSON.stringify(body)).setMimeType(
-    ContentService.MimeType.JSON,
-  );
 }

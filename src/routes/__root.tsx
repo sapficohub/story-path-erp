@@ -289,11 +289,44 @@ gtag('config', '${GOOGLE_ANALYTICS_ID}');`,
 function RootComponent() {
   return (
     <>
+      <WhatsAppClickTracking />
       <ReferralAttributionCapture />
       <Outlet />
       <Toaster position="top-center" richColors />
     </>
   );
+}
+
+function WhatsAppClickTracking() {
+  useEffect(() => {
+    const trackWhatsAppClick = (event: MouseEvent) => {
+      if (!(event.target instanceof Element)) return;
+
+      const link = event.target.closest<HTMLAnchorElement>("a[href]");
+      if (!link) return;
+
+      let hostname: string;
+      try {
+        hostname = new URL(link.href, window.location.href).hostname.toLowerCase();
+      } catch {
+        return;
+      }
+
+      const isWhatsAppLink = hostname === "wa.me" || hostname.endsWith(".whatsapp.com");
+      if (!isWhatsAppLink) return;
+
+      const analyticsWindow = window as Window & {
+        dataLayer?: Array<Record<string, unknown>>;
+      };
+      analyticsWindow.dataLayer = analyticsWindow.dataLayer || [];
+      analyticsWindow.dataLayer.push({ event: "whatsapp_click" });
+    };
+
+    document.addEventListener("click", trackWhatsAppClick, true);
+    return () => document.removeEventListener("click", trackWhatsAppClick, true);
+  }, []);
+
+  return null;
 }
 
 function ReferralAttributionCapture() {
