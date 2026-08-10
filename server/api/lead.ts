@@ -38,7 +38,10 @@ export default defineEventHandler(async (event: H3Event) => {
   }
 
   if (!WEBHOOK_URL || !WEBHOOK_SECRET) {
-    throw createError({ statusCode: 500, statusMessage: "Missing lead tracker environment variables" });
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Missing lead tracker environment variables",
+    });
   }
 
   const body = await readBody(event);
@@ -75,7 +78,8 @@ export default defineEventHandler(async (event: H3Event) => {
     }
     return {
       success: false,
-      error: (responseBody as Record<string, unknown>)?.error ||
+      error:
+        (responseBody as Record<string, unknown>)?.error ||
         (responseBody as Record<string, unknown>)?.message ||
         `Apps Script returned status ${response.status}`,
       details: responseBody,
