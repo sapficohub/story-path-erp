@@ -5,6 +5,7 @@ import quizPageHtml from "@/general-knowledge-quiz-with-qa.html?raw";
 import nextGenLogoUrl from "@/assets/nextgen-logo-480.webp";
 import { SITE_URL } from "@/lib/schema";
 import { PageStructuredData } from "@/components/PageStructuredData";
+import { useEffect, useRef } from "react";
 
 export const Route = createFileRoute("/quiz")({
   head: () => ({
@@ -25,6 +26,44 @@ export const Route = createFileRoute("/quiz")({
 
 function QuizPage() {
   const quizHtml = quizPageHtml.replace('src="next-gen-logo.png"', `src="${nextGenLogoUrl}"`);
+  const quizFrameRef = useRef<HTMLIFrameElement>(null);
+
+  useEffect(() => {
+    const frame = quizFrameRef.current;
+    if (!frame) return;
+
+    let observer: ResizeObserver | undefined;
+
+    const syncHeight = () => {
+      const iframeDocument = frame.contentDocument;
+      if (!iframeDocument) return;
+
+      const height = Math.max(
+        iframeDocument.documentElement.scrollHeight,
+        iframeDocument.body?.scrollHeight ?? 0,
+      );
+      frame.style.height = `${height}px`;
+    };
+
+    const handleLoad = () => {
+      observer?.disconnect();
+      syncHeight();
+
+      const iframeBody = frame.contentDocument?.body;
+      if (iframeBody) {
+        observer = new ResizeObserver(syncHeight);
+        observer.observe(iframeBody);
+      }
+    };
+
+    frame.addEventListener("load", handleLoad);
+    if (frame.contentDocument?.readyState === "complete") handleLoad();
+
+    return () => {
+      frame.removeEventListener("load", handleLoad);
+      observer?.disconnect();
+    };
+  }, []);
 
   return (
     <>
@@ -53,10 +92,12 @@ function QuizPage() {
 
         <div className="mx-auto w-full max-w-7xl px-4 py-6 pb-12 md:py-8">
           <iframe
+            ref={quizFrameRef}
             title="SAP FICO quiz"
             srcDoc={quizHtml}
-            className="min-h-[1400px] w-full rounded-3xl border border-border bg-background shadow-[0_20px_80px_rgba(7,17,38,0.16)]"
-            sandbox="allow-scripts"
+            className="block h-[600px] w-full overflow-hidden rounded-3xl border border-border bg-background shadow-[0_20px_80px_rgba(7,17,38,0.16)]"
+            sandbox="allow-scripts allow-same-origin"
+            scrolling="no"
           />
         </div>
       </SiteLayout>
