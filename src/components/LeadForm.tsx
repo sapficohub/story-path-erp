@@ -20,7 +20,8 @@ function getBrowserName(userAgent: string) {
   const lower = userAgent.toLowerCase();
   if (lower.includes("edg/")) return "Edge";
   if (lower.includes("opr/") || lower.includes("opera")) return "Opera";
-  if (lower.includes("chrome/") && !lower.includes("edg/") && !lower.includes("opr/")) return "Chrome";
+  if (lower.includes("chrome/") && !lower.includes("edg/") && !lower.includes("opr/"))
+    return "Chrome";
   if (lower.includes("firefox/")) return "Firefox";
   if (lower.includes("safari/") && !lower.includes("chrome/")) return "Safari";
   if (lower.includes("trident/") || lower.includes("msie")) return "Internet Explorer";
@@ -33,7 +34,6 @@ function getDeviceType(userAgent: string) {
   if (/tablet|ipad|playbook/.test(lower)) return "Tablet";
   return "Desktop";
 }
-
 
 type Field = {
   name: string;
@@ -135,6 +135,7 @@ async function sendLeadToTracker(data: z.infer<typeof leadSchema>) {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
+    signal: AbortSignal.timeout(15000),
   });
 
   if (!response.ok) {

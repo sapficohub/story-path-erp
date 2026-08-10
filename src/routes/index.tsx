@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Logo } from "@/components/Logo";
-import { COURSES } from "@/lib/courses";
+import { DISPLAYED_COURSES } from "@/lib/courses";
 import { LeadForm } from "@/components/LeadForm";
 import { SalaryGraph } from "@/components/ComicCharacter";
 import { JsonLd } from "@/components/JsonLd";
@@ -505,7 +505,7 @@ function HomePage() {
               title="SAP Courses for Freshers and Professionals"
             />
             <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {COURSES.slice(0, 8).map((c, i) => (
+              {DISPLAYED_COURSES.slice(0, 8).map((c, i) => (
                 <motion.div
                   key={c.slug}
                   initial={{ opacity: 0, y: 30 }}

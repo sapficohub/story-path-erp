@@ -16,13 +16,15 @@ function doPost(event) {
 
     const spreadsheet = getSpreadsheet_();
     const lock = LockService.getScriptLock();
-    lock.waitLock(10000);
+    lock.waitLock(3000);
 
     try {
-      const rawLeadId = buildLeadId_(ensureSheet_(spreadsheet, LEAD_TRACKER_SHEETS.RAW_LEADS, RAW_LEADS_HEADERS), submittedAt);
+      const rawLeadId = buildLeadId_(
+        ensureSheet_(spreadsheet, LEAD_TRACKER_SHEETS.RAW_LEADS, RAW_LEADS_HEADERS),
+        submittedAt,
+      );
       appendRawLead_(submittedAt, lead, rawLeadId);
       appendSourceLead_(spreadsheet, targetSheetName, submittedAt, lead, rawLeadId, leadSource);
-      refreshDashboard_(spreadsheet);
       return jsonResponse_({ success: true, lead_id: rawLeadId });
     } finally {
       lock.releaseLock();

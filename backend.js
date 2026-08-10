@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import path from "path";
 
-dotenv.config();
+dotenv.config({ path: [".env.local", ".env"] });
 
 const app = express();
 const port = process.env.PORT || 5174;
@@ -30,6 +30,7 @@ app.post("/api/lead", async (req, res) => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(12000),
     });
 
     const text = await response.text();
@@ -44,7 +45,11 @@ app.post("/api/lead", async (req, res) => {
     res.status(response.status).json(body);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Lead submission failed." });
+    const timedOut = error instanceof Error && error.name === "TimeoutError";
+    res.status(timedOut ? 504 : 500).json({
+      success: false,
+      error: timedOut ? "Lead tracker timed out." : "Lead submission failed.",
+    });
   }
 });
 

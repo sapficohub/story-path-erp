@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import { SiteLayout } from "@/components/SiteLayout";
-import { COURSES, getCourse } from "@/lib/courses";
+import { DISPLAYED_COURSES, getCourse } from "@/lib/courses";
 import { LeadForm } from "@/components/LeadForm";
 import { motion } from "framer-motion";
 import { LEGACY_COURSE_SLUGS } from "@/lib/redirects";
@@ -197,7 +197,7 @@ function CoursePage() {
     trackedCourse.current = trackingKey;
   }, [course.slug, course.title]);
 
-  const related = COURSES.filter((c) => c.slug !== course.slug).slice(0, 3);
+  const related = DISPLAYED_COURSES.filter((c) => c.slug !== course.slug).slice(0, 3);
 
   const faqs = [
     {

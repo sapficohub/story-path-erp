@@ -50,6 +50,7 @@ async function handleLeadApiRequest(request: Request): Promise<Response | null> 
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(12000),
     });
 
     const rawText = await response.text();
@@ -66,7 +67,14 @@ async function handleLeadApiRequest(request: Request): Promise<Response | null> 
     });
   } catch (error) {
     console.error(error);
-    return jsonResponse({ success: false, error: "Lead forwarding failed" }, 502);
+    const timedOut = error instanceof Error && error.name === "TimeoutError";
+    return jsonResponse(
+      {
+        success: false,
+        error: timedOut ? "Lead tracker timed out" : "Lead forwarding failed",
+      },
+      timedOut ? 504 : 502,
+    );
   }
 }
 

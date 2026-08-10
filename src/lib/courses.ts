@@ -450,4 +450,10 @@ export const COURSES: Course[] = [
   },
 ];
 
+const DISPLAYED_COURSE_CODES = ["FICO", "ABAP", "MM", "SD", "BASIS", "HCM"];
+
+export const DISPLAYED_COURSES = DISPLAYED_COURSE_CODES.map((code) =>
+  COURSES.find((course) => course.code === code),
+).filter((course): course is Course => course !== undefined);
+
 export const getCourse = (slug: string) => COURSES.find((c) => c.slug === slug);

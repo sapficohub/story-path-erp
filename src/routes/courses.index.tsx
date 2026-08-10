@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { motion } from "framer-motion";
-import { COURSES } from "@/lib/courses";
+import { DISPLAYED_COURSES } from "@/lib/courses";
 import { ArrowRight } from "lucide-react";
 import { JsonLd } from "@/components/JsonLd";
 import { canonicalUrl } from "@/components/seo";
@@ -113,7 +113,7 @@ function CoursesPage() {
         data={itemListSchema(
           `${SITE_URL}/courses`,
           "SAP Training Courses",
-          COURSES.map((course) => ({
+          DISPLAYED_COURSES.map((course) => ({
             name: `${course.title} Training`,
             url: `${SITE_URL}/courses/${course.slug}`,
           })),
@@ -140,7 +140,7 @@ function CoursesPage() {
 
         <section className="mx-auto max-w-7xl px-4 py-16">
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {COURSES.map((c, i) => (
+            {DISPLAYED_COURSES.map((c, i) => (
               <motion.div
                 key={c.slug}
                 initial={{ opacity: 0, y: 30 }}
