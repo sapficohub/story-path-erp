@@ -2,7 +2,7 @@ import { useState } from "react";
 import PhoneInput, { isValidPhoneNumber, type Value } from "react-phone-number-input";
 import flags from "react-phone-number-input/flags";
 import "react-phone-number-input/style.css";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 import {
@@ -154,6 +154,7 @@ export function LeadForm({
   cta = "Book Free Demo",
   defaultModule,
   sourceForm = "Free Demo",
+  successVariant = "default",
 }: {
   title?: string;
   subtitle?: string;
@@ -161,6 +162,7 @@ export function LeadForm({
   cta?: string;
   defaultModule?: string;
   sourceForm?: LeadSourceForm;
+  successVariant?: "default" | "demo";
 }) {
   const standardModules = [
     "SAP FICO",
@@ -305,6 +307,9 @@ export function LeadForm({
           {loading ? "Sending…" : cta}
         </button>
         <input type="hidden" name="source_form" value={sourceForm} />
+        {defaultModule && !defaultFields.some((field) => field.name === "module") && (
+          <input type="hidden" name="module" value={defaultModule} />
+        )}
         <p className="mt-3 text-center text-xs text-muted-foreground">
           By submitting you agree to be contacted by Next-Gen ERP Solutions.
         </p>
@@ -314,16 +319,40 @@ export function LeadForm({
         <DialogContent className="max-w-md rounded-lg text-center">
           <CheckCircle2 className="mx-auto size-14 text-brand-green" aria-hidden="true" />
           <DialogHeader className="text-center sm:text-center">
-            <DialogTitle className="text-2xl font-extrabold">Thank you!</DialogTitle>
+            <DialogTitle className="text-2xl font-extrabold">
+              {successVariant === "demo" ? "Your Free Demo Request Is Received" : "Thank you!"}
+            </DialogTitle>
             <DialogDescription className="text-base leading-relaxed">
-              Your details have been received. A career advisor will contact you within 1 working
-              hour.
+              {successVariant === "demo"
+                ? `Our career team will contact you regarding the ${defaultModule ?? "SAP"} demo.`
+                : "Your details have been received. A career advisor will contact you within 1 working hour."}
             </DialogDescription>
           </DialogHeader>
           {defaultModule && (
             <p className="text-sm font-semibold text-foreground">Course: {defaultModule}</p>
           )}
-          <DialogFooter className="mt-2 sm:justify-center">
+          {successVariant === "demo" && (
+            <div className="rounded-xl bg-secondary p-4 text-left text-sm">
+              <p className="font-bold text-foreground">What happens next?</p>
+              <ol className="mt-2 grid gap-1 text-muted-foreground sm:grid-cols-2">
+                <li>1. Profile discussion</li>
+                <li>2. Demo confirmation</li>
+                <li>3. Trainer session</li>
+                <li>4. Career and course guidance</li>
+              </ol>
+            </div>
+          )}
+          <DialogFooter className="mt-2 gap-2 sm:justify-center">
+            {successVariant === "demo" && (
+              <a
+                href="https://wa.me/919000333859"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[#25D366] px-5 py-2.5 font-semibold text-white"
+              >
+                <MessageCircle className="size-4" /> Chat on WhatsApp
+              </a>
+            )}
             <DialogClose asChild>
               <button
                 type="button"

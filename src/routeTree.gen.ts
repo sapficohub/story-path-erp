@@ -36,11 +36,13 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CoursesIndexRouteImport } from './routes/courses.index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
+import { Route as LpModuleRouteImport } from './routes/lp.$module'
 import { Route as JourneyFresherRouteImport } from './routes/journey.fresher'
 import { Route as JourneyExperiencedRouteImport } from './routes/journey.experienced'
 import { Route as JourneyCareerGapRouteImport } from './routes/journey.career-gap'
 import { Route as CoursesSlugRouteImport } from './routes/courses.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as ApiLeadRouteImport } from './routes/api/lead'
 
 const YoutubeRoute = YoutubeRouteImport.update({
   id: '/youtube',
@@ -177,6 +179,11 @@ const BlogIndexRoute = BlogIndexRouteImport.update({
   path: '/',
   getParentRoute: () => BlogRoute,
 } as any)
+const LpModuleRoute = LpModuleRouteImport.update({
+  id: '/lp/$module',
+  path: '/lp/$module',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const JourneyFresherRoute = JourneyFresherRouteImport.update({
   id: '/journey/fresher',
   path: '/journey/fresher',
@@ -201,6 +208,11 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => BlogRoute,
+} as any)
+const ApiLeadRoute = ApiLeadRouteImport.update({
+  id: '/api/lead',
+  path: '/api/lead',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -229,11 +241,13 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/whatsapp': typeof WhatsappRoute
   '/youtube': typeof YoutubeRoute
+  '/api/lead': typeof ApiLeadRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/journey/career-gap': typeof JourneyCareerGapRoute
   '/journey/experienced': typeof JourneyExperiencedRoute
   '/journey/fresher': typeof JourneyFresherRoute
+  '/lp/$module': typeof LpModuleRoute
   '/blog/': typeof BlogIndexRoute
   '/courses/': typeof CoursesIndexRoute
 }
@@ -261,11 +275,13 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/whatsapp': typeof WhatsappRoute
   '/youtube': typeof YoutubeRoute
+  '/api/lead': typeof ApiLeadRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/journey/career-gap': typeof JourneyCareerGapRoute
   '/journey/experienced': typeof JourneyExperiencedRoute
   '/journey/fresher': typeof JourneyFresherRoute
+  '/lp/$module': typeof LpModuleRoute
   '/blog': typeof BlogIndexRoute
   '/courses': typeof CoursesIndexRoute
 }
@@ -296,11 +312,13 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/whatsapp': typeof WhatsappRoute
   '/youtube': typeof YoutubeRoute
+  '/api/lead': typeof ApiLeadRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/journey/career-gap': typeof JourneyCareerGapRoute
   '/journey/experienced': typeof JourneyExperiencedRoute
   '/journey/fresher': typeof JourneyFresherRoute
+  '/lp/$module': typeof LpModuleRoute
   '/blog/': typeof BlogIndexRoute
   '/courses/': typeof CoursesIndexRoute
 }
@@ -332,11 +350,13 @@ export interface FileRouteTypes {
     | '/terms'
     | '/whatsapp'
     | '/youtube'
+    | '/api/lead'
     | '/blog/$slug'
     | '/courses/$slug'
     | '/journey/career-gap'
     | '/journey/experienced'
     | '/journey/fresher'
+    | '/lp/$module'
     | '/blog/'
     | '/courses/'
   fileRoutesByTo: FileRoutesByTo
@@ -364,11 +384,13 @@ export interface FileRouteTypes {
     | '/terms'
     | '/whatsapp'
     | '/youtube'
+    | '/api/lead'
     | '/blog/$slug'
     | '/courses/$slug'
     | '/journey/career-gap'
     | '/journey/experienced'
     | '/journey/fresher'
+    | '/lp/$module'
     | '/blog'
     | '/courses'
   id:
@@ -398,11 +420,13 @@ export interface FileRouteTypes {
     | '/terms'
     | '/whatsapp'
     | '/youtube'
+    | '/api/lead'
     | '/blog/$slug'
     | '/courses/$slug'
     | '/journey/career-gap'
     | '/journey/experienced'
     | '/journey/fresher'
+    | '/lp/$module'
     | '/blog/'
     | '/courses/'
   fileRoutesById: FileRoutesById
@@ -433,9 +457,11 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   WhatsappRoute: typeof WhatsappRoute
   YoutubeRoute: typeof YoutubeRoute
+  ApiLeadRoute: typeof ApiLeadRoute
   JourneyCareerGapRoute: typeof JourneyCareerGapRoute
   JourneyExperiencedRoute: typeof JourneyExperiencedRoute
   JourneyFresherRoute: typeof JourneyFresherRoute
+  LpModuleRoute: typeof LpModuleRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -629,6 +655,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogIndexRouteImport
       parentRoute: typeof BlogRoute
     }
+    '/lp/$module': {
+      id: '/lp/$module'
+      path: '/lp/$module'
+      fullPath: '/lp/$module'
+      preLoaderRoute: typeof LpModuleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/journey/fresher': {
       id: '/journey/fresher'
       path: '/journey/fresher'
@@ -663,6 +696,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/blog/$slug'
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof BlogRoute
+    }
+    '/api/lead': {
+      id: '/api/lead'
+      path: '/api/lead'
+      fullPath: '/api/lead'
+      preLoaderRoute: typeof ApiLeadRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -718,9 +758,11 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   WhatsappRoute: WhatsappRoute,
   YoutubeRoute: YoutubeRoute,
+  ApiLeadRoute: ApiLeadRoute,
   JourneyCareerGapRoute: JourneyCareerGapRoute,
   JourneyExperiencedRoute: JourneyExperiencedRoute,
   JourneyFresherRoute: JourneyFresherRoute,
+  LpModuleRoute: LpModuleRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

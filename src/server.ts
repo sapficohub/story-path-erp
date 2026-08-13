@@ -9,75 +9,6 @@ type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
 };
 
-const API_LEAD_PATH = "/api/lead";
-const WEBHOOK_URL = process.env.LEAD_TRACKER_WEBHOOK_URL;
-const WEBHOOK_SECRET = process.env.LEAD_TRACKER_WEBHOOK_SECRET;
-
-function jsonResponse(body: unknown, status = 200) {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { "content-type": "application/json; charset=utf-8" },
-  });
-}
-
-async function handleLeadApiRequest(request: Request): Promise<Response | null> {
-  const url = new URL(request.url);
-  if (url.pathname !== API_LEAD_PATH) return null;
-
-  if (request.method !== "POST") {
-    return jsonResponse({ success: false, error: "Method Not Allowed" }, 405);
-  }
-
-  if (!WEBHOOK_URL || !WEBHOOK_SECRET) {
-    return jsonResponse(
-      { success: false, error: "Missing LEAD_TRACKER_WEBHOOK_URL or LEAD_TRACKER_WEBHOOK_SECRET" },
-      500,
-    );
-  }
-
-  const requestBody = await request.json().catch(() => null);
-  if (!requestBody || typeof requestBody !== "object" || Array.isArray(requestBody)) {
-    return jsonResponse({ success: false, error: "Invalid JSON payload" }, 400);
-  }
-
-  const payload = {
-    ...requestBody,
-    tracker_secret: WEBHOOK_SECRET,
-  };
-
-  try {
-    const response = await fetch(WEBHOOK_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-      signal: AbortSignal.timeout(12000),
-    });
-
-    const rawText = await response.text();
-    let responseBody: unknown = rawText;
-    try {
-      responseBody = JSON.parse(rawText);
-    } catch {
-      responseBody = { success: response.ok, body: rawText };
-    }
-
-    return new Response(JSON.stringify(responseBody), {
-      status: response.status,
-      headers: { "content-type": "application/json; charset=utf-8" },
-    });
-  } catch (error) {
-    console.error(error);
-    const timedOut = error instanceof Error && error.name === "TimeoutError";
-    return jsonResponse(
-      {
-        success: false,
-        error: timedOut ? "Lead tracker timed out" : "Lead forwarding failed",
-      },
-      timedOut ? 504 : 502,
-    );
-  }
-}
-
 let serverEntryPromise: Promise<ServerEntry> | undefined;
 
 function getCanonicalRedirect(request: Request) {
@@ -143,9 +74,6 @@ export default {
     try {
       const canonicalRedirect = getCanonicalRedirect(request);
       if (canonicalRedirect) return canonicalRedirect;
-
-      const apiResponse = await handleLeadApiRequest(request);
-      if (apiResponse) return apiResponse;
 
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
