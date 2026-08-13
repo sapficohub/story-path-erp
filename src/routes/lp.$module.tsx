@@ -1,10 +1,25 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute, notFound, redirect } from "@tanstack/react-router";
 import { PaidLandingPage } from "@/components/PaidLandingPage";
 import { canonicalUrl } from "@/components/seo";
 import { PAID_LANDING_PAGES, type PaidModuleKey } from "@/lib/paid-landing-pages";
 
 export const Route = createFileRoute("/lp/$module")({
   loader: ({ params }) => {
+    const legacyModules: Partial<Record<string, PaidModuleKey>> = {
+      "sap-apab": "sap-abap",
+      "sap-fico2": "sap-fico",
+    };
+    const canonicalModule = legacyModules[params.module];
+
+    if (canonicalModule) {
+      throw redirect({
+        to: "/lp/$module",
+        params: { module: canonicalModule },
+        search: true,
+        statusCode: 301,
+      });
+    }
+
     const config = PAID_LANDING_PAGES[params.module as PaidModuleKey];
     if (!config) throw notFound();
     return { config };
