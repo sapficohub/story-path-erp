@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { LeadForm } from "@/components/LeadForm";
-import { Phone, MessageCircle, Mail, MapPin, Youtube, Instagram, Facebook } from "lucide-react";
+import { Phone, MessageCircle, Mail, MapPin, Youtube, Instagram, Facebook, Linkedin } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { JsonLd } from "@/components/JsonLd";
 import { COURSES } from "@/lib/courses";
@@ -213,6 +213,15 @@ function ContactPage() {
                   className="rounded-full bg-secondary p-3 transition hover:bg-brand hover:text-white"
                 >
                   <Facebook className="h-5 w-5" />
+                </a>
+                <a
+                  aria-label="LinkedIn"
+                  href="https://www.linkedin.com/company/next-gen-erp-solutions/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-full bg-secondary p-3 transition hover:bg-brand hover:text-white"
+                >
+                  <Linkedin className="h-5 w-5" />
                 </a>
               </div>
             </div>

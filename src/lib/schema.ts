@@ -14,6 +14,7 @@ const SOCIAL_PROFILES = [
   "https://www.facebook.com/NextGenERPSolutions",
   "https://www.instagram.com/nextgenerpsolutions/",
   "https://www.youtube.com/@Next-GenERPSolutions",
+  "https://www.linkedin.com/company/next-gen-erp-solutions/",
 ];
 
 const POSTAL_ADDRESS = {

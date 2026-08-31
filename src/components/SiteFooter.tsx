@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Logo } from "./Logo";
-import { Youtube, Instagram, Facebook, MapPin, Phone, MessageCircle } from "lucide-react";
+import { Youtube, Instagram, Facebook, Linkedin, MapPin, Phone, MessageCircle } from "lucide-react";
 import { GOOGLE_MAP_URL } from "@/lib/schema";
 import { COURSES } from "@/lib/courses";
 
@@ -43,6 +43,15 @@ export function SiteFooter() {
               className="rounded-full bg-white/10 p-2 hover:bg-white/20"
             >
               <Facebook className="h-4 w-4" />
+            </a>
+            <a
+              href="https://www.linkedin.com/company/next-gen-erp-solutions/"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="LinkedIn"
+              className="rounded-full bg-white/10 p-2 hover:bg-white/20"
+            >
+              <Linkedin className="h-4 w-4" />
             </a>
             <a
               href={GOOGLE_MAP_URL}
